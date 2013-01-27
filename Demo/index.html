@@ -1,14 +1,14 @@
 <!doctype html>
-
+<title>OrdnungJS</title>
 
 <div data-viewmodel="Main">
 	<label>Name:<br>
-	<input data-bind="value:name"></label>
+	<input data-bind="value:name" placeholder="write something here"></label>
 	<button data-bind="command: setName">Set Name</button>
 	<button data-bind="query: getName">Get Name</button>
 </div>
 
-
+<script src="../Source/Libs/es5-shim.min.js"></script>
 <script src="../Source/Libs/require-2.1.1.js"></script>
 <script>
 	require.config({
@@ -22,10 +22,13 @@
 		function ViewModel(){
 			var self = this;
 			
-			this.name = ko.observable("Marius");
+			this.name = ko.observable("");
 			
 			this.setName = qvc.createCommand({
 				name: "SetValue",
+				success: function(){
+					self.name("");
+				},
 				parameters: {
 					key: "name",
 					value: self.name

@@ -21,7 +21,7 @@ define(["Executable", "ExecutableResult", "utils", "knockout", "koExtensions"], 
 		
 		},
 		config: {
-			baseUrl: "/",
+			baseUrl: "/"
 		}
 	};
 	

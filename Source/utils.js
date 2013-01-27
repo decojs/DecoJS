@@ -37,12 +37,14 @@ define([], function(){
 			if(isPost && parameters){
 				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				xhr.setRequestHeader("Content-length", data.length);
-				//xhr.setRequestHeader("Connection", "close");
+				xhr.setRequestHeader("Connection", "close");
 			}
 			
-			xhr.onloadend = function(){
-				callback(xhr);
-			};
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4){
+					callback(xhr);
+				}
+			}
 			
 			xhr.send(data);
 			return xhr;

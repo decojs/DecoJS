@@ -12,42 +12,14 @@
 <script src="../Source/Libs/require-2.1.1.js"></script>
 <script>
 	require.config({
-		baseUrl: "../Source",
+		baseUrl: "js",
 		paths: {
-			"knockout": "Libs/knockout-2.1.0"
+			"ordnung": "../../Source/ordnung",
+			"knockout": "../../Source/Libs/knockout-2.1.0"
 		}
 	});
 	
-	define("Main", ["qvc", "knockout"], function(qvc, ko){
-		function ViewModel(){
-			var self = this;
-			
-			this.name = ko.observable("");
-			
-			this.setName = qvc.createCommand({
-				name: "SetValue",
-				success: function(){
-					self.name("");
-				},
-				parameters: {
-					key: "name",
-					value: self.name
-				}
-			});
-			
-			this.getName = qvc.createQuery({
-				name: "GetValue",
-				result: self.name,
-				parameters: {
-					key: "name"
-				}
-			});
-		}
-		
-		return ViewModel;
-	});
-	
-	require(["qvc", "loader"], function(qvc, load){
+	require(["ordnung/qvc", "ordnung/loader"], function(qvc, load){
 		qvc.config({
 			baseUrl: "/"
 		});

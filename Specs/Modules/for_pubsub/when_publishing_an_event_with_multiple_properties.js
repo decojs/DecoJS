@@ -1,4 +1,4 @@
-require(["pubsub"], function(pubsub){
+require(["ordnung/pubsub"], function(pubsub){
 	describe("when publishing an event with multiple properties", function(){
 		
 		var Event = function Event(name, title, prop){

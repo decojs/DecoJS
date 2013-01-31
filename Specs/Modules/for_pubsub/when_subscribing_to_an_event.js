@@ -1,4 +1,4 @@
-require(["pubsub"], function(pubsub){
+require(["ordnung/pubsub"], function(pubsub){
 	describe("when subscribing to a event", function(){
 		
 		var Event = function Event(){},

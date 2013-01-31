@@ -1,4 +1,4 @@
-define(["utils"], function(utils){
+define(["ordnung/utils"], function(utils){
 	function ExecutableResult(result){
 		
 		this.success = false;

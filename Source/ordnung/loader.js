@@ -1,4 +1,4 @@
-define(["utils", "knockout"], function (utils, ko) {
+define(["ordnung/utils", "knockout"], function (utils, ko) {
 	return function (domElement) {
 		utils.toArray((domElement || document.body).querySelectorAll("*[data-viewmodel]")).forEach(function (target) {
 			var viewModelName = target.getAttribute("data-viewmodel");

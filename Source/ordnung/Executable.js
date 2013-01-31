@@ -1,4 +1,4 @@
-define(["ExecutableResult", "utils", "knockout"], function(ExecutableResult, utils, ko){
+define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knockout"], function(ExecutableResult, validation, utils, ko){
 	function Executable(type, options, qvc){
 		var self = this;
 		
@@ -33,12 +33,12 @@ define(["ExecutableResult", "utils", "knockout"], function(ExecutableResult, uti
 			}
 
 			self.hasError(false);
-/*
+
 			self.validate();
-			if (!self.parametersAreValid()) {
+			if (!self.isValid()) {
 				return false;
 			}
-*/
+
 			self.options.beforeExecute(self);
 
 			if (self.options.canExecute(self) === false) {
@@ -52,15 +52,13 @@ define(["ExecutableResult", "utils", "knockout"], function(ExecutableResult, uti
 		
 		this.onError = function () {
 			self.hasError(true);
-			if ("validationResults" in self.result && self.result.validationResults) {
-				//self.applyServerValidation(self.result.validationResults);
-			}
+			self.applyViolationMessages(self.result);
 			self.options.error(self.result);
 		};
 
 		this.onSuccess = function () {
 			self.hasError(false);
-			//self.resetAllValidationMessages();
+			self.clearValidationMessages();
 			self.options.success(self.result);
 			self.options.result(self.result.result);
 		};
@@ -78,6 +76,7 @@ define(["ExecutableResult", "utils", "knockout"], function(ExecutableResult, uti
 			self.type = type;
 			utils.extend(self.parameters, options.parameters);
 			utils.extend(self.options, options);
+			utils.extend(self, new validation.Validatable());
 		})();
 	}
 	

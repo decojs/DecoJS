@@ -1,4 +1,4 @@
-define(["Executable", "ExecutableResult", "utils", "knockout", "koExtensions"], function(Executable, ExecutableResult, utils, ko){
+define(["ordnung/Executable", "ordnung/ExecutableResult", "ordnung/utils", "knockout", "ordnung/koExtensions"], function(Executable, ExecutableResult, utils, ko){
 	
 	var qvc = {
 		execute: function(executable){

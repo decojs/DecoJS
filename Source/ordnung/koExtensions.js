@@ -1,7 +1,6 @@
 define(["knockout"], function(ko){
 
-		
-	if (typeof ko !== 'undefined') {
+	if (ko != null) {
 		ko.bindingHandlers.validationMessageFor = {
 			init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 				var value = valueAccessor();
@@ -14,6 +13,9 @@ define(["knockout"], function(ko){
 		
 		ko.extenders.validation = function (target, options) {
 			//new Validator(target, options);
+			target.validator = {
+				validate: function(){}
+			};//TODO: replace
 			target.subscribe(function (newValue) {
 				target.validator.validate(newValue);
 			});
@@ -26,5 +28,6 @@ define(["knockout"], function(ko){
 			}
 		};
 	}
+	
 
 });

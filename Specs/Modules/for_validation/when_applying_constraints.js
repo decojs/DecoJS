@@ -16,7 +16,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 					}
 				};
 				
-				setOptionsSpy = sinon.mock();
+				setOptionsSpy = sinon.spy();
 				
 				executable.properties.name.validator = {
 					setOptions: setOptionsSpy
@@ -63,6 +63,53 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 					setOptions: setOptionsSpy
 				};
 				executable.properties.address.street.validator = {
+					setOptions: setOptionsSpy
+				};
+				
+				option = {option: "NotEmpty"};
+				constraintRules = [
+					{
+						name:"name",
+						constraints:option
+					},
+					{
+						name:"address.street",
+						constraints:option
+					}
+				];
+				
+				validation.applyConstraints(executable, constraintRules);
+			});
+			
+			it("should set the options of the field", function(){
+				expect(setOptionsSpy.called).toBe(true);
+				expect(setOptionsSpy.callCount).toBe(2);
+			});
+			
+			it("should set the correct constraint", function(){
+				expect(setOptionsSpy.getCall(0).args[0]).toBe(option);
+			});
+		});
+		
+		
+		describe("to an executable with nested fields inside observables", function(){
+		
+			beforeEach(function(){
+				executable = {
+					properties: {
+						address: ko.observable({
+							street: ko.observable("street")
+						}),
+						name: ko.observable("name")
+					}
+				};
+				
+				setOptionsSpy = sinon.spy();
+				
+				executable.properties.name.validator = {
+					setOptions: setOptionsSpy
+				};
+				executable.properties.address().street.validator = {
 					setOptions: setOptionsSpy
 				};
 				

@@ -56,12 +56,14 @@ define(["ordnung/utils", "knockout", "ordnung/koExtensions"],function(utils, ko)
 
 
 	
-	function applyValidationMessageToParameter(parameters, fieldPath, message) {
-		var object = findField(fieldPath, parameters, "Error applying violation");
+	function applyViolationMessageToField(properties, fieldPath, message) {
+		var object = findField(fieldPath, properties, "Error applying violation");
 		
 		if (typeof message === "string" && "validator" in object) {
 			object.validator.isValid(false);
 			object.validator.message(message);
+		}else{
+			throw new Error("Error applying violation\n"+fieldPath+" is not validatable\nit should be an observable");
 		}
 	};
 
@@ -78,10 +80,10 @@ define(["ordnung/utils", "knockout", "ordnung/koExtensions"],function(utils, ko)
 			var fieldName = violation.fieldName;
 			if (fieldName.length > 0) {
 				//one of the fields violates a constraint
-				self.applyViolationMessageToField(executable.parameters, fieldName, message);
+				applyViolationMessageToField(executable.properties, fieldName, message);
 			} else {
 				//the executable violates a constraint
-				self.applyViolationMessageToExecutable(executable, message);
+				applyViolationMessageToExecutable(executable, message);
 			}
 		});
 	};
@@ -102,6 +104,9 @@ define(["ordnung/utils", "knockout", "ordnung/koExtensions"],function(utils, ko)
 		},
 		applyConstraints: function(executable, constraints){
 			applyConstraintRules(executable.properties, constraints);
+		},
+		applyViolations: function(executable, violations){
+			applyViolationMessages(executable, violations);
 		},
 	
 		Validatable: function(_self){

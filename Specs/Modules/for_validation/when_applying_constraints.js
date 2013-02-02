@@ -11,15 +11,15 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						name: ko.observable("ordnung")
 					}
 				};
 				
 				setOptionsSpy = sinon.spy();
 				
-				executable.properties.name.validator = {
-					setOptions: setOptionsSpy
+				executable.parameters.name.validator = {
+					setConstraints: setOptionsSpy
 				};
 				
 				option = {option: "NotEmpty"};
@@ -49,7 +49,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 		
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						address: {
 							street: ko.observable("street")
 						},
@@ -59,11 +59,11 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 				
 				setOptionsSpy = sinon.spy();
 				
-				executable.properties.name.validator = {
-					setOptions: setOptionsSpy
+				executable.parameters.name.validator = {
+					setConstraints: setOptionsSpy
 				};
-				executable.properties.address.street.validator = {
-					setOptions: setOptionsSpy
+				executable.parameters.address.street.validator = {
+					setConstraints: setOptionsSpy
 				};
 				
 				option = {option: "NotEmpty"};
@@ -96,7 +96,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 		
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						address: ko.observable({
 							street: ko.observable("street")
 						}),
@@ -106,11 +106,11 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 				
 				setOptionsSpy = sinon.spy();
 				
-				executable.properties.name.validator = {
-					setOptions: setOptionsSpy
+				executable.parameters.name.validator = {
+					setConstraints: setOptionsSpy
 				};
-				executable.properties.address().street.validator = {
-					setOptions: setOptionsSpy
+				executable.parameters.address().street.validator = {
+					setConstraints: setOptionsSpy
 				};
 				
 				option = {option: "NotEmpty"};
@@ -143,13 +143,13 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 		
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						name: ko.observable("name")
 					}
 				};
 				
-				executable.properties.name.validator = {
-					setOptions: function(){}
+				executable.parameters.name.validator = {
+					setConstraints: function(){}
 				};
 				
 				option = {option: "NotEmpty"};
@@ -165,7 +165,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			it("to trow an exception", function(){
 				expect(function(){
 					validation.applyConstraints(executable, constraintRules);
-				}).toThrow(new Error("Error applying constraints to field: address\naddress is not a member of properties\nproperties = `[object Object]`"));
+				}).toThrow(new Error("Error applying constraints to field: address\naddress is not a member of parameters\nparameters = `{\"name\":\"name\"}`"));
 			});
 		});
 		
@@ -173,7 +173,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 		
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						name: "name"
 					}
 				};
@@ -191,7 +191,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			it("to trow an exception", function(){
 				expect(function(){
 					validation.applyConstraints(executable, constraintRules);
-				}).toThrow(new Error("Error applying constraints to field: name\nIt is not an observable or is not extended with a validator. \nname=`name`"));
+				}).toThrow(new Error("Error applying constraints to field: name\nIt is not an observable or is not extended with a validator. \nname=`\"name\"`"));
 			});
 		});
 	});

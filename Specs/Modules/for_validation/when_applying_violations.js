@@ -13,7 +13,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 				observable = function(){};
 			
 				executable = {
-					properties: {
+					parameters: {
 						name: observable
 					}
 				};
@@ -50,7 +50,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 				observable = function(){}
 				
 				executable = {
-					properties: {
+					parameters: {
 						address: {
 							street: observable
 						}
@@ -89,7 +89,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 				observable = function(){}
 				
 				executable = {
-					properties: {
+					parameters: {
 						address: ko.observable({
 							street: observable
 						})
@@ -127,7 +127,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			beforeEach(function(){
 				
 				executable = {
-					properties: {
+					parameters: {
 						name: function(){}
 					}
 				};
@@ -144,7 +144,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			it("should throw an exception", function(){
 				expect(function(){
 					validation.applyViolations(executable, violations);
-				}).toThrow(new Error("Error applying violation: address\naddress is not a member of properties\nproperties = `[object Object]`"));
+				}).toThrow(new Error("Error applying violation: address\naddress is not a member of parameters\nparameters = `{}`"));
 			});
 		});
 		
@@ -153,7 +153,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			beforeEach(function(){
 				
 				executable = {
-					properties: {
+					parameters: {
 						name: function(){}
 					}
 				};

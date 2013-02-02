@@ -1,4 +1,4 @@
-define(["knockout"], function(ko){
+define(["ordnung/Validator", "knockout"], function(Validator, ko){
 
 	if (ko != null) {
 		ko.bindingHandlers.validationMessageFor = {
@@ -12,10 +12,7 @@ define(["knockout"], function(ko){
 		};
 		
 		ko.extenders.validation = function (target, options) {
-			//new Validator(target, options);
-			target.validator = {
-				validate: function(){}
-			};//TODO: replace
+			target.validator = new Validator(target, options);
 			target.subscribe(function (newValue) {
 				target.validator.validate(newValue);
 			});

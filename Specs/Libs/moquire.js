@@ -1,5 +1,7 @@
 var moquire = (function(){
 
+	var requireConfig = {};
+
 	var contextCounter = 0;
 	function createContextName(){
 		return "context" + (contextCounter++);
@@ -32,9 +34,7 @@ var moquire = (function(){
 	function extendConfig(source, name, map){
 		var target = {
 			context: name,
-			map:{
-				'*': map
-			}
+			map: map
 		};
 	
 		for(var p in source){
@@ -47,13 +47,21 @@ var moquire = (function(){
 		define(name, [], factory);
 	}
 	
-	function createMap(map){
+	function createMap(map, levelTwo){
+		var twoLevels = false;
 		for(var key in map){
 			var val = map[key];
 			if(typeof val === "function"){
-				map[key] = createModuleName();
-				createModule(map[key], val);
+				var name = createModuleName();
+				createModule(name, val);
+				map[key] = name;
+			} else if (typeof val === "object"){
+				twoLevels = true;
+				map[key] = createMap(val, true);
 			}
+		}
+		if(twoLevels === false && levelTwo !== true){
+			map = {'*': map};
 		}
 		return map;
 	}
@@ -69,7 +77,7 @@ var moquire = (function(){
 		require(dependencies, factory);
 	}
 	
-	return function moquire(arg0, arg1, arg2){
+	function moquire(arg0, arg1, arg2){
 		
 		if(testArguments(arguments, ["array", "function"])){
 			requireWithoutMap(arg0, arg1);
@@ -81,5 +89,12 @@ var moquire = (function(){
 			"expected (array, function) or (object, array, function)");
 		}
 	}
+	
+	moquire.config = function(config){
+		requireConfig = config;
+		return config;
+	};
+	
+	return moquire;
 
 })();

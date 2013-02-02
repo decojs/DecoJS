@@ -1,6 +1,7 @@
 require.config({
-    baseUrl: "/test/Source",
+    baseUrl: "/test/Specs",
     paths: {
-		"knockout": "Libs/knockout-2.1.0"
+		"ordnung": "../Source/ordnung",
+		"knockout": "../Source/Libs/knockout-2.1.0"
     }
 });

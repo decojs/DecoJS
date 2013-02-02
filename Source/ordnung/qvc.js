@@ -20,6 +20,17 @@ define(["ordnung/Executable", "ordnung/ExecutableResult", "ordnung/utils", "knoc
 			});
 		
 		},
+		
+		loadValidationConstraints: function(executable){
+			var parameters = executable.name;
+			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + "validation";
+			utils.ajax(url, parameters, "GET", function(xhr){
+				if (xhr.status === 200) {
+					executable.applyConstraints(JSON.parse(xhr.responseText || "[]"));
+				}
+			});
+		},
+		
 		config: {
 			baseUrl: "/"
 		}

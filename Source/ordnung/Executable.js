@@ -52,7 +52,7 @@ define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knoc
 		
 		this.onError = function () {
 			self.hasError(true);
-			self.applyViolationMessages(self.result);
+			self.applyViolations(self.result);
 			self.options.error(self.result);
 		};
 
@@ -76,7 +76,7 @@ define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knoc
 			self.type = type;
 			utils.extend(self.parameters, options.parameters);
 			utils.extend(self.options, options);
-			utils.extend(self, new validation.Validatable());
+			utils.extend(self, new validation.Validatable(self));
 		})();
 	}
 	

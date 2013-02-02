@@ -10,14 +10,16 @@
   <script type="text/javascript" src="jasmine-1.2.0/jasmine-html.js"></script>
 
   <script type="text/javascript" src="Libs/sinon-1.3.4.js"></script>
+  <script type="text/javascript" src="Libs/moquire.js"></script>
   <script type="text/javascript" src="../Source/Libs/require-2.1.1.js"></script>
   <script type="text/javascript">
-  require.config({
-    baseUrl: "../Source",
+  require.config(moquire.config({
+    baseUrl: ".",
     paths: {
-      "knockout": "Libs/knockout-2.1.0"
+      "ordnung": "../Source/ordnung",
+      "knockout": "../Source/Libs/knockout-2.1.0"
     }
-  });
+  }));
   </script>
   
   
@@ -28,6 +30,8 @@
   <script type="text/javascript" src="Modules/for_validation/when_extending_an_executable.js"></script>
   <script type="text/javascript" src="Modules/for_validation/when_applying_constraints.js"></script>
   <script type="text/javascript" src="Modules/for_validation/when_applying_violations.js"></script>
+  <script type="text/javascript" src="Modules/for_validator/when_creating_a_new_validator.js"></script>
+  <script type="text/javascript" src="Modules/for_validator/when_validating.js"></script>
   
   <!-- stop editing now! -->
   

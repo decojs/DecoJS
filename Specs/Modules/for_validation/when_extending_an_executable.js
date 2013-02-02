@@ -10,7 +10,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						name: ko.observable("ordnung")
 					}
 				};
@@ -21,11 +21,11 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			
 			it("should add the field to validatableFields", function(){
 				expect(validatableFields.length).toBe(1);
-				expect(validatableFields[0]).toBe(executable.properties.name);
+				expect(validatableFields[0]).toBe(executable.parameters.name);
 			});
 			
 			it("should extend the observable with validator", function(){
-				expect(executable.properties.name.validator).toBeDefined();
+				expect(executable.parameters.name.validator).toBeDefined();
 			});
 		});
 		
@@ -33,7 +33,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						address: ko.observable({
 							street: ko.observable("street"),
 							postCode: ko.observable("postcode")
@@ -51,10 +51,10 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			});
 			
 			it("should extend the observable with validator", function(){
-				expect(executable.properties.address().street.validator).toBeDefined();
-				expect(executable.properties.address().postCode.validator).toBeDefined();
-				expect(executable.properties.address.validator).toBeDefined();
-				expect(executable.properties.name.validator).toBeDefined();
+				expect(executable.parameters.address().street.validator).toBeDefined();
+				expect(executable.parameters.address().postCode.validator).toBeDefined();
+				expect(executable.parameters.address.validator).toBeDefined();
+				expect(executable.parameters.name.validator).toBeDefined();
 			});
 		});
 		
@@ -62,7 +62,7 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			
 			beforeEach(function(){
 				executable = {
-					properties: {
+					parameters: {
 						address: {
 							street: ko.observable("street"),
 							postCode: ko.observable("postcode")
@@ -80,9 +80,9 @@ require(["knockout", "ordnung/validation", "ordnung/koExtensions"], function(ko,
 			});
 			
 			it("should extend the observable with validator", function(){
-				expect(executable.properties.address.street.validator).toBeDefined();
-				expect(executable.properties.address.postCode.validator).toBeDefined();
-				expect(executable.properties.name.validator).toBeDefined();
+				expect(executable.parameters.address.street.validator).toBeDefined();
+				expect(executable.parameters.address.postCode.validator).toBeDefined();
+				expect(executable.parameters.name.validator).toBeDefined();
 			});
 		});
 	

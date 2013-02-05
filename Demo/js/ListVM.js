@@ -19,8 +19,8 @@ define(["ordnung/qvc", "knockout"], function(qvc, ko){
 			this.list.push(new Name(firstName, lastName));
 		};
 		
-		this.getNameList = qvc.createQuery({
-			name: "GetAllNames",
+		this.getNameList = qvc.createQuery("GetAllNames",
+			{
 			result: function(names){
 				self.list(names.map(function(name){
 					return new Name(name.firstName, name.lastName);
@@ -34,7 +34,7 @@ define(["ordnung/qvc", "knockout"], function(qvc, ko){
 		
 		
 		(function(){
-			self.getNameList.execute();
+			self.getNameList();
 		})();
 	}
 	

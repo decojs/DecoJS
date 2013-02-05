@@ -15,7 +15,7 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 	}
 
 	function applyConstraintRules(parameters, fields) {
-	
+
 		fields.forEach(function(field){
 			var fieldName = field.name;
 			var constraints = field.constraints;
@@ -67,23 +67,23 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		}
 	};
 
-	function applyViolationMessageToExecutable(executable, message) {
-		executable.validator.isValid(false);
-		var oldMessage = executable.validator.message();
+	function applyViolationMessageToExecutable(validatable, message) {
+		validatable.validator.isValid(false);
+		var oldMessage = validatable.validator.message();
 		var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
-		executable.validator.message(newMessage);
+		validatable.validator.message(newMessage);
 	};
 
-	function applyViolationMessages(executable, violations) {
+	function applyViolationMessages(validatable, violations) {
 		violations.forEach(function(violation){
 			var message = violation.message;
 			var fieldName = violation.fieldName;
 			if (fieldName.length > 0) {
 				//one of the fields violates a constraint
-				applyViolationMessageToField(executable.parameters, fieldName, message);
+				applyViolationMessageToField(validatable.validatableParameters, fieldName, message);
 			} else {
-				//the executable violates a constraint
-				applyViolationMessageToExecutable(executable, message);
+				//the validatable violates a constraint
+				applyViolationMessageToExecutable(validatable, message);
 			}
 		});
 	};
@@ -92,16 +92,18 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 
 
 
-	function Validatable(_self){
-		var self = _self || this;
+	function Validatable(name, parameters, qvc){
+		var self = this;
 		
-		self.validator = new Validator();
-		self.validatableFields = [];
-		
+		this.validator = new Validator();
+		this.validatableFields = [];
+		this.validatableParameters = parameters;
 		
 		
 		(function init(){
-			recursivlyExtendParameters(self.parameters, self.validatableFields);
+			recursivlyExtendParameters(self.validatableParameters, self.validatableFields);
+			if(qvc)
+				qvc.loadValidationConstraints(name, self);
 		})();
 	}
 	
@@ -111,10 +113,12 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		}) && this.validator.isValid();
 	};
 		
-	Validatable.prototype.applyViolations = function(result){
-		if ("violations" in result && result.violations) {
-			applyViolationMessages(this, result.violations);
-		}
+	Validatable.prototype.applyViolations = function(violations){
+		applyViolationMessages(this, violations);
+	};
+	
+	Validatable.prototype.applyConstraints = function(constraints){
+		applyConstraintRules(this.validatableParameters, constraints);
 	};
 	
 	Validatable.prototype.validate = function(){
@@ -129,7 +133,6 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		}
 	};
 	
-	
 	Validatable.prototype.clearValidationMessages = function () {
 		this.validator.reset();
 		this.validatableFields.forEach(function(constraint){
@@ -139,22 +142,8 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 			}
 		});
 	};
-
-
-
-
-
-
-	return{
-		extendExecutable: function(executable, validatableFields){
-			recursivlyExtendParameters(executable.parameters, validatableFields);
-		},
-		applyConstraints: function(executable, constraints){
-			applyConstraintRules(executable.parameters, constraints);
-		},
-		applyViolations: function(executable, violations){
-			applyViolationMessages(executable, violations);
-		},
-		Validatable: Validatable
-	};
+	
+	
+	
+	return Validatable;
 });

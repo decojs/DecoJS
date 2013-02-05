@@ -10,8 +10,7 @@ define(["ListVM", "ordnung/qvc", "knockout"], function(ListVM, qvc, ko){
 			return self.firstName() + " " + self.lastName();
 		});
 		
-		this.addName = qvc.createCommand({
-			name: "AddName",
+		this.addName = qvc.createCommand("AddName",{
 			success: function(){
 				self.listVM.addName(self.firstName(), self.lastName());
 				self.firstName("");

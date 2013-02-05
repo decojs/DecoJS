@@ -15,40 +15,6 @@ define([], function(){
 				dst[i] = src[i];
 			}
 			return dst;
-		},
-		ajax: function(url, parameters, method, callback){
-			var xhr = new XMLHttpRequest();
-			
-			var isPost = (method === "POST");
-			var data = null;
-			
-			if(parameters){
-				if(isPost){
-					data = "parameters=" + parameters;
-				} else {
-					url += "?parameters=" + encodeURIComponent(parameters);
-				}
-			}
-			
-			url += (url.match(/\?/) ? "&" : "?") + Math.floor(Math.random()*10000);
-			
-			xhr.open(isPost ? "POST" : "GET", url, true);
-			
-			if(isPost && parameters){
-				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xhr.setRequestHeader("Content-length", data.length);
-				xhr.setRequestHeader("Connection", "close");
-			}
-			
-			xhr.onreadystatechange = function(){
-				if(xhr.readyState == 4){
-					callback(xhr);
-				}
-			}
-			
-			xhr.send(data);
-			return xhr;
 		}
-	
 	};
 });

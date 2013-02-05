@@ -1,5 +1,6 @@
-define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knockout"], function(ExecutableResult, validation, utils, ko){
-	function Executable(type, options, qvc){
+define(["ordnung/ExecutableResult", "ordnung/Validatable", "ordnung/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
+
+	function Executable(name, type, options, qvc){
 		var self = this;
 		
 		this.name;
@@ -27,32 +28,33 @@ define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knoc
 		};
 
 		this.onBeforeExecute = function () {
-
+			
 			if (self.isBusy()) {
 				return false;
 			}
-
+			
 			self.hasError(false);
-
+			
+			self.options.beforeExecute();
+			
 			self.validate();
 			if (!self.isValid()) {
 				return false;
 			}
-
-			self.options.beforeExecute(self);
-
-			if (self.options.canExecute(self) === false) {
+			
+			if (self.options.canExecute() === false) {
 				return false;
 			}
 			self.isBusy(true);
-
+			
 			return true;
 		};
 		
 		
 		this.onError = function () {
 			self.hasError(true);
-			self.applyViolations(self.result);
+			if("violations" in self.result)
+				self.applyViolations(self.result.violations);
 			self.options.error(self.result);
 		};
 
@@ -72,11 +74,11 @@ define(["ordnung/ExecutableResult", "ordnung/validation", "ordnung/utils", "knoc
 		
 		
 		(function init(){
-			self.name = options.name;
+			self.name = name;
 			self.type = type;
 			utils.extend(self.parameters, options.parameters);
 			utils.extend(self.options, options);
-			utils.extend(self, new validation.Validatable(self));
+			utils.extend(self, new Validatable(self.name, self.parameters, qvc));
 		})();
 	}
 	

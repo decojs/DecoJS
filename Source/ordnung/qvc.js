@@ -1,10 +1,22 @@
-define(["ordnung/Executable", "ordnung/ExecutableResult", "ordnung/utils", "knockout", "ordnung/koExtensions"], function(Executable, ExecutableResult, utils, ko){
+define([
+	"ordnung/Executable", 
+	"ordnung/ExecutableResult", 
+	"ordnung/utils", 
+	"ordnung/ajax", 
+	"knockout", 
+	"ordnung/koExtensions"], 
+	function(
+		Executable,
+		ExecutableResult,
+		utils,
+		ajax,
+		ko){
 	
 	var qvc = {
 		execute: function(executable){
-			var parameters = JSON.stringify(ko.toJS(executable.parameters));
+			var parameters = ko.toJS(executable.parameters);
 			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + executable.type + "/" + executable.name;
-			utils.ajax(url, parameters, "POST", function (xhr) {
+			ajax(url, parameters, "POST", function (xhr) {
 				if (xhr.status === 200) {
 					executable.result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
 					if (executable.result.success === true) {
@@ -21,12 +33,11 @@ define(["ordnung/Executable", "ordnung/ExecutableResult", "ordnung/utils", "knoc
 		
 		},
 		
-		loadValidationConstraints: function(executable){
-			var parameters = executable.name;
-			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + "validation";
-			utils.ajax(url, parameters, "GET", function(xhr){
+		loadValidationConstraints: function(name, executable){
+			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + "validation/"+name;
+			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
-					executable.applyConstraints(JSON.parse(xhr.responseText || "[]"));
+					executable.applyConstraints(JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
 				}
 			});
 		},
@@ -36,12 +47,27 @@ define(["ordnung/Executable", "ordnung/ExecutableResult", "ordnung/utils", "knoc
 		}
 	};
 	
+	function createExecutable(name, type, options){
+		if(name == null || name.length == 0)
+			throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', {<options>})");
+	
+		var executable = new Executable(name, type, options || {}, qvc);
+		var execute = executable.execute.bind(executable);
+		execute.isValid = ko.computed(function(){return executable.isValid(); });
+		execute.isBusy = ko.computed(function(){return executable.isBusy();});
+		execute.hasError = ko.computed(function(){return executable.hasError();});
+		execute.result = function(){return executable.result.result;};
+		execute.clearValidationMesages = executable.clearValidationMessages.bind(executable);
+		
+		return execute;
+	}
+	
 	return {
-		createCommand: function(options){
-			return new Executable(Executable.Command, options, qvc);
+		createCommand: function(name, options){
+			return createExecutable(name, Executable.Command, options);
 		},
-		createQuery: function(options){
-			return new Executable(Executable.Query, options, qvc);
+		createQuery: function(name, options){
+			return createExecutable(name, Executable.Query, options);
 		},
 		config: function(config){
 			utils.extend(qvc.config, config);

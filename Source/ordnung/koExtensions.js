@@ -21,7 +21,7 @@ define(["ordnung/Validator", "knockout"], function(Validator, ko){
 		
 		ko.bindingHandlers.command = ko.bindingHandlers.query = {
 			init: function (element, valueAccessor, allBindingAccessor, viewModel) {
-				ko.applyBindingsToNode(element, { click: valueAccessor().execute }, viewModel);
+				ko.applyBindingsToNode(element, { click: valueAccessor }, viewModel);
 			}
 		};
 	}

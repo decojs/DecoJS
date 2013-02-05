@@ -14,7 +14,7 @@ define([
 	
 	var qvc = {
 		execute: function(executable){
-			var parameters = ko.toJS(executable.parameters);
+			var parameters = {parameters:ko.toJSON(executable.parameters)};
 			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + executable.type + "/" + executable.name;
 			ajax(url, parameters, "POST", function (xhr) {
 				if (xhr.status === 200) {
@@ -57,7 +57,7 @@ define([
 		execute.isBusy = ko.computed(function(){return executable.isBusy();});
 		execute.hasError = ko.computed(function(){return executable.hasError();});
 		execute.result = function(){return executable.result.result;};
-		execute.clearValidationMesages = executable.clearValidationMessages.bind(executable);
+		execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
 		
 		return execute;
 	}

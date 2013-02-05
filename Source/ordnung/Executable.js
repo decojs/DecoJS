@@ -68,6 +68,7 @@ define(["ordnung/ExecutableResult", "ordnung/Validatable", "ordnung/utils", "kno
 		this.onComplete = function () {
 			if (!self.hasError()) {
 				self.options.complete(self.result);
+				self.clearValidationMessages();
 			}
 			self.isBusy(false);
 		};

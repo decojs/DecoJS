@@ -32,6 +32,10 @@ moquire({
 			expect(executable.result()).toBe(null);
 		});
 		
+		it("should have a way to clear validation messages", function(){
+			expect(executable.clearValidationMessages).toBeDefined();
+		});
+		
 		describe("when the name is missing", function(){
 			it("should throw an error", function(){
 				expect(function(){

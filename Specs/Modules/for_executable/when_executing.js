@@ -1,12 +1,13 @@
 moquire({
 	"ordnung/ajax":"Mocks/ajaxMock"
-},["ordnung/qvc", "ordnung/ajax"], function(qvc, ajaxMock){
+},["ordnung/qvc", "ordnung/ajax", "knockout"], function(qvc, ajaxMock, ko){
 	
 	describe("when executing", function(){
 		
 		var executable,
 			beforeExecute,
-			canExecute;
+			canExecute,
+			parameters;
 		
 		beforeEach(function(){
 			beforeExecute = sinon.spy();
@@ -33,6 +34,30 @@ moquire({
 			expect(ajaxMock.spy.callCount).toBe(1);
 			var args = ajaxMock.spy.firstCall.args;
 			expect(args[0]).toMatch(/command\/MyCommand$/);
+		});
+
+		describe("after complete", function(){
+
+			beforeEach(function(){
+				parameters = {
+					name: ko.observable()
+				}
+				ajaxMock.responseText = "{\"parameters\": []}";
+				executable = qvc.createCommand("MyCommand", {
+					parameters: parameters,
+					beforeExecute: beforeExecute,
+					canExecute: canExecute,
+					complete: function(){
+						parameters.name.validator.message("hello");
+					}
+				});
+				ajaxMock.responseText = "{\"success\":true}"
+				executable();
+			});
+
+			it("should clear validation messages", function(){
+				expect(parameters.name.validator.message()).toBe("");
+			});
 		});
 	});
 	

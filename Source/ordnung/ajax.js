@@ -8,8 +8,16 @@ define([], function(){
 		return params.join("&");
 	}
 
+	function addParamToUrl(url, name, value){
+		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : "&") : "?") + encodeURIComponent(name) + "=" + encodeURIComponent(value);
+	}
 
-	return function(url, object, method, callback){
+	function addToPath(url, segment){
+		return url + (url.match(/\/$/) ? "" : "/") + segment;
+	}
+
+
+	function ajax(url, object, method, callback){
 		var xhr = new XMLHttpRequest();
 		
 		var isPost = (method === "POST");
@@ -24,8 +32,10 @@ define([], function(){
 			}
 		}
 		
-		url += (url.match(/\?/) ? "&" : "?") + Math.floor(Math.random()*10000);
-		
+		if(isPost){
+			url = addParamToUrl(url, "cacheKey", Math.floor(Math.random()*10000));
+		}
+
 		xhr.open(isPost ? "POST" : "GET", url, true);
 		
 		if(isPost && data){
@@ -43,4 +53,10 @@ define([], function(){
 		xhr.send(data);
 		return xhr;
 	}
+
+	ajax.addParamToUrl = addParamToUrl;
+	ajax.addToPath = addToPath;
+
+
+	return ajax;
 })

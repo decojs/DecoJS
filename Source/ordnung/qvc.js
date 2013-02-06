@@ -14,9 +14,12 @@ define([
 	
 	var qvc = {
 		execute: function(executable){
-			var parameters = {parameters:ko.toJSON(executable.parameters)};
-			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + executable.type + "/" + executable.name;
-			ajax(url, parameters, "POST", function (xhr) {
+			var data = {
+				parameters: ko.toJSON(executable.parameters),
+				csrfToken: qvc.config.csrf
+			};
+			var url = ajax.addToPath(qvc.config.baseUrl, executable.type + "/" + executable.name);
+			ajax(url, data, "POST", function (xhr) {
 				if (xhr.status === 200) {
 					executable.result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
 					if (executable.result.success === true) {
@@ -34,7 +37,7 @@ define([
 		},
 		
 		loadValidationConstraints: function(name, executable){
-			var url = qvc.config.baseUrl + (qvc.config.baseUrl.match(/\/$/) ? "" : "/") + "validation/"+name;
+			var url = ajax.addToPath(qvc.config.baseUrl, "validation/" + name);
 			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
 					executable.applyConstraints(JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
@@ -43,7 +46,8 @@ define([
 		},
 		
 		config: {
-			baseUrl: "/"
+			baseUrl: "/",
+			csrf: ""
 		}
 	};
 	

@@ -1,5 +1,5 @@
 require(["ordnung/Constraint"], function(Constraint){
-	describe("when validating a constraint", function(){
+	describe("when validating the NotEmpty constraint", function(){
 
 		var constraint;
 		new Async(this).beforeEach(function(done){

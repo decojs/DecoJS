@@ -1,17 +1,19 @@
 require(["ordnung/pubsub"], function(pubsub){
-	describe("when extending a set of events", function(){
+	describe("when extending an array of events", function(){
 		
-		var events = {
-			Event1: function Event1(){
-			
-			},
-			Event2: function Event2(){
-			
-			}
-		};
+		var events,
+			eventList;
 		
 		beforeEach(function(){
-			pubsub.extend(events);
+			eventList = [
+				function Event1(){
+				
+				},
+				function Event2(){
+				
+				}
+			];
+			events = pubsub.extend(eventList);
 		});
 		
 		it("should give a publish function to each Event", function(){

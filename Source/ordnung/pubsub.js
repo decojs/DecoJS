@@ -84,11 +84,22 @@ define([], function () {
 		event.prototype.publish = function(){
 			publish(this);
 		};
+
+		return event;
 	}
 	
 	function extend(events){
-		for(var i in events){
-			extendEvent(events[i]);
+		if(events.length > 0){//TODO: isArray
+			return events.reduce(function(object, event){
+				var name = getSubscribableEventType(event).name;
+				object[name] = extendEvent(event);
+				return object;
+			}, {});
+		}else{
+			for(var i in events){
+				extendEvent(events[i]);
+			}
+			return events;
 		}
 	}
 

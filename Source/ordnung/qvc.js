@@ -12,10 +12,16 @@ define([
 		ajax,
 		ko){
 	
-	var qvc = {
-		execute: function(executable){
+	function QVC(){
+
+		var qvc = this;
+
+		this.constraintResolver = new constraintResolver(qvc);
+
+		this.execute = function(executable){
+			var parameters = ko.toJS(executable.parameters);
 			var data = {
-				parameters: ko.toJSON(executable.parameters),
+				parameters: JSON.stringify(parameters),
 				csrfToken: qvc.config.csrf
 			};
 			var url = ajax.addToPath(qvc.config.baseUrl, executable.type + "/" + executable.name);
@@ -34,22 +40,25 @@ define([
 				executable.onComplete();
 			});
 		
-		},
+		};
 		
-		loadValidationConstraints: function(name, executable){
+		this.loadConstraints = function(name, callback){
 			var url = ajax.addToPath(qvc.config.baseUrl, "validation/" + name);
 			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
-					executable.applyConstraints(JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
+					callback(JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
 				}
 			});
-		},
+		};
+
 		
-		config: {
+		this.config = {
 			baseUrl: "/",
 			csrf: ""
 		}
 	};
+
+	var qvc = new QVC();
 	
 	function createExecutable(name, type, options){
 		if(name == null || name.length == 0)

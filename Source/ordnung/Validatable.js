@@ -14,24 +14,6 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		}
 	}
 
-	function applyConstraintRules(parameters, fields) {
-
-		fields.forEach(function(field){
-			var fieldName = field.name;
-			var constraints = field.constraints;
-			
-			var object = findField(fieldName, parameters, "Error applying constraints to field");
-			
-			if (ko.isObservable(object) && "validator" in object) {
-				object.validator.setConstraints(constraints);
-			} else {
-				throw new Error("Error applying constraints to field: " + fieldName + "\n" +
-					"It is not an observable or is not extended with a validator. \n" +
-					fieldName + "=`" + ko.toJSON(object) + "`");
-			}
-		});
-	}
-
 
 	function findField(fieldPath, parameters, errorMessage){
 		return fieldPath.split(".").reduce(function(object, name){
@@ -67,32 +49,16 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		}
 	};
 
-	function applyViolationMessageToExecutable(validatable, message) {
+	function applyViolationMessageToValidatable(validatable, message) {
 		validatable.validator.isValid(false);
 		var oldMessage = validatable.validator.message();
 		var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
 		validatable.validator.message(newMessage);
 	};
 
-	function applyViolationMessages(validatable, violations) {
-		violations.forEach(function(violation){
-			var message = violation.message;
-			var fieldName = violation.fieldName;
-			if (fieldName.length > 0) {
-				//one of the fields violates a constraint
-				applyViolationMessageToField(validatable.validatableParameters, fieldName, message);
-			} else {
-				//the validatable violates a constraint
-				applyViolationMessageToExecutable(validatable, message);
-			}
-		});
-	};
 
 
-
-
-
-	function Validatable(name, parameters, qvc){
+	function Validatable(name, parameters, constraintResolver){
 		var self = this;
 		
 		this.validator = new Validator();
@@ -102,8 +68,8 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		
 		(function init(){
 			recursivlyExtendParameters(self.validatableParameters, self.validatableFields);
-			if(qvc)
-				qvc.loadValidationConstraints(name, self);
+			if(constraintResolver)
+				constraintResolver.applyValidationConstraints(name, self);
 		})();
 	}
 	
@@ -114,11 +80,36 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 	};
 		
 	Validatable.prototype.applyViolations = function(violations){
-		applyViolationMessages(this, violations);
+		violations.forEach(function(violation){
+			var message = violation.message;
+			var fieldName = violation.fieldName;
+			if (fieldName.length > 0) {
+				//one of the fields violates a constraint
+				applyViolationMessageToField(this.validatableParameters, fieldName, message);
+			} else {
+				//the validatable violates a constraint
+				applyViolationMessageToValidatable(this, message);
+			}
+		}.bind(this));
 	};
 	
-	Validatable.prototype.applyConstraints = function(constraints){
-		applyConstraintRules(this.validatableParameters, constraints);
+	Validatable.prototype.applyConstraints = function(fields){
+		var parameters = this.validatableParameters;
+		
+		fields.forEach(function(field){
+			var fieldName = field.name;
+			var constraints = field.constraints;
+			
+			var object = findField(fieldName, parameters, "Error applying constraints to field");
+			
+			if (ko.isObservable(object) && "validator" in object) {
+				object.validator.setConstraints(constraints);
+			} else {
+				throw new Error("Error applying constraints to field: " + fieldName + "\n" +
+					"It is not an observable or is not extended with a validator. \n" +
+					fieldName + "=`" + ko.toJSON(object) + "`");
+			}
+		});
 	};
 	
 	Validatable.prototype.validate = function(){

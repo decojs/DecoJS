@@ -28,9 +28,9 @@ require(["ordnung/pubsub"], function(pubsub){
 				eventSpy = sinon.stub();
 				pubsub.subscribeTo(Event, eventSpy);
 				
-				(function because(){
+				because: {
 					pubsub.publish(new Event("name", "title", "property"));
-				})();
+				}
 			});
 			
 			afterEach(function(){

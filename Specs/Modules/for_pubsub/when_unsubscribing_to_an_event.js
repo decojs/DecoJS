@@ -8,9 +8,9 @@ require(["ordnung/pubsub"], function(pubsub){
 			eventSpy = sinon.stub();
 			pubsub.subscribeTo(Event, eventSpy);
 			
-			(function because(){
+			because: {
 				pubsub.unsubscribeTo(Event, eventSpy);
-			})();
+			}
 		});
 		
 		it("should NOT call the function when an event is published", function(){
@@ -28,9 +28,9 @@ require(["ordnung/pubsub"], function(pubsub){
 				eventSpy = sinon.stub();
 				pubsub.subscribeTo(Event, eventSpy, object);
 				
-				(function because(){
+				because: {
 					pubsub.unsubscribeTo(Event, eventSpy, object);
-				})();
+				}
 			});
 			
 			it("should NOT call the function when an event is published", function(){

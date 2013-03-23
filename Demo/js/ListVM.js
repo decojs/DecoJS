@@ -33,9 +33,9 @@ define(["ordnung/qvc", "knockout"], function(qvc, ko){
 		
 		
 		
-		(function(){
+		init: {
 			self.getNameList();
-		})();
+		}
 	}
 	
 	return ListVM;

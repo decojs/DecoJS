@@ -74,13 +74,13 @@ define(["ordnung/ExecutableResult", "ordnung/Validatable", "ordnung/utils", "kno
 		};
 		
 		
-		(function init(){
+		init: {
 			self.name = name;
 			self.type = type;
 			utils.extend(self.parameters, options.parameters);
 			utils.extend(self.options, options);
 			utils.extend(self, new Validatable(self.name, self.parameters, qvc));
-		})();
+		}
 	}
 	
 	Executable.Command = "command";

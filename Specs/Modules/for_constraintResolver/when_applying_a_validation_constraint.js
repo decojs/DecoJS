@@ -23,9 +23,9 @@ require(["ordnung/ConstraintResolver"], function(ConstraintResolver){
 						
 			beforeEach(function(){
 				
-				(function because(){
+				because: {
 					cr.applyValidationConstraints("name", validatable);
-				})();
+				}
 				
 			});
 			
@@ -42,10 +42,10 @@ require(["ordnung/ConstraintResolver"], function(ConstraintResolver){
 			
 			beforeEach(function(){
 				
-				(function because(){
+				because: {
 					cr.applyValidationConstraints("name", validatable);
 					cr.applyValidationConstraints("name", validatable);
-				})();
+				}
 				
 			});
 			
@@ -75,10 +75,10 @@ require(["ordnung/ConstraintResolver"], function(ConstraintResolver){
 				
 				cr.applyValidationConstraints("name", validatable);
 
-				(function because(){
+				because: {
 					cr.applyValidationConstraints("name", validatable);
 					loadCallback(name, []);
-				})();
+				}
 				
 			});
 			

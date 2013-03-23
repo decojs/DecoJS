@@ -66,11 +66,11 @@ define(["ordnung/utils", "ordnung/Validator", "knockout", "ordnung/koExtensions"
 		this.validatableParameters = parameters;
 		
 		
-		(function init(){
+		init: {
 			recursivlyExtendParameters(self.validatableParameters, self.validatableFields);
 			if(constraintResolver)
 				constraintResolver.applyValidationConstraints(name, self);
-		})();
+		}
 	}
 	
 	Validatable.prototype.isValid = function () {

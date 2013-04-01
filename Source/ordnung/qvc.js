@@ -48,7 +48,7 @@ define([
 			var url = ajax.addToPath(qvc.config.baseUrl, "validation/" + name);
 			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
-					callback(JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
+					callback(name, JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
 				}
 			});
 		};

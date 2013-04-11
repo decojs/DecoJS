@@ -1,30 +1,31 @@
 require(["ordnung/pubsub"], function(pubsub){
 	describe("when subscribing to a event", function(){
 		
-		var events,
-			eventSpy;
+		var when,
+			proclaim,
+			spyOnIt;
 		
 		beforeEach(function(){
-			eventSpy = sinon.stub();
-			events = pubsub.extend({
-				event1: function (){}
+			spyOnIt = sinon.stub();
+			when = proclaim = pubsub.extend({
+				somethingHappens: function (){}
 			});
-			events.event1(eventSpy);
+			when.somethingHappens(spyOnIt);
 		});
 		
 		afterEach(function(){
-			events.event1.dont(eventSpy);
+			when.somethingHappens.dont(spyOnIt);
 		});
 		
 		it("should call the function when a event is published", function(){
-			events.event1();
-			expect(eventSpy.calledOnce).toBe(true);
+			proclaim.somethingHappens();
+			expect(spyOnIt.calledOnce).toBe(true);
 		});
 
 		describe("with an undefined callback", function(){
 						
 			beforeEach(function(){
-				eventSpy = undefined;
+				spyOnIt = undefined;
 			});
 			
 			afterEach(function(){
@@ -32,7 +33,7 @@ require(["ordnung/pubsub"], function(pubsub){
 			
 			it("should throw an error", function(){
 				var thrower = function(){
-					events.event1(eventSpy);
+					proclaim.somethingHappens(spyOnIt);
 				};
 				expect(thrower).toThrow();
 			});

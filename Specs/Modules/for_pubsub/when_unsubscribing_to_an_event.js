@@ -1,24 +1,25 @@
 require(["ordnung/pubsub"], function(pubsub){
 	describe("when unsubscribing to an event", function(){
 		
-		var events,
-			eventSpy;
+		var when,
+			proclaim,
+			spyOnIt;
 		
 		beforeEach(function(){
-			eventSpy = sinon.stub();
-			events = pubsub.extend({
-				event1: function(){}
+			spyOnIt = sinon.stub();
+			when = proclaim = pubsub.extend({
+				somethingHappens: function(){}
 			})
-			events.event1(eventSpy);
+			when.somethingHappens(spyOnIt);
 			
 			because: {
-				events.event1.dont(eventSpy);
+				when.somethingHappens.dont(spyOnIt);
 			}
 		});
 		
 		it("should NOT call the function when an event is published", function(){
-			events.event1();
-			expect(eventSpy.calledOnce).toBe(false);
+			proclaim.somethingHappens();
+			expect(spyOnIt.calledOnce).toBe(false);
 		});
 	});
 });

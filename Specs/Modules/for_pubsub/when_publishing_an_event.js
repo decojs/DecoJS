@@ -1,33 +1,34 @@
 require(["ordnung/pubsub"], function(pubsub){
 	describe("when publishing an event", function(){
 
-		var events,
-			eventSpy;
+		var when,
+			proclaim,
+			spyOnIt;
 
 		describe("with multiple properties", function(){
 			
 			beforeEach(function(){
-				events = pubsub.extend({
-					event1: function(name, title, prop){}
+				when = proclaim = pubsub.extend({
+					somethingHappens: function(name, title, prop){}
 				});
-				eventSpy = sinon.stub();
-				events.event1(eventSpy);
+				spyOnIt = sinon.stub();
+				when.somethingHappens(spyOnIt);
 				
 				because: {
-					events.event1("name", "title", "property");
+					proclaim.somethingHappens("name", "title", "property");
 				}
 			});
 			
 			afterEach(function(){
-				events.event1.dont(eventSpy);
+				when.somethingHappens.dont(spyOnIt);
 			});
 			
 			it("should call the subscriber with 3 arguments", function(){
-				expect(eventSpy.callCount).toBe(1);
-				expect(eventSpy.calledWithExactly("name", "title", "property")).toBe(true);
-				expect(eventSpy.getCall(0).args[0]).toBe("name");
-				expect(eventSpy.getCall(0).args[1]).toBe("title");
-				expect(eventSpy.getCall(0).args[2]).toBe("property");
+				expect(spyOnIt.callCount).toBe(1);
+				expect(spyOnIt.calledWithExactly("name", "title", "property")).toBe(true);
+				expect(spyOnIt.getCall(0).args[0]).toBe("name");
+				expect(spyOnIt.getCall(0).args[1]).toBe("title");
+				expect(spyOnIt.getCall(0).args[2]).toBe("property");
 			});
 		});
 	});

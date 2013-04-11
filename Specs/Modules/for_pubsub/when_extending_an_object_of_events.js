@@ -4,12 +4,10 @@ require(["ordnung/pubsub"], function(pubsub){
 		var events;
 		
 		beforeEach(function(){
-			events = {
+			events = pubsub.extend({
 				event1: function(){},
 				event2: function(param1, param2){}
-			};
-
-			events = pubsub.extend(events);
+			});
 		});
 		
 		it("should produce an object with the events", function(){
@@ -18,7 +16,7 @@ require(["ordnung/pubsub"], function(pubsub){
 		});
 		
 		it("should set the correct length for the events", function(){
-			expect(events.event1.length).toBe(0));
+			expect(events.event1.length).toBe(0);
 			expect(events.event2.length).toBe(2);
 		});
 	});

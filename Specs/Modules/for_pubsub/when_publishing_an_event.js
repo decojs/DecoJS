@@ -1,40 +1,25 @@
 require(["ordnung/pubsub"], function(pubsub){
 	describe("when publishing an event", function(){
 
-		var Event,
+		var events,
 			eventSpy;
 
-		describe("which is an object", function(){
-			
-			beforeEach(function(){
-				Event = {};
-			});
-
-			it("should throw an error", function(){
-				expect(function(){
-					pubsub.publish(Event);
-				}).toThrow();
-			});
-		});
 		describe("with multiple properties", function(){
 			
 			beforeEach(function(){
-				Event = function Event(name, title, prop){
-					this.name = name;
-					this.title = title;
-					this.prop = prop;
-				}
-
+				events = pubsub.extend({
+					event1: function(name, title, prop){}
+				});
 				eventSpy = sinon.stub();
-				pubsub.subscribeTo(Event, eventSpy);
+				events.event1(eventSpy);
 				
 				because: {
-					pubsub.publish(new Event("name", "title", "property"));
+					events.event1("name", "title", "property");
 				}
 			});
 			
 			afterEach(function(){
-				pubsub.unsubscribeTo(Event, eventSpy);
+				events.event1.dont(eventSpy);
 			});
 			
 			it("should call the subscriber with 3 arguments", function(){
@@ -43,17 +28,6 @@ require(["ordnung/pubsub"], function(pubsub){
 				expect(eventSpy.getCall(0).args[0]).toBe("name");
 				expect(eventSpy.getCall(0).args[1]).toBe("title");
 				expect(eventSpy.getCall(0).args[2]).toBe("property");
-			});
-		});
-		describe("without a name", function(){
-			
-			beforeEach(function(){
-				Event = function (){};
-			});
-			it("should throw an error", function(){
-				expect(function(){
-					pubsub.publish(new Event());
-				}).toThrow();
 			});
 		});
 	});

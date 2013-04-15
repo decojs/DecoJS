@@ -9,7 +9,9 @@ define([], function(){
 		this.name = name;
 		this.attributes = attributes;
 		this.message = attributes.message;
-		this.test = function(){};
+		this.test = function(){
+			return true;//real test not loaded yet
+		};
 		
 		
 		this.init();

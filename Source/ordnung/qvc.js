@@ -45,7 +45,7 @@ define([
 		};
 		
 		this.loadConstraints = function(name, callback){
-			var url = ajax.addToPath(qvc.config.baseUrl, "validation/" + name);
+			var url = ajax.addToPath(qvc.config.baseUrl, "constraints/" + name);
 			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
 					try{

@@ -44,7 +44,7 @@ moquire({
 			it("should throw an error", function(){
 				expect(function(){
 					qvc.createCommand();
-				}).toThrow(new Error("command is missing name\nA command must have a name!\nusage: createCommand('name', {<options>})"));
+				}).toThrow(new Error("command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
 			});
 		});
 		
@@ -55,9 +55,7 @@ moquire({
 					name: ko.observable()
 				};
 				ajaxMock.spy.reset();
-				executable = qvc.createCommand("name"+Math.random(), {
-					parameters: parameters
-				});
+				executable = qvc.createCommand("name"+Math.random(), parameters);
 			});
 
 			afterEach(function(){

@@ -10,17 +10,19 @@ define(["ListVM", "ordnung/qvc", "knockout"], function(ListVM, qvc, ko){
 			return self.firstName() + " " + self.lastName();
 		});
 		
-		this.addName = qvc.createCommand("AddName",{
-			success: function(){
-				self.listVM.addName(self.firstName(), self.lastName());
-				self.firstName("");
-				self.lastName("");
-			},
-			parameters: {
+		this.addName = qvc.createCommand("AddName",
+			{
 				firstName: self.firstName,
 				lastName: self.lastName
+			},
+			{
+				success: function(){
+					self.listVM.addName(self.firstName(), self.lastName());
+					self.firstName("");
+					self.lastName("");
+				}
 			}
-		});
+		);
 	}
 	
 	return ViewModel;

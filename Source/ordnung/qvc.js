@@ -70,11 +70,11 @@ define([
 
 	var qvc = new QVC();
 	
-	function createExecutable(name, type, options){
+	function createExecutable(name, type, parameters, callbacks){
 		if(name == null || name.length == 0)
-			throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', {<options>})");
+			throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', [parameters, callbacks])");
 	
-		var executable = new Executable(name, type, options || {}, qvc);
+		var executable = new Executable(name, type, parameters || {}, callbacks || {}, qvc);
 		var execute = executable.execute.bind(executable);
 		execute.isValid = ko.computed(function(){return executable.isValid(); });
 		execute.isBusy = ko.computed(function(){return executable.isBusy();});
@@ -86,11 +86,11 @@ define([
 	}
 	
 	return {
-		createCommand: function(name, options){
-			return createExecutable(name, Executable.Command, options);
+		createCommand: function(name, parameters, callbacks){
+			return createExecutable(name, Executable.Command, parameters, callbacks);
 		},
-		createQuery: function(name, options){
-			return createExecutable(name, Executable.Query, options);
+		createQuery: function(name, parameters, callbacks){
+			return createExecutable(name, Executable.Query, parameters, callbacks);
 		},
 		config: function(config){
 			utils.extend(qvc.config, config);

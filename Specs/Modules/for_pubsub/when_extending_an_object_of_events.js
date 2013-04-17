@@ -4,28 +4,15 @@ require(["ordnung/pubsub"], function(pubsub){
 		var events;
 		
 		beforeEach(function(){
-			events = {
-				Event1: function Event1(){
-				
-				},
-				Event2: function Event2(){
-				
-				}
-			};
-
-			events = pubsub.extend(events);
+			events = pubsub.extend({
+				event1: function(){},
+				event2: function(param1, param2){}
+			});
 		});
 		
-		it("should give a publish function to each Event", function(){
-			expect(new events.Event1().publish).toBeDefined();
-		});
-		
-		it("should give a subscribeTo function to each Event", function(){
-			expect(events.Event1.subscribeTo).toBeDefined();
-		});
-		
-		it("should give an unsubscribeTo function to each Event", function(){
-			expect(events.Event1.unsubscribeTo).toBeDefined();
+		it("should produce an object with the events", function(){
+			expect(events.event1).toBeDefined();
+			expect(events.event2).toBeDefined();
 		});
 	});
 });

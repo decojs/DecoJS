@@ -1,112 +1,77 @@
 define([], function () {
-	var funcNameRegex = /function\s+(.+)\s*\(([^)]*)\)/;
-	var argumentSplitRegex = /\s*,\s*/;
-	var subscribers = {};
+	var events = [];
 
-	function getPublishedEventType(event){
-		if ("name" in event.constructor) {
-			if(event.constructor === Object || event.constructor === Function || event.constructor.name === ""){
-				throw new Error("Cannot publish event " + event + " because it is not an object with a named constructor.\n");
-			}else{
-				return event.constructor.name;
-			}
-		} else {
-			var regexResult = funcNameRegex.exec(event.constructor);
-			if (regexResult && regexResult.length > 1) {
-				return regexResult[1];
-			} else {
-				throw new Error("Cannot publish event " + event + " because it is not an object with a named constructor.\n");
-			}
-		}
-	}
-	
-	function getSubscribableEventType(event){
-		if(typeof event === "undefined"){
-			throw new Error("cannot subscribe to undefined event");
-		}else if(typeof event === "string") {
-			return {
-				name: event,
-				arguments: []
-			};
+	function findEvent(event){
+		var found = events.filter(function(e){
+			return e.event === event;
+		});
+
+		if(found.length === 0){
+			return null;
 		}else{
-			var regexResult = funcNameRegex.exec(event);
-			if (regexResult && regexResult.length == 3) {
-				return {
-					name: regexResult[1],
-					arguments: regexResult[2].split(argumentSplitRegex)
-				};
-			} else {
-				throw new Error("Cannot subscribe to event " + event + " because it is not an object with a named constructor.\n");
-			}
+			return found[0];
 		}
 	}
 
-	function publish(event) {
-		var eventType = getPublishedEventType(event);
-		if (eventType in subscribers) {
-			subscribers[eventType].forEach(function (item) {
-				var eventProperties = item.arguments.map(function(argument){
-					return event[argument];
-				});
-				item.callback.apply(item.self, eventProperties);
-			});
-		}
+	function addEvent(event){
+		var eventObject = {
+			event: event,
+			subscribers: []
+		};
+		events.push(eventObject);
+		return eventObject;
 	}
 
-	function subscribeTo(event, subscriber, that) {
-		if(typeof subscriber === "undefined")
-			throw new Error("Cannot subscribe to event " + event + " because subscriber is undefined");
-		var eventType = getSubscribableEventType(event);
+	function publish(event, data) {
+		var eventObject = findEvent(event);
+		if(eventObject == null) return;
 
-		if (eventType.name in subscribers === false) {
-			subscribers[eventType.name] = [];
+		eventObject.subscribers.forEach(function (item) {
+			item.apply(item, data);
+		});
+	}
+
+	function subscribeTo(event, subscriber) {
+		var eventObject = findEvent(event);
+		if(eventObject == null){
+			eventObject = addEvent(event);
 		}
-		subscribers[eventType.name].push({callback:subscriber, self: that, arguments: eventType.arguments});
+
+		eventObject.subscribers.push(subscriber);
 	}
 	
-	function unsubscribeTo(event, subscriber, that){
-		var eventType = getSubscribableEventType(event).name;
-		if(eventType in subscribers){
-			subscribers[eventType] = subscribers[eventType].filter(function( item){
-				return (item.callback !== subscriber || item.self !== that);
-			});
+	function unsubscribeTo(event, subscriber){
+		var eventObject = findEvent(event);
+		if(eventObject == null){
+			eventObject = addEvent(event);
 		}
+		var index = eventObject.subscribers.indexOf(subscriber);
+		eventObject.subscribers.splice(index, 1);
 	}
 	function extendEvent(event){
-		event.subscribeTo = function(subscriber, self){
-			subscribeTo(event, subscriber, self);
-		};
-		
-		event.unsubscribeTo = function(subscriber, self){
-			unsubscribeTo(event, subscriber, self);
-		};
-		
-		event.prototype.publish = function(){
-			publish(this);
+		var extendedEvent = function(){
+			if(arguments.length == 1 && typeof arguments[0] === "function"){
+				subscribeTo(event, arguments[0]);
+			}else{
+				publish(event, arguments);
+			}
+		}
+
+		extendedEvent.dont = function(subscriber){
+			unsubscribeTo(event, subscriber);
 		};
 
-		return event;
+		return extendedEvent;
 	}
 	
 	function extend(events){
-		if(events.length > 0){//TODO: isArray
-			return events.reduce(function(object, event){
-				var name = getSubscribableEventType(event).name;
-				object[name] = extendEvent(event);
-				return object;
-			}, {});
-		}else{
-			for(var i in events){
-				extendEvent(events[i]);
-			}
-			return events;
+		for(var i in events){
+			events[i] = extendEvent(events[i]);
 		}
+		return events;
 	}
 
 	return {
-		publish: publish,
-		subscribeTo: subscribeTo,
-		unsubscribeTo: unsubscribeTo,
 		extend: extend
 	};
 	

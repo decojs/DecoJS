@@ -1,42 +1,25 @@
 require(["ordnung/pubsub"], function(pubsub){
 	describe("when unsubscribing to an event", function(){
 		
-		var Event = function Event(){},
-			eventSpy;
+		var when,
+			proclaim,
+			spyOnIt;
 		
 		beforeEach(function(){
-			eventSpy = sinon.stub();
-			pubsub.subscribeTo(Event, eventSpy);
+			spyOnIt = sinon.stub();
+			when = proclaim = pubsub.extend({
+				somethingHappens: function(){}
+			})
+			when.somethingHappens(spyOnIt);
 			
 			because: {
-				pubsub.unsubscribeTo(Event, eventSpy);
+				when.somethingHappens.dont(spyOnIt);
 			}
 		});
 		
 		it("should NOT call the function when an event is published", function(){
-			pubsub.publish(new Event());
-			expect(eventSpy.calledOnce).toBe(false);
-		});
-
-		describe("with a self object", function(){
-		
-			var Event = function Event(){},
-				eventSpy,
-				object = {};
-			
-			beforeEach(function(){
-				eventSpy = sinon.stub();
-				pubsub.subscribeTo(Event, eventSpy, object);
-				
-				because: {
-					pubsub.unsubscribeTo(Event, eventSpy, object);
-				}
-			});
-			
-			it("should NOT call the function when an event is published", function(){
-				pubsub.publish(new Event());
-				expect(eventSpy.calledOnce).toBe(false);
-			});
+			proclaim.somethingHappens();
+			expect(spyOnIt.calledOnce).toBe(false);
 		});
 	});
 });

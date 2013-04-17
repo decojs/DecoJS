@@ -51,10 +51,10 @@ define([
 					try{
 						var response = JSON.parse(xhr.responseText || "{\"parameters\":[]}");
 						if("parameters" in response == false){
-							response.parameters = {};
+							response.parameters = [];
 						}
 					}catch(e){
-						var response = {parameters: {}};
+						var response = {parameters: []};
 					}
 					callback(name, response.parameters);
 				}

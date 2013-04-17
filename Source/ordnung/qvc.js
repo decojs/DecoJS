@@ -79,7 +79,33 @@ define([
 		execute.isValid = ko.computed(function(){return executable.isValid(); });
 		execute.isBusy = ko.computed(function(){return executable.isBusy();});
 		execute.hasError = ko.computed(function(){return executable.hasError();});
-		execute.result = function(){return executable.result.result;};
+		execute.success = function(callback){
+			executable.callbacks.success = callback;
+			return execute;
+		};
+		execute.error = function(callback){
+			executable.callbacks.error = callback;
+			return execute;
+		};
+		execute.beforeExecute = function(callback){
+			executable.callbacks.beforeExecute = callback;
+			return execute;
+		};
+		execute.canExecute = function(callback){
+			executable.callbacks.canExecute = callback;
+			return execute;
+		};
+		execute.result = function(){
+			if(arguments.length == 1){
+				executable.callbacks.result = arguments[0];
+				return execute;
+			}
+			return executable.result.result;
+		};
+		execute.complete = function(callback){
+			executable.callbacks.complete = callback;
+			return execute;
+		};
 		execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
 		
 		return execute;

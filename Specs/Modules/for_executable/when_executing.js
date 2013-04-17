@@ -13,7 +13,7 @@ moquire({
 			beforeExecute = sinon.spy();
 			canExecute = sinon.spy();
 			ajaxMock.responseText = "{\"parameters\": []}";
-			executable = qvc.createCommand("MyCommand", {
+			executable = qvc.createCommand("MyCommand", {}, {
 				beforeExecute: beforeExecute,
 				canExecute: canExecute
 			});
@@ -43,14 +43,17 @@ moquire({
 					name: ko.observable()
 				}
 				ajaxMock.responseText = "{\"parameters\": []}";
-				executable = qvc.createCommand("MyCommand", {
-					parameters: parameters,
-					beforeExecute: beforeExecute,
-					canExecute: canExecute,
-					complete: function(){
-						parameters.name.validator.message("hello");
+				executable = qvc.createCommand(
+					"MyCommand",
+					parameters,
+					{
+						beforeExecute: beforeExecute,
+						canExecute: canExecute,
+						complete: function(){
+							parameters.name.validator.message("hello");
+						}
 					}
-				});
+				);
 				ajaxMock.responseText = "{\"success\":true}"
 				executable();
 			});

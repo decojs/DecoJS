@@ -48,7 +48,15 @@ define([
 			var url = ajax.addToPath(qvc.config.baseUrl, "validation/" + name);
 			ajax(url, null, "GET", function(xhr){
 				if (xhr.status === 200) {
-					callback(name, JSON.parse(xhr.responseText || "{\"parameters\":[]}").parameters);
+					try{
+						var response = JSON.parse(xhr.responseText || "{\"parameters\":[]}");
+						if("parameters" in response == false){
+							response.parameters = [];
+						}
+					}catch(e){
+						var response = {parameters: []};
+					}
+					callback(name, response.parameters);
 				}
 			});
 		};
@@ -62,27 +70,53 @@ define([
 
 	var qvc = new QVC();
 	
-	function createExecutable(name, type, options){
+	function createExecutable(name, type, parameters, callbacks){
 		if(name == null || name.length == 0)
-			throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', {<options>})");
+			throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', [parameters, callbacks])");
 	
-		var executable = new Executable(name, type, options || {}, qvc);
+		var executable = new Executable(name, type, parameters || {}, callbacks || {}, qvc);
 		var execute = executable.execute.bind(executable);
 		execute.isValid = ko.computed(function(){return executable.isValid(); });
 		execute.isBusy = ko.computed(function(){return executable.isBusy();});
 		execute.hasError = ko.computed(function(){return executable.hasError();});
-		execute.result = function(){return executable.result.result;};
+		execute.success = function(callback){
+			executable.callbacks.success = callback;
+			return execute;
+		};
+		execute.error = function(callback){
+			executable.callbacks.error = callback;
+			return execute;
+		};
+		execute.beforeExecute = function(callback){
+			executable.callbacks.beforeExecute = callback;
+			return execute;
+		};
+		execute.canExecute = function(callback){
+			executable.callbacks.canExecute = callback;
+			return execute;
+		};
+		execute.result = function(){
+			if(arguments.length == 1){
+				executable.callbacks.result = arguments[0];
+				return execute;
+			}
+			return executable.result.result;
+		};
+		execute.complete = function(callback){
+			executable.callbacks.complete = callback;
+			return execute;
+		};
 		execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
 		
 		return execute;
 	}
 	
 	return {
-		createCommand: function(name, options){
-			return createExecutable(name, Executable.Command, options);
+		createCommand: function(name, parameters, callbacks){
+			return createExecutable(name, Executable.Command, parameters, callbacks);
 		},
-		createQuery: function(name, options){
-			return createExecutable(name, Executable.Query, options);
+		createQuery: function(name, parameters, callbacks){
+			return createExecutable(name, Executable.Query, parameters, callbacks);
 		},
 		config: function(config){
 			utils.extend(qvc.config, config);

@@ -14,10 +14,5 @@ require(["ordnung/pubsub"], function(pubsub){
 			expect(events.event1).toBeDefined();
 			expect(events.event2).toBeDefined();
 		});
-		
-		it("should set the correct length for the events", function(){
-			expect(events.event1.length).toBe(0);
-			expect(events.event2.length).toBe(2);
-		});
 	});
 });

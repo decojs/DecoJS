@@ -51,7 +51,7 @@ define([], function () {
 	function extendEvent(event){
 		var extendedEvent = function(){
 			if(arguments.length == 1 && typeof arguments[0] === "function"){
-				subscribeTo(event, arguments[0]);				
+				subscribeTo(event, arguments[0]);
 			}else{
 				publish(event, arguments);
 			}

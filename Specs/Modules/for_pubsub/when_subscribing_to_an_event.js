@@ -21,22 +21,5 @@ require(["ordnung/pubsub"], function(pubsub){
 			proclaim.somethingHappens();
 			expect(spyOnIt.calledOnce).toBe(true);
 		});
-
-		describe("with an undefined callback", function(){
-						
-			beforeEach(function(){
-				spyOnIt = undefined;
-			});
-			
-			afterEach(function(){
-			});
-			
-			it("should throw an error", function(){
-				var thrower = function(){
-					proclaim.somethingHappens(spyOnIt);
-				};
-				expect(thrower).toThrow();
-			});
-		});
 	});
 });

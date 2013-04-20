@@ -2,7 +2,8 @@ define([
 	"ordnung/Executable", 
 	"ordnung/ExecutableResult", 
 	"ordnung/utils", 
-	"ordnung/ajax", 
+	"ordnung/ajax",
+	"ordnung/ConstraintResolver",
 	"knockout", 
 	"ordnung/koExtensions"], 
 	function(
@@ -10,13 +11,14 @@ define([
 		ExecutableResult,
 		utils,
 		ajax,
+		ConstraintResolver,
 		ko){
 	
 	function QVC(){
 
 		var qvc = this;
 
-		this.constraintResolver = new constraintResolver(qvc);
+		this.constraintResolver = new ConstraintResolver(qvc);
 
 		this.execute = function(executable){
 			var parameters = ko.toJS(executable.parameters);

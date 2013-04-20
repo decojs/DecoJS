@@ -9,7 +9,11 @@ moquire({
 		
 		beforeEach(function(){
 			ajaxMock.responseText = "{\"parameters\": []}";
-			executable = qvc.createCommand("name");
+			executable = qvc.createCommand("name"+Math.random());
+		});
+
+		afterEach(function(){
+			ajaxMock.spy.reset();
 		});
 		
 		it("should have isValid", function(){
@@ -50,12 +54,14 @@ moquire({
 				parameters = {
 					name: ko.observable()
 				};
-
 				ajaxMock.spy.reset();
-				ajaxMock.responseText = "{\"parameters\": []}";
-				executable = qvc.createCommand("name", {
+				executable = qvc.createCommand("name"+Math.random(), {
 					parameters: parameters
 				});
+			});
+
+			afterEach(function(){
+				ajaxMock.spy.reset();
 			});
 		
 			it("should add validator to the parameters", function(){
@@ -64,7 +70,7 @@ moquire({
 
 			it("should request constraints from the server", function(){
 				expect(ajaxMock.spy.callCount).toBe(1);
-				expect(ajaxMock.spy.firstCall.args[0]).toMatch(/validation\/name$/);
+				expect(ajaxMock.spy.firstCall.args[0]).toMatch(/validation\/name/);
 			});
 		});
 		

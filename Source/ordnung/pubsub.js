@@ -1,29 +1,43 @@
 define([], function () {
-	var events = [];
+	var _events = {};
 
-	function findEvent(event){
-		var found = events.filter(function(e){
-			return e.event === event;
-		});
-
-		if(found.length === 0){
+	function findEvent(name, event){
+		if(name in _events == false)
 			return null;
+		var eventsWithTheSameName = _events[name];
+		if(eventsWithTheSameName.length > 1){
+		
+			var found = eventsWithTheSameName.filter(function(e){
+				return e.event === event;
+			});
+
+			if(found.length === 0){
+				return null;
+			}else{
+				return found[0];
+			}
+			
+		}else if(eventsWithTheSameName.length === 1){
+			var found = eventsWithTheSameName[0];
+			return (found.event === event) ? found : null;
 		}else{
-			return found[0];
+			return null;
 		}
 	}
 
-	function addEvent(event){
+	function addEvent(name, event){
+		var eventsWithTheSameName = [];
 		var eventObject = {
 			event: event,
 			subscribers: []
 		};
-		events.push(eventObject);
+		eventsWithTheSameName.push(eventObject);
+		_events[name] = eventsWithTheSameName;
 		return eventObject;
 	}
 
-	function publish(event, data) {
-		var eventObject = findEvent(event);
+	function publish(name, event, data) {
+		var eventObject = findEvent(name, event);
 		if(eventObject == null) return;
 
 		eventObject.subscribers.forEach(function (item) {
@@ -31,34 +45,34 @@ define([], function () {
 		});
 	}
 
-	function subscribeTo(event, subscriber) {
-		var eventObject = findEvent(event);
+	function subscribeTo(name, event, subscriber) {
+		var eventObject = findEvent(name, event);
 		if(eventObject == null){
-			eventObject = addEvent(event);
+			eventObject = addEvent(name, event);
 		}
 
 		eventObject.subscribers.push(subscriber);
 	}
 	
-	function unsubscribeTo(event, subscriber){
-		var eventObject = findEvent(event);
+	function unsubscribeTo(name, event, subscriber){
+		var eventObject = findEvent(name, event);
 		if(eventObject == null){
-			eventObject = addEvent(event);
+			eventObject = addEvent(name, event);
 		}
 		var index = eventObject.subscribers.indexOf(subscriber);
 		eventObject.subscribers.splice(index, 1);
 	}
-	function extendEvent(event){
+	function extendEvent(name, event){
 		var extendedEvent = function(){
 			if(arguments.length == 1 && typeof arguments[0] === "function"){
-				subscribeTo(event, arguments[0]);
+				subscribeTo(name, event, arguments[0]);
 			}else{
-				publish(event, arguments);
+				publish(name, event, arguments);
 			}
 		}
 
 		extendedEvent.dont = function(subscriber){
-			unsubscribeTo(event, subscriber);
+			unsubscribeTo(name, event, subscriber);
 		};
 
 		return extendedEvent;
@@ -66,7 +80,7 @@ define([], function () {
 	
 	function extend(events){
 		for(var i in events){
-			events[i] = extendEvent(events[i]);
+			events[i] = extendEvent(i, events[i]);
 		}
 		return events;
 	}

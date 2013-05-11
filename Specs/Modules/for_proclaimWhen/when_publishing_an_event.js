@@ -1,4 +1,4 @@
-require(["ordnung/pubsub"], function(pubsub){
+require(["ordnung/proclaimWhen"], function(proclaimWhen){
 	describe("when publishing an event", function(){
 
 		var when,
@@ -8,7 +8,7 @@ require(["ordnung/pubsub"], function(pubsub){
 		describe("with multiple properties", function(){
 			
 			beforeEach(function(){
-				when = proclaim = pubsub.extend({
+				when = proclaim = proclaimWhen.extend({
 					somethingHappens: function(name, title, prop){}
 				});
 				spyOnIt = sinon.stub();

@@ -1,4 +1,4 @@
-require(["ordnung/pubsub"], function(pubsub){
+require(["ordnung/proclaimWhen"], function(proclaimWhen){
 	describe("when creating multiple events with the same name", function(){
 		
 		var events1,
@@ -6,11 +6,11 @@ require(["ordnung/pubsub"], function(pubsub){
 		
 		beforeEach(function(){
 		
-			events1 = pubsub.extend({
+			events1 = proclaimWhen.extend({
 				event1: function(){}
 			});
 			
-			events2 = pubsub.extend({
+			events2 = proclaimWhen.extend({
 				event1:function(){}
 			});
 			

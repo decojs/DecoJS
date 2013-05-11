@@ -1,10 +1,10 @@
-require(["ordnung/pubsub"], function(pubsub){
+require(["ordnung/proclaimWhen"], function(proclaimWhen){
 	describe("when extending an object of events", function(){
 		
 		var events;
 		
 		beforeEach(function(){
-			events = pubsub.extend({
+			events = proclaimWhen.extend({
 				event1: function(){},
 				event2: function(param1, param2){}
 			});

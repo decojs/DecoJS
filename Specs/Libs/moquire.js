@@ -1,5 +1,7 @@
 var moquire = (function(){
 
+	var whenDone = function(){};
+	var requirements = 0;
 	var requireConfig = {};
 
 	var contextCounter = 0;
@@ -65,16 +67,32 @@ var moquire = (function(){
 		}
 		return map;
 	}
+
+
+    function requirementLoaded(){
+      requirements--;
+      if(requirements == 0 && typeof whenDone == "function"){
+        whenDone();
+      }
+    }
+
+	function callRequire(method, dependencies, factory){
+		requirements++;
+		method(dependencies, function(){
+			requirementLoaded();
+			factory.apply(this, arguments);
+		});
+	}
 	
 	function requireWithMap(map, dependencies, factory){
 		var config = extendConfig(requireConfig, createContextName(), createMap(map));
 
 		var mappedRequire = require.config(config);
-		mappedRequire(dependencies, factory);
+		callRequire(mappedRequire, dependencies, factory);
 	}
 	
 	function requireWithoutMap(dependencies, factory){
-		require(dependencies, factory);
+		callRequire(require, dependencies, factory);
 	}
 	
 	function moquire(arg0, arg1, arg2){
@@ -94,6 +112,14 @@ var moquire = (function(){
 		requireConfig = config;
 		return config;
 	};
+
+	moquire.then = function(callback){
+		if(requirements == 0){
+			callback();
+		}else{
+			whenDone = callback;
+		}
+	}
 	
 	return moquire;
 

@@ -10,6 +10,7 @@ files = [
   REQUIRE_ADAPTER,
   'Specs/Libs/moquire.js',
   'Specs/Libs/sinon-1.3.4.js',
+  'Specs/Libs/jasmine.async.js',
   {pattern: 'Source/Libs/knockout-2.1.0.js', included: false},
 
   'Specs/specs-main.js',

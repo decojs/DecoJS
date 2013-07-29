@@ -16,10 +16,6 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		};
 	}
 
-	function applyViewModel(data) {
-		var viewModel = new data.ViewModel(data.model);
-		ko.applyBindings(viewModel, data.target);
-	};
 
 	function loadViewModel(data){
 		return callbacks.call(require, [
@@ -30,9 +26,12 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		});
 	}
 
+	function applyViewModel(when, data) {
+		var viewModel = new data.ViewModel(data.model, when);
+		ko.applyBindings(viewModel, data.target);
+	};
 
-
-	return function (domElement) {
+	return function (domElement, proclaimWhen) {
 
 		domElement = domElement || document.body;
 
@@ -41,7 +40,7 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
 
 		return when.all(viewModelsLoaded).then(function(list){
-			list.forEach(applyViewModel)
+			list.forEach(applyViewModel.bind(null, proclaimWhen))
 		});
 	};
 });

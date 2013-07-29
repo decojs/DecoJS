@@ -5,9 +5,12 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 		return m.name || m.toString().match(/function\s+([^(]+)/)[1];
 	}
 
-	var dummyVM;
+	var dummyVM,
+		when;
 
 	beforeEach(function(done){
+
+		when = sinon.spy();
 
 		var elm = document.createElement("div");
 		var div = document.createElement("div");
@@ -24,7 +27,7 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 		});
 
 		because: {
-			load(elm).then(done);
+			load(elm, when).then(done);
 		}
 	});
 
@@ -38,5 +41,9 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 
 	it("should call the viewmodule with the model as the first argument", function(){
 		expect(dummyVM.getCall(0).args[1][0]).toEqual({a: true});
+	});
+
+	it("should call the viewmodule with the when function as the second argument", function(){
+		expect(dummyVM.getCall(0).args[1][1]).toEqual(when);
 	});
 });

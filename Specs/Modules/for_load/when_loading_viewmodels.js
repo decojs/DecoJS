@@ -1,4 +1,4 @@
-moquire(["ordnung/loader"], function(load){
+moquire(["ordnung/load"], function(load){
 	describe("when loading viewmodels", function(){
 
 		var dummyVM;

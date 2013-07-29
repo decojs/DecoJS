@@ -12,6 +12,9 @@ requirejs.config(moquire.config({
       "knockout": "/base/Source/Libs/knockout-2.1.0",
       "ordnung": "/base/Source/ordnung"
     },
+    packages: [
+        { name: 'when', location: '/base/components/when', main: 'when' }
+    ],
 
     shim: {
     }

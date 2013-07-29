@@ -19,12 +19,11 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 		define("dummyVM", [], function(){
 			return function DummyVM(){
 				dummyVM(this);
-				done();
 			};
 		});
 
 		because: {
-			load(elm);
+			load(elm).then(done);
 		}
 	});
 

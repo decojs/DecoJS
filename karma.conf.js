@@ -16,6 +16,7 @@ files = [
   {pattern: 'Source/Libs/knockout-2.1.0.js', included: false},
 
   'Specs/specs-main.js',
+  {pattern: 'components/when/**/*', included: false},
   {pattern: 'Source/ordnung/**/*.js', included: false},
   {pattern: 'Specs/Modules/**/*.js', included: true},
   {pattern: 'Specs/Mocks/**/*.js', included: false}

@@ -4,6 +4,8 @@
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'Specs/Libs/overload.js',
+  'Specs/Libs/jazzmine.js',
   REQUIRE,
   REQUIRE_ADAPTER,
   'Specs/Libs/moquire.js',

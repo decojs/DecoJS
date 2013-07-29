@@ -1,39 +1,37 @@
-moquire(["ordnung/proclaimWhen"], function(proclaimWhen){
-	describe("when creating multiple events with the same name", function(){
+describe("when creating multiple events with the same name", ["ordnung/proclaimWhen"], function(proclaimWhen){
+	
+	var events1,
+		events2;
+	
+	beforeEach(function(){
+	
+		events1 = proclaimWhen.extend({
+			event1: function(){}
+		});
 		
-		var events1,
-			events2;
+		events2 = proclaimWhen.extend({
+			event1:function(){}
+		});
+		
+	});
+	
+	describe("when subscribing to one event", function(){
+		
+		var spy;
 		
 		beforeEach(function(){
 		
-			events1 = proclaimWhen.extend({
-				event1: function(){}
-			});
+			spy = sinon.spy();
+			events1.event1(spy);
 			
-			events2 = proclaimWhen.extend({
-				event1:function(){}
-			});
+			because: {
+				events2.event1();
+			}
 			
 		});
-		
-		describe("when subscribing to one event", function(){
-			
-			var spy;
-			
-			beforeEach(function(){
-			
-				spy = sinon.spy();
-				events1.event1(spy);
-				
-				because: {
-					events2.event1();
-				}
-				
-			});
-		
-			it("should not trigger when the other event is published", function(){
-				expect(spy.callCount).toBe(0);
-			});
+	
+		it("should not trigger when the other event is published", function(){
+			expect(spy.callCount).toBe(0);
 		});
 	});
 });

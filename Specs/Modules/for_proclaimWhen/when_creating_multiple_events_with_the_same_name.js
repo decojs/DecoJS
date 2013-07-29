@@ -1,4 +1,4 @@
-require(["ordnung/proclaimWhen"], function(proclaimWhen){
+moquire(["ordnung/proclaimWhen"], function(proclaimWhen){
 	describe("when creating multiple events with the same name", function(){
 		
 		var events1,

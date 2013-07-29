@@ -1,4 +1,4 @@
-require(["knockout", "ordnung/Validatable", "ordnung/koExtensions"], function(ko, Validatable){
+moquire(["knockout", "ordnung/Validatable", "ordnung/koExtensions"], function(ko, Validatable){
 	
 	describe("when extending a Validatable", function(){
 		

@@ -1,4 +1,4 @@
-require(["ordnung/Validator"], function(Validator){
+moquire(["ordnung/Validator"], function(Validator){
 	
 	describe("when validating all the constraints", function(){
 		var validator,

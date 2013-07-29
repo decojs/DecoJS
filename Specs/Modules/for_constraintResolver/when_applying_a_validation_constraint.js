@@ -1,4 +1,4 @@
-require(["ordnung/ConstraintResolver"], function(ConstraintResolver){
+moquire(["ordnung/ConstraintResolver"], function(ConstraintResolver){
 	describe("when applying a validation constraint", function(){
 	
 		var cr,

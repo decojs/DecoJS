@@ -1,7 +1,8 @@
 var moquire = (function(){
 
 	var whenDone = function(){};
-	var requirements = 0;
+	var requirementsRemaining = 0;
+	var requirementsLoaded = 0;
 	var requireConfig = {};
 
 	var contextCounter = 0;
@@ -70,17 +71,17 @@ var moquire = (function(){
 
 
     function requirementLoaded(){
-      requirements--;
-      if(requirements == 0 && typeof whenDone == "function"){
+      requirementsLoaded++;
+      if(requirementsLoaded == requirementsRemaining && typeof whenDone == "function"){
         whenDone();
       }
     }
 
 	function callRequire(method, dependencies, factory){
-		requirements++;
+		requirementsRemaining++;
 		method(dependencies, function(){
-			requirementLoaded();
 			factory.apply(this, arguments);
+			requirementLoaded();
 		});
 	}
 	
@@ -114,7 +115,7 @@ var moquire = (function(){
 	};
 
 	moquire.then = function(callback){
-		if(requirements == 0){
+		if(requirementsRemaining != 0 && requirementsRemaining == requirementsLoaded){
 			callback();
 		}else{
 			whenDone = callback;

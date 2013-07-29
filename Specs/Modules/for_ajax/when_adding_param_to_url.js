@@ -1,4 +1,4 @@
-require(["ordnung/ajax"], function(ajax){
+moquire(["ordnung/ajax"], function(ajax){
 	describe("when adding param to url", function(){
 		describe("when the url contains a question mark", function(){
 			describe("when it ends without an &", function(){

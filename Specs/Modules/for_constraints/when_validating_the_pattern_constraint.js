@@ -1,4 +1,4 @@
-require(["ordnung/constraints/Pattern"], function(Pattern){
+moquire(["ordnung/constraints/Pattern"], function(Pattern){
 	describe("when validating the Pattern constraint", function(){
 
 		var constraint;

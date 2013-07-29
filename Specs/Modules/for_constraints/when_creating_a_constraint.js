@@ -1,4 +1,4 @@
-require(["ordnung/Constraint"], function(Constraint){
+moquire(["ordnung/Constraint"], function(Constraint){
 	describe("with an case insensitive flag", function(){
 
 		var constraint,

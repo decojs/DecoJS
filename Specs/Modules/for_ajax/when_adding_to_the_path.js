@@ -1,4 +1,4 @@
-require(["ordnung/ajax"], function(ajax){
+moquire(["ordnung/ajax"], function(ajax){
 	describe("when adding to the path", function(){
 		describe("when the path ends with a slash", function(){
 			it("should not add a slash", function(){

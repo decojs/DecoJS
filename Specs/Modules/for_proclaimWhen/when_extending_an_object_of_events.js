@@ -1,4 +1,4 @@
-require(["ordnung/proclaimWhen"], function(proclaimWhen){
+moquire(["ordnung/proclaimWhen"], function(proclaimWhen){
 	describe("when extending an object of events", function(){
 		
 		var events;

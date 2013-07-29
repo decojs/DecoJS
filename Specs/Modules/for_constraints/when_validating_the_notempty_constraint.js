@@ -1,4 +1,4 @@
-require(["ordnung/constraints/NotEmpty"], function(NotEmpty){
+moquire(["ordnung/constraints/NotEmpty"], function(NotEmpty){
 	describe("when validating the NotEmpty constraint", function(){
 
 		var constraint;

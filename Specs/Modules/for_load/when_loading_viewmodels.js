@@ -12,13 +12,14 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 		var elm = document.createElement("div");
 		var div = document.createElement("div");
 		div.setAttribute("data-viewmodel", "dummyVM");
+		div.setAttribute("data-model", '{"a":true}');
 		elm.appendChild(div);
 
 		dummyVM = sinon.spy();
 
 		define("dummyVM", [], function(){
 			return function DummyVM(){
-				dummyVM(this);
+				dummyVM(this, arguments);
 			};
 		});
 
@@ -33,5 +34,9 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 
 	it("should call the viewmodule as a constructor", function(){
 		expect(functionName(dummyVM.getCall(0).args[0].constructor)).toBe("DummyVM");
+	});
+
+	it("should call the viewmodule with the model as the first argument", function(){
+		expect(dummyVM.getCall(0).args[1][0]).toEqual({a: true});
 	});
 });

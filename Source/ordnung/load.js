@@ -4,15 +4,15 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 	function getAttributes(target){
 
 		var viewModelName = target.getAttribute("data-viewmodel");
-		var initObject = target.getAttribute("data-initObject");
-		if (initObject && initObject.indexOf("{") == 0) {
-			initObject = JSON.parse(initObject);
+		var model = target.getAttribute("data-model");
+		if (model && model.indexOf("{") == 0) {
+			model = JSON.parse(model);
 		}
 
 		return {
 			target: target,
 			viewModelName: viewModelName,
-			model: initObject
+			model: model
 		};
 	}
 
@@ -34,7 +34,9 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 
 	return function (domElement) {
 
-		var elementList = utils.toArray((domElement || document.body).querySelectorAll("*[data-viewmodel]"));
+		domElement = domElement || document.body;
+
+		var elementList = utils.toArray(domElement.querySelectorAll("*[data-viewmodel]"));
 
 		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
 

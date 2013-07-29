@@ -17,11 +17,16 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 	}
 
 	function applyViewModel(data) {
+		var viewModel = new data.ViewModel(data.model);
+		ko.applyBindings(viewModel, data.target);
+	};
+
+	function loadViewModel(data){
 		return callbacks.call(require, [
 			data.viewModelName
 		]).then(function(ViewModel){
-			var viewModel = new ViewModel(data.model);
-			ko.applyBindings(viewModel, data.target);
+			data.ViewModel = ViewModel;
+			return data;
 		});
 	}
 
@@ -31,6 +36,10 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 
 		var elementList = utils.toArray((domElement || document.body).querySelectorAll("*[data-viewmodel]"));
 
-		return when.map(elementList.map(getAttributes), applyViewModel);
+		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
+
+		return when.all(viewModelsLoaded).then(function(list){
+			list.forEach(applyViewModel)
+		});
 	};
 });

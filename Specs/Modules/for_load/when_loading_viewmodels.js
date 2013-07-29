@@ -1,4 +1,10 @@
 moquire(["ordnung/load"], function(load){
+
+
+	function functionName(m){
+		return m.name || m.toString().match(/function\s+([^(]+)/)[1];
+	}
+
 	describe("when loading viewmodels", function(){
 
 		var dummyVM;
@@ -29,7 +35,7 @@ moquire(["ordnung/load"], function(load){
 		});
 
 		it("should call the viewmodule as a constructor", function(){
-			expect(dummyVM.getCall(0).args[0].constructor.name).toBe("DummyVM");
+			expect(functionName(dummyVM.getCall(0).args[0].constructor)).toBe("DummyVM");
 		});
 	});
 

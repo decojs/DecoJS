@@ -2,6 +2,8 @@
 
 // list of files / patterns to load in the browser
 files = [
+  'Source/Libs/es5-shim.min.js',
+  'Source/Libs/json2.js',
   JASMINE,
   JASMINE_ADAPTER,
   'Specs/Libs/overload.js',

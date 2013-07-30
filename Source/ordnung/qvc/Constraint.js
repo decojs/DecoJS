@@ -10,7 +10,7 @@ define([], function(){
 	}
 		
 	Constraint.prototype.init = function(name){
-		require(["ordnung/constraints/" + name], function(Tester){
+		require(["ordnung/qvc/constraints/" + name], function(Tester){
 			var tester = new Tester(this.attributes);
 			this.validate = tester.isValid.bind(tester);
 		}.bind(this));

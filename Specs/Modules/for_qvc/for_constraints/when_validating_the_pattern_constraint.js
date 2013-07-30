@@ -1,4 +1,4 @@
-describe("when validating the Pattern constraint", ["ordnung/constraints/Pattern"], function(Pattern){
+describe("when validating the Pattern constraint", ["ordnung/qvc/constraints/Pattern"], function(Pattern){
 
 
 	var constraint;

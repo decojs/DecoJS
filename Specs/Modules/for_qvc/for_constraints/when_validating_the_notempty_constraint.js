@@ -1,4 +1,4 @@
-describe("when validating the NotEmpty constraint", ["ordnung/constraints/NotEmpty"], function(NotEmpty){
+describe("when validating the NotEmpty constraint", ["ordnung/qvc/constraints/NotEmpty"], function(NotEmpty){
 
 	var constraint;
 	beforeEach(function(){

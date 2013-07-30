@@ -9,6 +9,20 @@ define([
 	var _config = {},
 		_document;
 
+	function applyContent = function(content){
+		//unloadCurrentPage();
+		//loadNextPage(content);
+		//setPageTitle();
+		//runPageJavaScript();
+		//return applyViewModels(_outlet, subscribe);
+	}
+
+	function pageChanged(path){
+		//setPageIsLoading();
+		//templates.getTemplate(path)
+		//.then(applyContent)
+		//.then(setPageHasLoaded);
+	}
 
 	function subscribe(event, reaction){
 		event(reaction);
@@ -18,9 +32,12 @@ define([
 		_document = document || window.document;
 		_config = utils.extend(_config, config);
 
-
+		//_hashNavigation = new HashNavigation(_document);
+		//_hashNavigation.onPageChanged(pageChanged);
 
 		return applyViewModels(_document, subscribe).then(function(){
+			//return _hashNavigation.start();
+		}).then(function(){
 
 		});
 	}

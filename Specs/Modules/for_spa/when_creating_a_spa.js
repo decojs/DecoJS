@@ -1,8 +1,8 @@
 describe("when creating a spa", {
-	"ordnung/applyViewModels": "Mocks/applyViewModelsMock"
+	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock"
 },[
 	"ordnung/spa",
-	"ordnung/applyViewModels"
+	"ordnung/spa/applyViewModels"
 ], function(
 	spa,
 	applyViewModelsSpy

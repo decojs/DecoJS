@@ -1,5 +1,5 @@
 describe("when creating a templates", [
-	"ordnung/Templates"
+	"ordnung/spa/Templates"
 ], function(
 	Templates
 ){

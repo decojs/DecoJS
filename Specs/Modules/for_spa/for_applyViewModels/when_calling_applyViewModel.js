@@ -1,4 +1,4 @@
-describe(["ordnung/applyViewModels"], "when calling applyViewModels", function(applyViewModels){
+describe(["ordnung/spa/applyViewModels"], "when calling applyViewModels", function(applyViewModels){
 
 	var dummyVM,
 		promise;

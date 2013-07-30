@@ -1,5 +1,5 @@
 define([
-	"ordnung/applyViewModels",
+	"ordnung/spa/applyViewModels",
 	"ordnung/utils"
 ], function(
 	applyViewModels,
@@ -9,7 +9,7 @@ define([
 	var _config = {},
 		_document;
 
-	function applyContent = function(content){
+	function applyContent(content){
 		//unloadCurrentPage();
 		//loadNextPage(content);
 		//setPageTitle();

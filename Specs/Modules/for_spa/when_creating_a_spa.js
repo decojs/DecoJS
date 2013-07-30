@@ -14,19 +14,19 @@ describe("when creating a spa", {
 
 	describe("when starting with an empty config", function(){
 
-		var stop;
+		var promise;
 
 		beforeEach(function(){
-			stop = spa.start({});
+			promise = spa.start({});
 		});
 
 		afterEach(function(){
-			stop();
 			applyViewModelsSpy.reset();
 		});
 
-		it("should return a stop method", function(){
-			expect(stop).toBeDefined();
+		it("should return a promise", function(){
+			expect(promise).toBeDefined();
+			expect(promise.then).toBeDefined();
 		});
 
 		it("should apply viewmodels to the current document", function(){

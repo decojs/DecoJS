@@ -11,7 +11,7 @@ define([
 
 
 	function subscribe(){
-
+		
 	}
 
 	function start(config, document){
@@ -20,13 +20,9 @@ define([
 
 
 
-		applyViewModels(_document, subscribe).then(function(){
-			
+		return applyViewModels(_document, subscribe).then(function(){
+
 		});
-
-		return function(){
-
-		};
 	}
 
 	return {

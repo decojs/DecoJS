@@ -55,7 +55,7 @@ describe("when", {
 		});
 
 		it("should have the content as its innerHTML", function(){
-			expect(elm.innerHTML).toBe("<p>new content</p>");
+			expect(elm.innerHTML.toLowerCase()).toBe("<p>new content</p>");
 		});
 	});
 

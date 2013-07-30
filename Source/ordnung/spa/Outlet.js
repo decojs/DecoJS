@@ -19,7 +19,7 @@ define([
 	};
 
 	Outlet.prototype.getPageTitle = function(){
-		var titleMetaTag = this.element.querySelector("title");
+		var titleMetaTag = this.element.querySelector("meta[rel=title]");
 		return (titleMetaTag && titleMetaTag.textContent);
 	};
 

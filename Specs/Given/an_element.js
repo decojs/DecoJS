@@ -13,7 +13,8 @@ define([], function(){
 		},
 		withChildrenAndATitle: function(titleText){
 			var elm = this.withChildren();
-			var title = document.createElement("title");
+			var title = document.createElement("meta");
+			title.setAttribute("rel", "title");
 			title.textContent = titleText;
 			elm.appendChild(title);
 			return elm;

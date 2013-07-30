@@ -20,4 +20,19 @@ requirejs.config(moquire.config({
     }
 }));
 
+beforeEach(function(){
+  this.addMatchers({
+    toBeA: function(type){
+      var actual = this.actual;
+      var notText = this.isNot ? " not" : "";
+
+      this.message = function(){
+        return "expected " + (typeof actual) + notText + " to be a " + type;
+      }
+
+      return typeof actual == type;
+    }
+  });
+});
+
 moquire.then(window.__karma__.start);

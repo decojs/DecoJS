@@ -39,8 +39,16 @@ define([], function () {
 		return events;
 	}
 
+	function create(arg1, arg2){
+		if(arg2)
+			return extendEvent(arg1, arg2);
+		else
+			return extendEvent("anonymous event", arg1)
+	}
+
 	return {
-		extend: extend
+		extend: extend,
+		create: create
 	};
 	
 });

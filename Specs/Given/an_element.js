@@ -10,6 +10,22 @@ define([], function(){
 			elm.appendChild(div);
 
 			return elm;
+		},
+		withChildrenAndATitle: function(titleText){
+			var elm = this.withChildren();
+			var title = document.createElement("title");
+			title.textContent = titleText;
+			elm.appendChild(title);
+			return elm;
+		},
+		withChildren: function(){
+			var elm = document.createElement("div");
+			for(var i=0; i<5; i++){
+				var child = document.createElement("span");
+				child.textContent = "child number "+i;
+				elm.appendChild(child);
+			}
+			return elm;
 		}
 	}
 });

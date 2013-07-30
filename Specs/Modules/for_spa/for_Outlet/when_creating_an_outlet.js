@@ -12,8 +12,8 @@ describe("when creating an outlet", [
 		outlet = new Outlet(elm);
 	});
 	
-	it("should take one argument", function(){
-		expect(Outlet.length).toBe(1);
+	it("should take two arguments", function(){
+		expect(Outlet.length).toBe(2);
 	});
 
 	it("should have a way to unload the current page", function(){

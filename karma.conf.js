@@ -19,7 +19,8 @@ files = [
   {pattern: 'components/when/**/*', included: false},
   {pattern: 'Source/ordnung/**/*.js', included: false},
   {pattern: 'Specs/Modules/**/*.js', included: true},
-  {pattern: 'Specs/Mocks/**/*.js', included: false}
+  {pattern: 'Specs/Mocks/**/*.js', included: false},
+  {pattern: 'Specs/Given/**/*.js', included: false}
 ];
 
 // list of files to exclude

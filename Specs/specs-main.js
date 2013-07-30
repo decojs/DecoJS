@@ -9,6 +9,7 @@ requirejs.config(moquire.config({
 
     paths: {
       "Mocks": "/base/Specs/Mocks",
+      "Given": "/base/Specs/Given",
       "knockout": "/base/Source/Libs/knockout-2.1.0",
       "ordnung": "/base/Source/ordnung"
     },

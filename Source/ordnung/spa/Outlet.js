@@ -28,7 +28,17 @@ define([
 	};
 
 	Outlet.prototype.extractAndRunPageJavaScript = function(){
-
+		var scripts = this.element.querySelectorAll("script");
+		for(var i=0; i<scripts.length; i++){
+			scripts[i].parentNode.removeChild(scripts[i]);
+			if(scripts[i].id === '') throw new Error("The script must have an id");
+			if(this.document.getElementById(scripts[i].id) == null){
+				var script = this.document.createElement("script");
+				script.id = scripts[i].id;
+				script.text = scripts[i].textContent;
+				this.document.body.appendChild(script);
+			}
+		}
 	};
 
 	Outlet.prototype.indicatePageIsLoading = function(){

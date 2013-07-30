@@ -26,6 +26,25 @@ define([], function(){
 				elm.appendChild(child);
 			}
 			return elm;
+		},
+		withScriptTags: function(){
+			var elm = document.createElement("div");
+			for(var i=0; i<5; i++){
+				var child = document.createElement("script");
+				child.textContent = "child number "+i;
+				elm.appendChild(child);
+			}
+			return elm;
+		},
+		withScriptTagsWithIds: function(){
+			var elm = document.createElement("div");
+			for(var i=0; i<5; i++){
+				var child = document.createElement("script");
+				child.id = "script"+i;
+				child.textContent = "child number "+i;
+				elm.appendChild(child);
+			}
+			return elm;
 		}
 	}
 });

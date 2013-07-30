@@ -34,7 +34,7 @@ describe("when subscribing to events", [
 
 	describe("when the event is triggered", function(){
 
-		beforeEach(function(){
+		because(function(){
 			event();
 		});
 

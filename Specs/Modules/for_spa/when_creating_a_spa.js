@@ -16,7 +16,7 @@ describe("when creating a spa", {
 
 		var promise;
 
-		beforeEach(function(){
+		because(function(){
 			promise = spa.start({});
 		});
 

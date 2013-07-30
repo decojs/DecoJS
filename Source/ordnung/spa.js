@@ -10,8 +10,8 @@ define([
 		_document;
 
 
-	function subscribe(){
-		
+	function subscribe(event, reaction){
+		event(reaction);
 	}
 
 	function start(config, document){

@@ -26,12 +26,12 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		});
 	}
 
-	function applyViewModel(when, data) {
-		var viewModel = new data.ViewModel(data.model, when);
+	function applyViewModel(subscribe, data) {
+		var viewModel = new data.ViewModel(data.model, subscribe);
 		ko.applyBindings(viewModel, data.target);
 	};
 
-	return function (domElement, proclaimWhen) {
+	return function (domElement, subscribe) {
 
 		domElement = domElement || document.body;
 
@@ -40,7 +40,7 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
 
 		return when.all(viewModelsLoaded).then(function(list){
-			list.forEach(applyViewModel.bind(null, proclaimWhen))
+			list.forEach(applyViewModel.bind(null, subscribe))
 		});
 	};
 });

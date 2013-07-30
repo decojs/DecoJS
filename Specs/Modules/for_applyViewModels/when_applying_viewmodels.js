@@ -6,11 +6,11 @@ describe("when applying viewmodels", ["ordnung/applyViewModels"], function(apply
 	}
 
 	var dummyVM,
-		when;
+		subscribe;
 
 	beforeEach(function(done){
 
-		when = sinon.spy();
+		subscribe = sinon.spy();
 
 		var elm = document.createElement("div");
 		var div = document.createElement("div");
@@ -27,7 +27,7 @@ describe("when applying viewmodels", ["ordnung/applyViewModels"], function(apply
 		});
 
 		because: {
-			applyViewModels(elm, when).then(done);
+			applyViewModels(elm, subscribe).then(done);
 		}
 	});
 
@@ -36,14 +36,14 @@ describe("when applying viewmodels", ["ordnung/applyViewModels"], function(apply
 	});
 
 	it("should call the viewmodule as a constructor", function(){
-		expect(functionName(dummyVM.getCall(0).args[0].constructor)).toBe("DummyVM");
+		expect(functionName(dummyVM.firstCall.args[0].constructor)).toBe("DummyVM");
 	});
 
 	it("should call the viewmodule with the model as the first argument", function(){
-		expect(dummyVM.getCall(0).args[1][0]).toEqual({a: true});
+		expect(dummyVM.firstCall.args[1][0]).toEqual({a: true});
 	});
 
-	it("should call the viewmodule with the when function as the second argument", function(){
-		expect(dummyVM.getCall(0).args[1][1]).toEqual(when);
+	it("should call the viewmodule with the subscribe function as the second argument", function(){
+		expect(dummyVM.firstCall.args[1][1]).toEqual(subscribe);
 	});
 });

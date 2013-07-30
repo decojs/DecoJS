@@ -1,11 +1,11 @@
 define([
-	"ordnung/Executable", 
-	"ordnung/ExecutableResult", 
+	"ordnung/qvc/Executable", 
+	"ordnung/qvc/ExecutableResult", 
 	"ordnung/utils", 
 	"ordnung/ajax",
-	"ordnung/ConstraintResolver",
+	"ordnung/qvc/ConstraintResolver",
 	"knockout", 
-	"ordnung/koExtensions"], 
+	"ordnung/qvc/koExtensions"], 
 	function(
 		Executable,
 		ExecutableResult,

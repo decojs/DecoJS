@@ -1,4 +1,4 @@
-define(["ordnung/Validator", "knockout"], function(Validator, ko){
+define(["ordnung/qvc/Validator", "knockout"], function(Validator, ko){
 
 	if (ko != null) {
 		ko.bindingHandlers.validationMessageFor = {

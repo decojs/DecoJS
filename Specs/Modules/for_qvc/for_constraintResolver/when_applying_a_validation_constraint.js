@@ -1,4 +1,4 @@
-describe("when applying a validation constraint", ["ordnung/ConstraintResolver"], function(ConstraintResolver){
+describe("when applying a validation constraint", ["ordnung/qvc/ConstraintResolver"], function(ConstraintResolver){
 	
 
 	var cr,

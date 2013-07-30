@@ -38,7 +38,7 @@ describe("when creating a spa", {
 		});
 
 		it("should pass in a subscribe function to the applyViewModels", function(){
-			expect(applyViewModelsSpy.firstCall.args[1]).toBeA("function");
+			expect(applyViewModelsSpy.firstCall.args[1]).toBeA(Function);
 		});
 
 	});

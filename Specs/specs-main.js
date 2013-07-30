@@ -21,19 +21,48 @@ requirejs.config(moquire.config({
     }
 }));
 
-beforeEach(function(){
-  this.addMatchers({
-    toBeA: function(type){
-      var actual = this.actual;
-      var notText = this.isNot ? " not" : "";
 
-      this.message = function(){
-        return "expected " + (typeof actual) + notText + " to be a " + type;
-      }
+(function(){
+  
+  function functionName(m){
+    return m.name || m.toString().match(/function\s+([^(]+)/)[1];
+  }
 
-      return typeof actual == type;
+  function typeOf(obj) {
+    var typeString = ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1];
+    if(typeString == "Object"){
+      return functionName(obj.constructor);
+    }else{
+      return typeString;
     }
+  }
+
+  function toBeA(aOrAn, type){
+    var actual = typeOf(this.actual);
+    var notText = this.isNot ? " not" : "";
+    var expected = functionName(type);
+
+    this.message = function(){
+      return "expected " + actual + notText + " to be " + aOrAn + expected;
+    }
+
+    return actual === expected;
+  }
+
+  beforeEach(function(){
+    this.addMatchers({
+      toBeA: function(type){
+        return toBeA.call(this, "a ", type)
+      },
+      toBeAn: function(type){
+        return toBeA.call(this, "an ", type)
+      }
+    });
   });
-});
+
+})();
+
+
+
 
 moquire.then(window.__karma__.start);

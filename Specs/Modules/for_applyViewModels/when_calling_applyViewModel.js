@@ -1,4 +1,4 @@
-describe(["ordnung/load"], "when calling load", function(load){
+describe(["ordnung/applyViewModels"], "when calling applyViewModels", function(applyViewModels){
 
 	var dummyVM,
 		promise;
@@ -8,7 +8,7 @@ describe(["ordnung/load"], "when calling load", function(load){
 		var elm = document.createElement("div");
 
 		because: {
-			promise = load(elm);
+			promise = applyViewModels(elm);
 		}
 	});
 

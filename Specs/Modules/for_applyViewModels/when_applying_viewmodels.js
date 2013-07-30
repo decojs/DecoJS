@@ -1,4 +1,4 @@
-describe("when loading viewmodels", ["ordnung/load"], function(load){
+describe("when applying viewmodels", ["ordnung/applyViewModels"], function(applyViewModels){
 
 
 	function functionName(m){
@@ -27,7 +27,7 @@ describe("when loading viewmodels", ["ordnung/load"], function(load){
 		});
 
 		because: {
-			load(elm, when).then(done);
+			applyViewModels(elm, when).then(done);
 		}
 	});
 

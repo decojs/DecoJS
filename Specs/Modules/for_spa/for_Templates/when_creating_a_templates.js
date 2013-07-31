@@ -1,14 +1,18 @@
 describe("when creating a templates", [
-	"ordnung/spa/Templates"
+	"ordnung/spa/Templates",
+	"Given/a_document"
 ], function(
-	Templates
+	Templates,
+	a_document
 ){
 	
 
-	var templates;
+	var templates,
+		doc;
 
 	beforeEach(function(){
-		templates = new Templates();
+		doc = a_document.withPageTemplates();
+		templates = new Templates(doc);
 	});
 
 	it("should have a constructor taking one argument", function(){
@@ -18,5 +22,10 @@ describe("when creating a templates", [
 	it("should have a getTemplate method", function(){
 		expect(templates.getTemplate).toBeDefined();
 		expect(templates.getTemplate.length).toBe(1);
+	});
+
+	it("should find all templates", function(){
+		expect(doc.querySelectorAll.callCount).toBe(1);
+		expect(doc.querySelectorAll.firstCall.args[0]).toBe("[type='text/page-template']");
 	});
 });

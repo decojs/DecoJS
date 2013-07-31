@@ -26,6 +26,21 @@ define([], function(){
 				doc.body.appendChild(child);
 			}
 			return doc;
+		},
+		withPageTemplates: function(){
+			var doc = {
+				querySelectorAll: sinon.stub()
+			};
+
+			doc.querySelectorAll.returns([
+				{
+					id:"myTemplate",
+					innerHTML: "<p>my template</p>"
+				}
+			]);
+
+			return doc;
+
 		}
 	}
 });

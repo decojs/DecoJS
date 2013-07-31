@@ -49,7 +49,6 @@ define([
 		this.element.setAttribute("data-loading", "false");
 	};
 
-
 	return Outlet;
 
 });

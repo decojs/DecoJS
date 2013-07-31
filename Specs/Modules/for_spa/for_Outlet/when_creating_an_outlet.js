@@ -4,10 +4,11 @@ describe("when creating an outlet", [
 	Outlet
 ){
 
-	var outlet;
+	var outlet,
+		elm;
 
 	beforeEach(function(){
-		var elm = document.createElement("div");
+		elm = document.createElement("div");
 
 		outlet = new Outlet(elm);
 	});
@@ -49,6 +50,10 @@ describe("when creating an outlet", [
 	it("should be told when the page is done loading", function(){
 		expect(outlet.pageHasLoaded).toBeA(Function);
 		expect(outlet.pageHasLoaded.length).toBe(0);
+	});
+
+	it("should have an element", function(){
+		expect(outlet.element).toBe(elm);
 	});
 
 });

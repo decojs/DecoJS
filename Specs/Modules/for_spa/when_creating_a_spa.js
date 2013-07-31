@@ -1,17 +1,20 @@
 describe("when creating a spa", {
 	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
 	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}},
-	"ordnung/spa/Outlet": function(){return sinon.spy();}
+	"ordnung/spa/Outlet": function(){return sinon.spy();},
+	"ordnung/spa/Templates": function(){return sinon.spy();}
 },[
 	"ordnung/spa",
 	"ordnung/spa/applyViewModels",
 	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Outlet"
+	"ordnung/spa/Outlet",
+	"ordnung/spa/Templates"
 ], function(
 	spa,
 	applyViewModelsSpy,
 	hashNavigationSpy,
-	OutletSpy
+	OutletSpy,
+	TemplatesSpy
 ){
 
 	it("should have a start method", function(){
@@ -42,6 +45,7 @@ describe("when creating a spa", {
 			applyViewModelsSpy.reset();
 			hashNavigationSpy.start.reset();
 			OutletSpy.reset();
+			TemplatesSpy.reset();
 		});
 
 		it("should return a promise", function(){
@@ -72,6 +76,10 @@ describe("when creating a spa", {
 
 		it("should start the hashNavigation", function(){
 			expect(hashNavigationSpy.start.callCount).toBe(1);
+		});
+
+		it("should create a templates repository", function(){
+			expect(TemplatesSpy.callCount).toBe(1);
 		});
 
 	});

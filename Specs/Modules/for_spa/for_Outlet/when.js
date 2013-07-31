@@ -115,4 +115,11 @@ describe("when", {
 		});
 	});
 
+	describe("asking for the element", function(){
+
+		it("should return the same element as it was constructed with", function(){
+			expect(outlet.element).toBe(elm);
+		});
+	});
+
 });

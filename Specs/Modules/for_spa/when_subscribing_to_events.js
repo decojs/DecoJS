@@ -1,13 +1,16 @@
 describe("when subscribing to events", {
-	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}}
+	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock",
+	"ordnung/spa/Outlet": "Mocks/OutletMock"
 },[
 	"ordnung/spa",
 	"Given/an_element",
-	"Given/an_event"
+	"Given/an_event",
+	"ordnung/spa/hashNavigation"
 ], function(
 	spa,
 	an_element,
-	an_event
+	an_event,
+	hashNavigationMock
 ){
 
 	var event,
@@ -45,5 +48,17 @@ describe("when subscribing to events", {
 		});
 	});
 
+	describe("when the page changes", function(){
+
+		beforeEach(function(){
+			hashNavigationMock.listener()("some/path");
+			event();
+		});
+
+		it("should no longer react to the event", function(){
+			expect(react.callCount).toBe(0);
+		});
+
+	});
 
 });

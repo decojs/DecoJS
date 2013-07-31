@@ -52,7 +52,9 @@ define([
 		global.addEventListener("hashchange", onHashChanged, false);
 
 		return {
-			stop: function(){}
+			stop: function(){
+				global.removeEventListener("hashchange", onHashChanged, false);
+			}
 		};
 	}
 

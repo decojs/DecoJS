@@ -25,8 +25,8 @@ define([
 	}
 
 
-	function Templates(document){
-		this.pageLoader = new PageLoader();
+	function Templates(document, config){
+		this.pageLoader = new PageLoader(config && config.pathToUrl || function(a){ return a; });
 
 		this.templates = findTemplatesInDocument(document);
 	}

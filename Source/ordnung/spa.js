@@ -1,7 +1,9 @@
 define([
+	"ordnung/spa/Outlet",
 	"ordnung/spa/applyViewModels",
 	"ordnung/utils"
 ], function(
+	Outlet,
 	applyViewModels,
 	utils
 ){
@@ -10,18 +12,20 @@ define([
 		_document;
 
 	function applyContent(content){
-		//unloadCurrentPage();
-		//loadNextPage(content);
-		//setPageTitle();
-		//runPageJavaScript();
-		//return applyViewModels(_outlet, subscribe);
+		//this.outlet.unloadCurrentPage();
+		//this.outlet.setPageContent(content);
+		//this.outlet.setDocumentTitle(this.outlet.getPageTitle() || _originalTitle);
+		//this.outlet.extractAndRunPageJavaScript();
+		//return applyViewModels(this.outlet.element, subscribe);
 	}
 
 	function pageChanged(path){
-		//setPageIsLoading();
+		//this.outlet.indicatePageIsLoading();
 		//templates.getTemplate(path)
 		//.then(applyContent)
-		//.then(setPageHasLoaded);
+		//.then(function(){
+		//	this.outlet.pageHasLoaded();
+		//});
 	}
 
 	function subscribe(event, reaction){

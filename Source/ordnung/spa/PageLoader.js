@@ -4,7 +4,8 @@ define([
 	ajax
 ){
 
-	function PageLoader(){
+	function PageLoader(pathToUrl){
+		this.pathToUrl = pathToUrl;
 		this.currentXHR = null;
 	}
 
@@ -12,7 +13,7 @@ define([
 
 		this.abort();
 
-		this.currentXHR = ajax(path, {}, "GET", function(xhr){
+		this.currentXHR = ajax(this.pathToUrl(path), {}, "GET", function(xhr){
 			if(xhr.status === 200)
 				resolver.resolve(xhr.responseText);
 			else

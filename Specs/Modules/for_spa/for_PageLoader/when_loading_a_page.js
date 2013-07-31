@@ -9,10 +9,14 @@ describe("when loading a page", {
 ){
 
 	var pageLoader,
-		resolver;
+		resolver,
+		pathToUrlSpy;
 
 	beforeEach(function(){
-		pageLoader = new PageLoader();
+
+		pathToUrlSpy = sinon.spy();
+
+		pageLoader = new PageLoader(pathToUrlSpy);
 		ajax.respondImmediately = false;
 
 		resolver = {
@@ -28,6 +32,11 @@ describe("when loading a page", {
 	afterEach(function(){
 		ajax.spy.reset();
 		ajax.respondImmediately = true;
+	});
+
+	it("should use the pathToUrl to get the correct url", function(){
+		expect(pathToUrlSpy.callCount).toBe(1);
+		expect(pathToUrlSpy.firstCall.args[0]).toBe("path/to/page");
 	});
 
 	it("should use ajax to get the page", function(){

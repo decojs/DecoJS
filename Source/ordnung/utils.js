@@ -15,6 +15,12 @@ define([], function(){
 				dst[i] = src[i];
 			}
 			return dst;
+		},
+		arrayToObject: function(array, func){
+			return array.reduce(function(collection, item){
+				func(item, collection);
+				return collection;
+			}, {});
 		}
 	};
 });

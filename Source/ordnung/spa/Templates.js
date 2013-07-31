@@ -1,9 +1,9 @@
 define([
-	"ordnung/spa/TemplateLoader",
+	"ordnung/spa/PageLoader",
 	"ordnung/utils",
 	"when"
 ], function(
-	TemplateLoader,
+	PageLoader,
 	utils,
 	when
 ){
@@ -26,7 +26,7 @@ define([
 
 
 	function Templates(document){
-		this.templateLoader = new TemplateLoader();
+		this.pageLoader = new PageLoader();
 
 		this.templates = findTemplatesInDocument(document);
 	}
@@ -35,14 +35,14 @@ define([
 
 		var deferred = when.defer();
 
-		this.templateLoader.abort();
+		this.pageLoader.abort();
 
 		var normalizedPath = path.toLowerCase();
 
 		if(normalizedPath in this.templates){
 			deferred.resolve(this.templates[normalizedPath]);
 		}else{
-			this.templateLoader.loadTemplate(path, deferred.resolver);
+			this.pageLoader.loadPage(path, deferred.resolver);
 		}
 
 

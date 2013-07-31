@@ -1,11 +1,11 @@
 describe("when getting a non existing template", {
-	"ordnung/spa/TemplateLoader": "Mocks/TemplateLoaderMock"
+	"ordnung/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
 	"ordnung/spa/Templates",
-	"ordnung/spa/TemplateLoader"
+	"ordnung/spa/PageLoader"
 ], function(
 	Templates,
-	TemplateLoader
+	PageLoader
 ){
 
 	var templates,
@@ -19,8 +19,8 @@ describe("when getting a non existing template", {
 	});
 
 	afterEach(function(){
-		TemplateLoader.loadTemplateSpy.reset();
-		TemplateLoader.abortSpy.reset();
+		PageLoader.loadPageSpy.reset();
+		PageLoader.abortSpy.reset();
 	});
 
 	it("should return a promise", function(){
@@ -28,11 +28,11 @@ describe("when getting a non existing template", {
 	});
 
 	it("should call the loadTemplate method", function(){
-		expect(TemplateLoader.loadTemplateSpy.callCount).toBe(1);
+		expect(PageLoader.loadPageSpy.callCount).toBe(1);
 	});
 
 	it("should abort the previous loading", function(){
-		expect(TemplateLoader.abortSpy.callCount).toBe(1);
+		expect(PageLoader.abortSpy.callCount).toBe(1);
 	});
 
 	

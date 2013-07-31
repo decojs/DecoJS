@@ -1,18 +1,18 @@
-describe("when getting a non existing template", {
+describe("when loading a page", {
 	"ordnung/ajax": "Mocks/ajaxMock"
 },[
-	"ordnung/spa/TemplateLoader",
+	"ordnung/spa/PageLoader",
 	"ordnung/ajax"
 ], function(
-	TemplateLoader,
+	PageLoader,
 	ajax
 ){
 
-	var templateLoader,
+	var pageLoader,
 		resolver;
 
 	beforeEach(function(){
-		templateLoader = new TemplateLoader();
+		pageLoader = new PageLoader();
 		ajax.respondImmediately = false;
 
 		resolver = {
@@ -21,7 +21,7 @@ describe("when getting a non existing template", {
 		};
 
 		because: {
-			templateLoader.loadTemplate("path/to/template", resolver);
+			pageLoader.loadPage("path/to/page", resolver);
 		}
 	});
 
@@ -30,7 +30,7 @@ describe("when getting a non existing template", {
 		ajax.respondImmediately = true;
 	});
 
-	it("should use ajax to get the template", function(){
+	it("should use ajax to get the page", function(){
 		expect(ajax.spy.callCount).toBe(1);
 	});
 
@@ -46,7 +46,7 @@ describe("when getting a non existing template", {
 		it("the promise should resolve", function(){
 			expect(resolver.resolve.callCount).toBe(1);
 		});
-		it("the promise should resolve with the template content", function(){
+		it("the promise should resolve with the page content", function(){
 			expect(resolver.resolve.firstCall.args[0]).toBe("myTemplate");
 		});
 	});
@@ -65,10 +65,10 @@ describe("when getting a non existing template", {
 		});
 	});
 
-	describe("when a new template is requetsed before the old one is resolved", function(){
+	describe("when a new page is requetsed before the old one is resolved", function(){
 
 		because(function(){
-			templateLoader.loadTemplate("a/second/template");
+			pageLoader.loadPage("a/second/page");
 		});
 
 		it("the original promise should be rejected", function(){
@@ -79,7 +79,7 @@ describe("when getting a non existing template", {
 	describe("when the loading is aborted", function(){
 
 		because(function(){
-			templateLoader.abort();
+			pageLoader.abort();
 		});
 
 		it("the original promise should be rejected", function(){

@@ -4,11 +4,11 @@ define([
 	ajax
 ){
 
-	function TemplateLoader(){
+	function PageLoader(){
 		this.currentXHR = null;
 	}
 
-	TemplateLoader.prototype.loadTemplate = function(path, resolver){
+	PageLoader.prototype.loadPage = function(path, resolver){
 
 		this.abort();
 
@@ -20,11 +20,11 @@ define([
 		});
 	};
 
-	TemplateLoader.prototype.abort = function(){
+	PageLoader.prototype.abort = function(){
 		if(this.currentXHR && this.currentXHR.readyState !== 4){
 			this.currentXHR.abort();
 		}
 	};
 
-	return TemplateLoader;
+	return PageLoader;
 });

@@ -1,12 +1,12 @@
 describe("when getting an existing template", {
-	"ordnung/spa/TemplateLoader": "Mocks/TemplateLoaderMock"
+	"ordnung/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
 	"ordnung/spa/Templates",
-	"ordnung/spa/TemplateLoader",
+	"ordnung/spa/PageLoader",
 	"Given/a_document"
 ], function(
 	Templates,
-	TemplateLoader,
+	PageLoader,
 	a_document
 ){
 
@@ -21,8 +21,8 @@ describe("when getting an existing template", {
 	});
 
 	afterEach(function(){
-		TemplateLoader.loadTemplateSpy.reset();
-		TemplateLoader.abortSpy.reset();
+		PageLoader.loadPageSpy.reset();
+		PageLoader.abortSpy.reset();
 	});
 
 	it("should return a promise", function(){
@@ -30,7 +30,7 @@ describe("when getting an existing template", {
 	});
 
 	it("should abort the previous loading", function(){
-		expect(TemplateLoader.abortSpy.callCount).toBe(1);
+		expect(PageLoader.abortSpy.callCount).toBe(1);
 	});
 
 	it("should resolve the promise to a template", function(done){

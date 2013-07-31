@@ -1,14 +1,17 @@
 describe("when creating a spa", {
 	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
-	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}}
+	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}},
+	"ordnung/spa/Outlet": function(){return sinon.spy();}
 },[
 	"ordnung/spa",
 	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation"
+	"ordnung/spa/hashNavigation",
+	"ordnung/spa/Outlet"
 ], function(
 	spa,
 	applyViewModelsSpy,
-	hashNavigation
+	hashNavigationSpy,
+	OutletSpy
 ){
 
 	it("should have a start method", function(){
@@ -17,16 +20,28 @@ describe("when creating a spa", {
 
 	describe("when starting with an empty config", function(){
 
-		var promise;
+		var promise,
+			doc;
 
-		because(function(done){
-			promise = spa.start({});
+		beforeEach(function(done){
+
+			doc = {
+				querySelector: sinon.spy(),
+				location: {
+					hash: "",
+					replace: sinon.spy()
+				}
+
+			};
+
+			promise = spa.start({}, doc);
 			promise.then(done);
 		});
 
 		afterEach(function(){
 			applyViewModelsSpy.reset();
-			hashNavigation.start.reset();
+			hashNavigationSpy.start.reset();
+			OutletSpy.reset();
 		});
 
 		it("should return a promise", function(){
@@ -39,15 +54,24 @@ describe("when creating a spa", {
 		});
 
 		it("should pass in the current document to the applyViewModels", function(){
-			expect(applyViewModelsSpy.firstCall.args[0]).toBe(document);
+			expect(applyViewModelsSpy.firstCall.args[0]).toBe(doc);
 		});
 
 		it("should pass in a subscribe function to the applyViewModels", function(){
 			expect(applyViewModelsSpy.firstCall.args[1]).toBeA(Function);
 		});
 
+		it("should find the outlet in the document", function(){
+			expect(doc.querySelector.callCount).toBe(1);
+			expect(doc.querySelector.firstCall.args[0]).toBe("[data-outlet]");
+		});
+
+		it("should create an outlet", function(){
+			expect(OutletSpy.callCount).toBe(1);
+		});
+
 		it("should start the hashNavigation", function(){
-			expect(hashNavigation.start.callCount).toBe(1);
+			expect(hashNavigationSpy.start.callCount).toBe(1);
 		});
 
 	});

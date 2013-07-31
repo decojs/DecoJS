@@ -11,23 +11,24 @@ define([
 ){
 
 	var _config = {},
-		_document;
+		_document,
+		_outlet;
 
 	function applyContent(content){
-		//this.outlet.unloadCurrentPage();
-		//this.outlet.setPageContent(content);
-		//this.outlet.setDocumentTitle(this.outlet.getPageTitle() || _originalTitle);
-		//this.outlet.extractAndRunPageJavaScript();
-		//return applyViewModels(this.outlet.element, subscribe);
+		//_outlet.unloadCurrentPage();
+		//_outlet.setPageContent(content);
+		//_outlet.setDocumentTitle(_outlet.getPageTitle() || _originalTitle);
+		//_outlet.extractAndRunPageJavaScript();
+		//return applyViewModels(_outlet.element, subscribe);
 	}
 
 	function pageChanged(path){
-		//this.outlet.indicatePageIsLoading();
+		//_outlet.indicatePageIsLoading();
 		//unsubscribePageEvents();
 		//templates.getTemplate(path)
 		//.then(applyContent)
 		//.then(function(){
-		//	this.outlet.pageHasLoaded();
+		//	_outlet.pageHasLoaded();
 		//});
 	}
 
@@ -39,10 +40,10 @@ define([
 		_document = document || window.document;
 		_config = utils.extend(_config, config);
 
+		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
 
 		return applyViewModels(_document, subscribe).then(function(){
 			hashNavigation.start(_config, pageChanged, _document);
-			return true;
 		});
 	}
 

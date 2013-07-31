@@ -1,10 +1,12 @@
 define([
 	"ordnung/spa/Outlet",
 	"ordnung/spa/applyViewModels",
+	"ordnung/spa/hashNavigation",
 	"ordnung/utils"
 ], function(
 	Outlet,
 	applyViewModels,
+	hashNavigation,
 	utils
 ){
 
@@ -21,6 +23,7 @@ define([
 
 	function pageChanged(path){
 		//this.outlet.indicatePageIsLoading();
+		//unsubscribePageEvents();
 		//templates.getTemplate(path)
 		//.then(applyContent)
 		//.then(function(){
@@ -36,13 +39,10 @@ define([
 		_document = document || window.document;
 		_config = utils.extend(_config, config);
 
-		//_hashNavigation = new HashNavigation(_document);
-		//_hashNavigation.onPageChanged(pageChanged);
 
 		return applyViewModels(_document, subscribe).then(function(){
-			//return _hashNavigation.start();
-		}).then(function(){
-
+			hashNavigation.start(_config, pageChanged, _document);
+			return true;
 		});
 	}
 

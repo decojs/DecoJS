@@ -1,4 +1,6 @@
-describe("when subscribing to events", [
+describe("when subscribing to events", {
+	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}}
+},[
 	"ordnung/spa",
 	"Given/an_element",
 	"Given/an_event"

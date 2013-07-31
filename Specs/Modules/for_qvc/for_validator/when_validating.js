@@ -1,4 +1,4 @@
-describe("when validating all the constraints", ["ordnung/Validator"], function(Validator){
+describe("when validating all the constraints", ["ordnung/qvc/Validator"], function(Validator){
 
 	var validator,
 		constraintValid = {validate: sinon.spy(function(){return true}), message:"valid"};

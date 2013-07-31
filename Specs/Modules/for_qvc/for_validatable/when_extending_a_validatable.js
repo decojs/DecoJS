@@ -1,4 +1,4 @@
-describe("when extending a Validatable", ["knockout", "ordnung/Validatable", "ordnung/koExtensions"], function(ko, Validatable){
+describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable", "ordnung/qvc/koExtensions"], function(ko, Validatable){
 
 	var parameters,
 		validatable,

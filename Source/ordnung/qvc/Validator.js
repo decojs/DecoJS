@@ -1,4 +1,4 @@
-define(["ordnung/Constraint", "knockout"], function(Constraint, ko){
+define(["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
 	function Validator(){
 		var self = this;
 		

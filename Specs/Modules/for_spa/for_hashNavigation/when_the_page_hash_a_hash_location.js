@@ -26,7 +26,7 @@ describe("when the page has a hash location", [
 			removeEventListener: removeEventListenerSpy
 		};
 
-		result = hashNavigation({}, onPageChangedSpy, doc, global);
+		result = hashNavigation.start({}, onPageChangedSpy, doc, global);
 	});
 
 	it("should return an object with a stop function", function(){

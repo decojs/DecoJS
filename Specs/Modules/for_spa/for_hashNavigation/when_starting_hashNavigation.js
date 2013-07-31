@@ -4,8 +4,8 @@ describe("when starting hashNavigation", [
 	hashNavigation
 ){
 
-	it("should be a function which takes four arguments", function(){
-		expect(hashNavigation.length).toBe(4);
+	it("should have a function which takes four arguments", function(){
+		expect(hashNavigation.start.length).toBe(4);
 	});
 
 });

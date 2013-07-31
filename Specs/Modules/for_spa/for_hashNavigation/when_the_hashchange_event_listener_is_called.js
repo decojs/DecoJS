@@ -34,7 +34,7 @@ describe("when the hashchange event listener is called", [
 			}
 		};
 
-		result = hashNavigation(config, onPageChangedSpy, doc, global);
+		result = hashNavigation.start(config, onPageChangedSpy, doc, global);
 	});
 
 	it("should add the correct index value to the end", function(){

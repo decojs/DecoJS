@@ -59,6 +59,8 @@ define([
 	}
 
 
-	return startHashNavigation;
+	return {
+		start: startHashNavigation
+	};
 
 });

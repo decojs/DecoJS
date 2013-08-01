@@ -21,7 +21,7 @@ describe("when the hashchange event listener is called", [
 
 		doc = {
 			location: {
-				hash: "#/myPath/",
+				hash: "#/myPath/home",
 				replace: replaceSpy
 			}
 		};
@@ -33,11 +33,6 @@ describe("when the hashchange event listener is called", [
 		};
 
 		result = hashNavigation.start(config, onPageChangedSpy, doc, global);
-	});
-
-	it("should add the correct index value to the end", function(){
-		expect(onPageChangedSpy.callCount).toBe(1);
-		expect(onPageChangedSpy.firstCall.args[0]).toBe("myPath/home");
 	});
 
 	describe("with a path starting with /", function(){
@@ -57,7 +52,7 @@ describe("when the hashchange event listener is called", [
 	describe("with a path not starting with /", function(){
 
 		because(function(){
-			onPageChangedSpy.reset();
+			replaceSpy.reset();
 			doc.location.hash = "#newPath";
 			onHashChange();
 		});
@@ -65,6 +60,20 @@ describe("when the hashchange event listener is called", [
 		it("should call document.location.replace with the new path", function(){
 			expect(replaceSpy.callCount).toBe(1);
 			expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/newPath");
+		});
+	});
+
+	describe("with a path ends with /", function(){
+
+		because(function(){
+			replaceSpy.reset();
+			doc.location.hash = "#/newPath/";
+			onHashChange();
+		});
+
+		it("should call document.location.replace with the new path, ending with index", function(){
+			expect(replaceSpy.callCount).toBe(1);
+			expect(replaceSpy.firstCall.args[0]).toBe("#/newPath/home");
 		});
 	});
 });

@@ -10,12 +10,14 @@ define([
 		var isAbsolute = _.startsWith(link, '/');
 		var isFolder = _.endsWith(link, '/');
 		
-		if(link == "/"){
+		if(link === "/"){
 			var path = [];
+		}else if(link === ""){
+			var path = [index];
 		}else{
 			var path = _.trim(link, "/").split("/");
 		}
-		
+
 		if(isFolder){
 			path.push(index);
 		}
@@ -30,12 +32,15 @@ define([
 
 		var path = _.trim(document.location.hash, '#');
 
-		if(_.startsWith(path, '/')){
-			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'));
-		}else{
+		var isRelative = _.startsWith(path, '/') == false;
+		var isFolder = _.endsWith(path, '/');
+
+		if(isRelative || isFolder){
 			var newHash = newPath(this.currentPath, path, config.index).join('/');
 			document.location.replace("#/" + newHash);
+		}else{
+			this.currentPath = newPath(this.currentPath, path, config.index);
+			onPageChanged(this.currentPath.join('/'));
 		}
 
 	}

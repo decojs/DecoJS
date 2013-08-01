@@ -14,8 +14,8 @@ define([], function(){
 		withChildrenAndATitle: function(titleText){
 			var elm = this.withChildren();
 			var title = document.createElement("meta");
-			title.setAttribute("rel", "title");
-			title.textContent = titleText;
+			title.setAttribute("name", "title");
+			title.setAttribute("content", titleText);
 			elm.appendChild(title);
 			return elm;
 		},

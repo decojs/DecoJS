@@ -19,8 +19,8 @@ define([
 	};
 
 	Outlet.prototype.getPageTitle = function(){
-		var titleMetaTag = this.element.querySelector("meta[rel=title]");
-		return (titleMetaTag && titleMetaTag.textContent);
+		var titleMetaTag = this.element.querySelector("meta[name=title]");
+		return (titleMetaTag && titleMetaTag.getAttribute("content"));
 	};
 
 	Outlet.prototype.setDocumentTitle = function(title){

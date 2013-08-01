@@ -6,7 +6,6 @@ describe("when the hashchange event listener is called", [
 
 	var result,
 		onPageChangedSpy,
-		addEventListenerSpy,
 		replaceSpy,
 		doc,
 		onHashChange;
@@ -14,7 +13,6 @@ describe("when the hashchange event listener is called", [
 	beforeEach(function(){
 
 		onPageChangedSpy = sinon.spy();
-		addEventListenerSpy = sinon.spy();
 		replaceSpy = sinon.spy();
 
 		config = {

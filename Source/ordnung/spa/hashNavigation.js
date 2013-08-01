@@ -49,7 +49,7 @@ define([
 		};
 		var onHashChanged = hashChanged.bind(state, config, onPageChanged, doc);
 		onHashChanged();
-		global.addEventListener("hashchange", onHashChanged, false);
+		_.addEventListener(global, "hashchange", onHashChanged, false);
 
 		return {
 			stop: function(){

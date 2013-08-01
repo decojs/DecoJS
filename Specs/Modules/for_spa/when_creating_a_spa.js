@@ -78,6 +78,10 @@ describe("when creating a spa", {
 			expect(hashNavigationSpy.start.callCount).toBe(1);
 		});
 
+		it("should set a default index if one is not provided", function(){
+			expect(hashNavigationSpy.start.firstCall.args[0].index).toBe("index");
+		});
+
 		it("should create a templates repository", function(){
 			expect(TemplatesSpy.callCount).toBe(1);
 		});

@@ -12,7 +12,9 @@ define([
 	utils
 ){
 
-	var _config = {},
+	var _config = {
+			index: "index"
+		},
 		_document,
 		_outlet,
 		_originalTitle,

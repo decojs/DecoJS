@@ -35,6 +35,13 @@ define([], function(){
 		},
 		endsWith: function(word, character){
 			return word.charAt(word.length - 1) === character;
+		},
+		addEventListener: function(element, event, listener, bubble){
+			if('addEventListener' in element){
+				element.addEventListener(event, listener, bubble);
+			}else{
+				element.attachEvent("on"+event, listener);		
+			}
 		}
 	};
 });

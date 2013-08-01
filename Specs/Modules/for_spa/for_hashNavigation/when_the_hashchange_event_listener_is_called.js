@@ -76,4 +76,46 @@ describe("when the hashchange event listener is called", [
 			expect(replaceSpy.firstCall.args[0]).toBe("#/newPath/home");
 		});
 	});
+
+	describe("with a path starting with ..", function(){
+
+		because(function(){
+			replaceSpy.reset();
+			doc.location.hash = "#../home";
+			onHashChange();
+		});
+
+		it("should call document.location.replace with the new path, ending with index", function(){
+			expect(replaceSpy.callCount).toBe(1);
+			expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+		});
+	});
+
+	describe("with a path containing two consecutive slashes", function(){
+
+		because(function(){
+			onPageChangedSpy.reset();
+			doc.location.hash = "#/newPath//home";
+			onHashChange();
+		});
+
+		it("should call document.location.replace with the new path, ending with index", function(){
+			expect(onPageChangedSpy.callCount).toBe(1);
+			expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath/home");
+		});
+	});
+
+	describe("with a path starting with .", function(){
+
+		because(function(){
+			replaceSpy.reset();
+			doc.location.hash = "#./home";
+			onHashChange();
+		});
+
+		it("should call document.location.replace with the new path, ending with index", function(){
+			expect(replaceSpy.callCount).toBe(1);
+			expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
+		});
+	});
 });

@@ -7,7 +7,7 @@ define([
 
 	
 	function newPath(currentPath, link, index){
-		var isAbsolute = _.startsWith(link, '/');
+		var isRelative = _.startsWith(link, '/') === false;
 		var isFolder = _.endsWith(link, '/');
 		
 		if(link === "/"){
@@ -21,11 +21,25 @@ define([
 		if(isFolder){
 			path.push(index);
 		}
-		if(isAbsolute){
-			return path;
-		}else{
-			return _.popTail(currentPath).concat(path);
+		if(isRelative){
+			path = _.popTail(currentPath).concat(path);
 		}
+
+		var out = [];
+
+		for(var i = path.length>>>0; i--;){
+			if(path[i] === ""){
+				continue;
+			}else if(path[i] === "."){
+				continue;
+			}else if(path[i] === "..") {
+				i--;
+			}else{
+				out.unshift(path[i]);
+			}
+		}
+
+		return out;
 	}
 
 	function hashChanged(config, onPageChanged, document){

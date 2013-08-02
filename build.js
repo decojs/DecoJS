@@ -3,13 +3,13 @@
 	out: "Bin/ordnung.js",
 	paths: {
 		"knockout": "empty:",
-		"ordnung": "Source"
+		"ordnung": "Source",
 		"when": "empty:"
 	},
-	include: [,
+	include: [
 		"ordnung/qvc",
 		"ordnung/spa",
-		"ordnung/proclaimWhen.js",
+		"ordnung/proclaimWhen",
 		"ordnung/utils",
 		"ordnung/ajax"
 	],

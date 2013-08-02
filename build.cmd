@@ -1,1 +1,1 @@
-Tools\node.exe node_modules\requirejs\bin\r.js -o build.js
+node_modules\.bin\r.js.cmd -o build.js

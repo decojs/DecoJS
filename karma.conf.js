@@ -2,8 +2,8 @@
 
 // list of files / patterns to load in the browser
 files = [
-  'Source/Libs/es5-shim.min.js',
-  'Source/Libs/json2.js',
+  'bower_components/es5-shim/es5-shim.js', //for old IE
+  'bower_components/json2/json2.js', //for old IE
   JASMINE,
   JASMINE_ADAPTER,
   'Specs/Libs/overload.js',
@@ -12,12 +12,13 @@ files = [
   REQUIRE_ADAPTER,
   'Specs/Libs/moquire.js',
   'Specs/Libs/sinon-1.3.4.js',
-  {pattern: 'Source/Libs/knockout-2.1.0.js', included: false},
+  {pattern: 'bower_components/knockout.js/knockout.js', included: false},
 
   'Specs/specs-main.js',
-  {pattern: 'Source/ordnung/**/*.js', included: false},
-  {pattern: 'Specs/Modules/**/*.js', included: true},
-  {pattern: 'Specs/Mocks/**/*.js', included: false}
+  {pattern: 'Source/**/*.js', included: false},
+  {pattern: 'Specs/Mocks/**/*.js', included: false},
+
+  'Specs/Modules/**/*.js'
 ];
 
 // list of files to exclude

@@ -1,15 +1,16 @@
 ({
-	baseUrl: "Source",
+	baseUrl: ".",
 	out: "Bin/ordnung.js",
 	paths: {
-		"knockout": "empty:"
+		"knockout": "empty:",
+		"ordnung": "Source"
 	},
-	include: [
+	include: [,
 		"ordnung/qvc",
-		"ordnung/utils",
 		"ordnung/ajax",
+		"ordnung/utils",
 		"ordnung/loader",
-		"ordnung/proclaimWhen.js"
+		"ordnung/proclaimWhen"
 	],
 	
 	

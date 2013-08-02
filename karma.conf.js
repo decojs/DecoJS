@@ -15,7 +15,7 @@ files = [
   {pattern: 'bower_components/knockout.js/knockout.js', included: false},
 
   'Specs/specs-main.js',
-  {pattern: 'Source/ordnung/**/*.js', included: false},
+  {pattern: 'Source/**/*.js', included: false},
   {pattern: 'Specs/Mocks/**/*.js', included: false},
 
   'Specs/Modules/**/*.js'

@@ -4,13 +4,14 @@
 	paths: {
 		"knockout": "empty:",
 		"ordnung": "Source"
+		"when": "empty:"
 	},
 	include: [,
 		"ordnung/qvc",
-		"ordnung/ajax",
+		"ordnung/spa",
+		"ordnung/proclaimWhen.js",
 		"ordnung/utils",
-		"ordnung/loader",
-		"ordnung/proclaimWhen"
+		"ordnung/ajax"
 	],
 	
 	

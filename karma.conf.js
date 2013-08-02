@@ -13,11 +13,12 @@ files = [
   'Specs/Libs/moquire.js',
   'Specs/Libs/sinon-1.3.4.js',
   {pattern: 'bower_components/knockout.js/knockout.js', included: false},
+  {pattern: 'bower_components/when/**/*', included: false},
 
   'Specs/specs-main.js',
   {pattern: 'Source/**/*.js', included: false},
   {pattern: 'Specs/Mocks/**/*.js', included: false},
-
+  {pattern: 'Specs/Given/**/*.js', included: false},
   'Specs/Modules/**/*.js'
 ];
 

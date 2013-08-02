@@ -5,16 +5,16 @@ var tests = Object.keys(window.__karma__.files).filter(function (file) {
 
 requirejs.config(moquire.config({
     // Karma serves files from '/base'
-    baseUrl: '/base/Source',
+    baseUrl: '/base',
 
     paths: {
-      "Mocks": "/base/Specs/Mocks",
-      "Given": "/base/Specs/Given",
-      "knockout": "/base/Source/Libs/knockout-2.1.0",
-      "ordnung": "/base/Source/ordnung"
+      "Mocks": "Specs/Mocks",
+      "Given": "Specs/Given",
+      "knockout": "bower_components/knockout.js/knockout",
+      "ordnung": "Source"
     },
     packages: [
-        { name: 'when', location: '/base/components/when', main: 'when' }
+        { name: 'when', location: 'bower_components/when', main: 'when' }
     ],
 
     shim: {

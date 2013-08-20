@@ -34,7 +34,7 @@ describe("when subscribing to events", {
 	});
 
 	afterEach(function(){
-		
+		require.undef("dummyVM");
 	});
 
 	describe("when the event is triggered", function(){

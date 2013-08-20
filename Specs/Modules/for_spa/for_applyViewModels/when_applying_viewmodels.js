@@ -34,6 +34,10 @@ describe("when applying viewmodels", [
 		}
 	});
 
+	afterEach(function(){
+		require.undef("dummyVM");
+	});
+
 	it("should find all the viewmodels in the dom tree", function(){
 		expect(dummyVM.callCount).toBe(1);
 	});

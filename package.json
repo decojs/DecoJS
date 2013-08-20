@@ -3,7 +3,8 @@
 	"version": "0.2.0",	
 	"devDependencies": {
 		"karma": "latest",
-		"requirejs": "latest"
+		"requirejs": "latest",
+		"jazzmine": "latest"
 	}
 
 }

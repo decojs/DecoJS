@@ -49,6 +49,7 @@
 	beforeEach = function(block){
 		jasmine_beforeEach(runAsync(block))
 	};
+	because = beforeEach;
 	afterEach = function(block){
 		jasmine_afterEach(runAsync(block))
 	};

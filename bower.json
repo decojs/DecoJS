@@ -1,0 +1,21 @@
+{
+	"name": "Ordnung",
+	"version": "0.2.0",
+	"main": "Bin/ordnung.js",
+	"ignore": [
+		"**/.*",
+		"**/*.cmd",
+		"/*.js",
+		"node_modules",
+		"bower_components",
+		"Specs",
+		"Tools"
+	],
+	"dependencies": {
+		"knockout.js": "2.3.0",
+		"json2": "latest",
+		"es5-shim": "2.1.0",
+		"when": "2.2.1"
+	},
+	"_source": "git://github.com/mariusgundersen/ordnungJS.git"
+}

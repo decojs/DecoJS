@@ -1,6 +1,6 @@
 {
-	"name": "Ordnung",
-	"version": "0.2.0",
+	"name": "ordnung",
+	"version": "0.2.1",
 	"main": "Bin/ordnung.js",
 	"ignore": [
 		"**/.*",

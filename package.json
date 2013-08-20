@@ -1,11 +1,22 @@
 {
-	"name": "Ordnung",
-	"version": "0.2.0",	
+	"name": "ordnung",
+	"description": "framework for building maintainable single page applications",
+	"keywords": ["spa", "knockout", "require", "maintainable"],
+	"author": {
+		"name": "Marius Gundersen",
+		"email": "npm@mariusgundersen.net",
+		"url": "http://mariusgundersen.net"
+	},
+	"version": "0.2.1",	
 	"devDependencies": {
 		"karma": "latest",
 		"requirejs": "latest",
 		"jazzmine": "latest",
 		"sinon": "latest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/mariusgundersen/ordnungjs"
 	}
 
 }

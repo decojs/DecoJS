@@ -11,7 +11,8 @@ module.exports = function(config){
       'node_modules/jazzmine/bin/jazzmine.min.js',
       'node_modules/karma-requirejs/lib/require.js',
       'node_modules/karma-requirejs/lib/adapter.js',
-      'Specs/Libs/sinon-1.3.4.js',
+      'node_modules/sinon/pkg/sinon.js',
+      'node_modules/sinon/pkg/sinon-ie.js',
       {pattern: 'bower_components/knockout.js/knockout.js', included: false},
       {pattern: 'bower_components/when/**/*', included: false},
 

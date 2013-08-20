@@ -4,7 +4,8 @@
 	"devDependencies": {
 		"karma": "latest",
 		"requirejs": "latest",
-		"jazzmine": "latest"
+		"jazzmine": "latest",
+		"sinon": "latest"
 	}
 
 }

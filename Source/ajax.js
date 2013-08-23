@@ -44,6 +44,8 @@ define([], function(){
 			xhr.setRequestHeader("Connection", "close");
 		}
 		
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4){
 				callback(xhr);

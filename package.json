@@ -7,7 +7,7 @@
 		"email": "npm@mariusgundersen.net",
 		"url": "http://mariusgundersen.net"
 	},
-	"version": "0.2.2",	
+	"version": "0.2.3",	
 	"devDependencies": {
 		"karma": "latest",
 		"requirejs": "latest",
@@ -16,7 +16,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/mariusgundersen/ordnungjs"
+		"url": "https://github.com/mariusGundersen/OrdnungJS"
 	}
 
 }

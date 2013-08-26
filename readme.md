@@ -2,7 +2,18 @@
 
 A framework for building maintainable frontend applications
 
-## Dependencies
+## Getting Started
+
+This project can be used with bower. This will install both the concatenated and minified files, along with the sourcemap for both of them. It will also install the dependencies needed to run the project
+
+```shell
+bower install ordnung
+```
+
+Ordnung is only dependent on [Require.js](http://requirejs.org) and [Knockout.js](http://knockoutjs.com). With these three files you are ready to make your own awesome single page application!
+
+
+## Development
 
 This project requires node.js, grunt and bower. Download and install [node js](http://www.nodejs.org) on your machine. Next install [bower](https://github.com/bower/bower) and [grunt](http://gruntjs.com) from the terminal: 
 
@@ -13,7 +24,13 @@ npm install -g grunt-cli
 
 ## Installation
 
-This project uses grunt for installation, building and testing. With grunt and bower installed, the `grunt` command can be used to perform any of the other tasks. 
+This project uses grunt for installation, building and testing. With grunt and bower installed, the `grunt` command can be used to perform any of the other tasks. Before grunt can be used, some node packages must be installed:
+
+
+```shell
+npm install
+```
+
 
 ### Fetching Dependencies
 
@@ -23,23 +40,33 @@ Download the dependencies using bower:
 grunt install
 ```
 
-### Installing Dev Tools
+### Building the project
 
-Download the dependencies using npm:
+Grunt can be used to concatenate the AMD modules and minify them:
 
 ```shell
-npm install
+grunt build
 ```
 
-This should download and intsall the development dependencies automatically
+### Running Tests
 
-## Running Tests
+karma is used for automatic testing. In development a test server can be started, and the tests will be automatically run when a file changes:
 
-karma is used for automatic testing. Run the karma_runner.cmd file to start a test runner. 
+```shell
+grunt test
+```
 
-## Building 
+Connect to the test server by opening one or more browsers and navigating to http://localhost:9876
 
-The source files can be built into a single file (which ends up in Bin) using the require optimizer. Run the build.cmd to build this project
+### Buildserver
+
+On the build server all of these steps (installing dependencies, building the project and running tests) can be done with the default grunt commant:
+
+
+```shell
+grunt
+```
+
 
 ## License
 

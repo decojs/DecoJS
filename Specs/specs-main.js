@@ -10,7 +10,7 @@ jazzmine.requireConfig({
     "ordnung": "Source"
   },
   packages: [
-      { name: 'when', location: 'bower_components/when', main: 'when' }
+      { name: 'when', location: 'node_modules/when', main: 'when' }
   ],
 
   shim: {

@@ -1,22 +1,31 @@
 {
-	"name": "ordnung",
-	"description": "framework for building maintainable single page applications",
-	"keywords": ["spa", "knockout", "require", "maintainable"],
-	"author": {
-		"name": "Marius Gundersen",
-		"email": "npm@mariusgundersen.net",
-		"url": "http://mariusgundersen.net"
-	},
-	"version": "0.2.3",	
-	"devDependencies": {
-		"karma": "latest",
-		"requirejs": "latest",
-		"jazzmine": "latest",
-		"sinon": "latest"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/mariusGundersen/OrdnungJS"
-	}
-
+  "name": "ordnung",
+  "description": "framework for building maintainable single page applications",
+  "keywords": [
+    "spa",
+    "knockout",
+    "require",
+    "maintainable"
+  ],
+  "author": {
+    "name": "Marius Gundersen",
+    "email": "npm@mariusgundersen.net",
+    "url": "http://mariusgundersen.net"
+  },
+  "version": "0.2.4",
+  "devDependencies": {
+    "karma": "latest",
+    "requirejs": "latest",
+    "jazzmine": "latest",
+    "sinon": "latest",
+    "when": "2.3.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-bower-task": "~0.3.1",
+    "grunt-contrib-uglify": "~0.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mariusGundersen/OrdnungJS"
+  }
 }

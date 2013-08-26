@@ -4,25 +4,24 @@ A framework for building maintainable frontend applications
 
 ## Dependencies
 
-This project requires node.js and bower. Download and install [node js](http://www.nodejs.org) on your machine. Next install [bower](https://github.com/bower/bower) from the terminal: 
+This project requires node.js, grunt and bower. Download and install [node js](http://www.nodejs.org) on your machine. Next install [bower](https://github.com/bower/bower) and [grunt](http://gruntjs.com) from the terminal: 
 
 ```shell
 npm install -g bower
+npm install -g grunt-cli
 ```
 
 ## Installation
 
-This project can be installed for use or for development. For use you need to dowload all the dependencies using bower. For development you need to additionally install the build and test tools using npm. This will install karma for running tests and require for concatenating and minifying the source files.
+This project uses grunt for installation, building and testing. With grunt and bower installed, the `grunt` command can be used to perform any of the other tasks. 
 
 ### Fetching Dependencies
 
 Download the dependencies using bower:
 
 ```shell
-bower install
+grunt install
 ```
-
-This should download and install the dependencies automatically
 
 ### Installing Dev Tools
 

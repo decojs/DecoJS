@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     bower: {
+      //https://github.com/yatskevich/grunt-bower-task
       install: {
         options: {
           copy: false
@@ -11,6 +12,7 @@ module.exports = function(grunt) {
       }
     },
     requirejs: {
+      //https://github.com/gruntjs/grunt-contrib-requirejs
       compile: {
         options: {
           baseUrl: ".",
@@ -38,6 +40,7 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+      //https://github.com/gruntjs/grunt-contrib-uglify
       my_target: {
         options: {
           sourceMap: 'Dist/ordnung.min.js.map',
@@ -47,14 +50,30 @@ module.exports = function(grunt) {
           'Dist/ordnung.min.js': ['Dist/ordnung.js']
         }
       }
+    },
+    karma: {
+      //https://github.com/karma-runner/grunt-karma
+      unit: {
+        configFile: 'karma.conf.js',
+        autoWatch: true
+      },
+      continuous: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['Firefox', 'IE']
+      },
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-karma');
 
   // Default task(s).
-  grunt.registerTask('default', ['bower', 'requirejs', 'uglify']);
+  grunt.registerTask('install', ['bower']);
+  grunt.registerTask('build', ['requirejs', 'uglify']);
+  grunt.registerTask('test', ['karma:continuous']);
+  grunt.registerTask('default', ['bower', 'requirejs', 'uglify', 'karma:continuous']);
 
 };

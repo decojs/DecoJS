@@ -15,6 +15,9 @@
   "version": "0.2.4",
   "devDependencies": {
     "karma": "latest",
+    "karma-firefox-launcher": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-ie-launcher": "latest",
     "requirejs": "latest",
     "jazzmine": "latest",
     "sinon": "latest",
@@ -22,7 +25,8 @@
     "grunt": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-bower-task": "~0.3.1",
-    "grunt-contrib-uglify": "~0.2.2"
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-karma": "~0.6.1"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
 	"name": "ordnung",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"main": "Dist/ordnung.js",
 	"ignore": [
 		"**/.*",
@@ -8,8 +8,7 @@
 		"/*.js",
 		"node_modules",
 		"bower_components",
-		"Specs",
-		"Source"
+		"Specs"
 	],
 	"dependencies": {
 		"requirejs": "2.1.8",

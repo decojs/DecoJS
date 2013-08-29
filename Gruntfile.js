@@ -29,7 +29,9 @@ module.exports = function(grunt) {
             "ordnung/spa",
             "ordnung/proclaimWhen",
             "ordnung/utils",
-            "ordnung/ajax"
+            "ordnung/ajax",
+            "ordnung/qvc/constraints/NotEmpty",
+            "ordnung/qvc/constraints/Pattern"
           ],
           
           

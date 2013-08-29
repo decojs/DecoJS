@@ -2178,4 +2178,43 @@ define('ordnung/proclaimWhen',[], function () {
 	
 });
 
+define('ordnung/qvc/constraints/NotEmpty',[], function(){
+	function NotEmpty(attributes){
+		
+	}
+	
+	NotEmpty.prototype.isValid = function(value){
+		if(value == null) return false;
+		if(typeof value == "string" && value.length == 0) return false;
+		return true;
+	};
+	
+	return NotEmpty;
+});
+define('ordnung/qvc/constraints/Pattern',[], function(){
+	function Pattern(attributes){		
+
+		attributes.flags = attributes.flags || [];
+		
+		var flags = '';
+		if(attributes.flags.indexOf("CASE_INSENSITIVE") >= 0) flags += 'i';
+		
+		this.regex = new RegExp(attributes.regexp, flags);
+	}
+	
+	
+	Pattern.prototype.isValid = function(value){
+		
+		if(value == null) return false;
+		
+		var result = this.regex.exec(value);
+		
+		if(result == null) return false;
+		
+		return result[0] == value;
+	};
+	
+	
+	return Pattern;
+});
 //# sourceMappingURL=ordnung.js.map

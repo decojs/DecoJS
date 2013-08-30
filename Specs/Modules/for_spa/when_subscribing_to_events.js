@@ -55,8 +55,8 @@ describe("when subscribing to events", {
 			event();
 		});
 
-		it("should no longer react to the event", function(){
-			expect(react.callCount).toBe(0);
+		it("should still react to the event", function(){
+			expect(react.callCount).toBe(1);
 		});
 
 	});

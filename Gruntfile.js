@@ -75,7 +75,7 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('install', ['bower']);
   grunt.registerTask('build', ['requirejs', 'uglify']);
-  grunt.registerTask('test', ['karma:continuous']);
+  grunt.registerTask('test', ['karma:unit']);
   grunt.registerTask('default', ['bower', 'requirejs', 'uglify', 'karma:continuous']);
 
 };

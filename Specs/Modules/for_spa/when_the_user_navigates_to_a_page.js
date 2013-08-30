@@ -1,4 +1,5 @@
 describe("when the user naviagtes to a page", {
+	"ordnung/spa/EventSubscriber": "Mocks/EventSubscriberMock",
 	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
 	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock",
 	"ordnung/spa/Outlet": "Mocks/OutletMock",
@@ -8,13 +9,15 @@ describe("when the user naviagtes to a page", {
 	"ordnung/spa/applyViewModels",
 	"ordnung/spa/hashNavigation",
 	"ordnung/spa/Outlet",
-	"ordnung/spa/Templates"
+	"ordnung/spa/Templates",
+	"ordnung/spa/EventSubscriber"
 ], function(
 	spa,
 	applyViewModelsSpy,
 	hashNavigationSpy,
 	OutletSpy,
-	TemplatesSpy
+	TemplatesSpy,
+	EventSubscriberMock
 ){
 
 	var promise,
@@ -82,6 +85,10 @@ describe("when the user naviagtes to a page", {
 			expect(applyViewModelsSpy.callCount).toBe(1);
 			expect(applyViewModelsSpy.firstCall.args[0]).toBe("something");
 			expect(applyViewModelsSpy.firstCall.args[1]).toBeA(Function);
+		});
+
+		it("should unsubscribe from the page events", function(){
+			expect(EventSubscriberMock.instance.unsubscribeAllEvents.callCount).toBe(1);
 		});
 
 	});

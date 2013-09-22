@@ -27,7 +27,7 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 	}
 
 	function applyViewModel(subscribe, data) {
-		var viewModel = new data.ViewModel(data.model, subscribe);
+		var viewModel = new data.ViewModel(data.model || {}, subscribe);
 		ko.applyBindings(viewModel, data.target);
 	};
 

@@ -636,6 +636,10 @@ define('ordnung/spa/Outlet',[
 		this.document = document || window.document;
 	}
 
+	Outlet.prototype.outletExists = function(){
+		return this.element == null;
+	};
+
 	Outlet.prototype.unloadCurrentPage = function(){
 		ko.cleanNode(this.element);
 		this.element.innerHTML = "";
@@ -709,6 +713,13 @@ define('ordnung/spa/EventSubscriber',[
 	}
 
 	return EventSubscriber
+});
+define('ordnung/errorHandler',[], function(){
+	return {
+		onError: function(error){
+			console.error(error.stack);
+		}
+	};
 });
 /** @license MIT License (c) copyright 2011-2013 original author or authors */
 
@@ -1868,7 +1879,19 @@ define('when/callbacks',['require','./when'],function(require) {
 	// Boilerplate for AMD and Node
 );
 
-define('ordnung/spa/applyViewModels',["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils, ko, when, callbacks) {
+define('ordnung/spa/applyViewModels',[
+	"ordnung/utils",
+	"ordnung/errorHandler",
+	"knockout", 
+	"when", 
+	"when/callbacks"
+], function (
+	utils, 
+	errorHandler,
+	ko, 
+	when, 
+	callbacks
+) {
 
 
 	function getAttributes(target){
@@ -1888,18 +1911,30 @@ define('ordnung/spa/applyViewModels',["ordnung/utils", "knockout", "when", "when
 
 
 	function loadViewModel(data){
+
 		return callbacks.call(require, [
 			data.viewModelName
 		]).then(function(ViewModel){
 			data.ViewModel = ViewModel;
 			return data;
+		}, function(error){
+			errorHandler.onError(new Error("could not load the following modules: "+error.requireModules));
+			return null;
 		});
 	}
 
 	function applyViewModel(subscribe, data) {
-		var viewModel = new data.ViewModel(data.model, subscribe);
-		ko.applyBindings(viewModel, data.target);
-	};
+		try{
+			var viewModel = new data.ViewModel(data.model || {}, subscribe);
+			ko.applyBindings(viewModel, data.target);
+		}catch(e){
+			errorHandler.onError(e);
+		}
+	}
+
+	function viewModelLoadedSuccessfully(data){
+		return data != null && data.ViewModel != null;
+	}
 
 	return function (domElement, subscribe) {
 
@@ -1910,7 +1945,7 @@ define('ordnung/spa/applyViewModels',["ordnung/utils", "knockout", "when", "when
 		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
 
 		return when.all(viewModelsLoaded).then(function(list){
-			list.forEach(applyViewModel.bind(null, subscribe))
+			list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
 		});
 	};
 });
@@ -2018,7 +2053,7 @@ define('ordnung/spa/PageLoader',[
 			if(xhr.status === 200)
 				resolver.resolve(xhr.responseText);
 			else
-				resolver.reject(xhr.responseText);
+				resolver.reject({error: xhr.status, content: xhr.responseText});
 		});
 	};
 
@@ -2065,20 +2100,28 @@ define('ordnung/spa/Templates',[
 
 	Templates.prototype.getTemplate = function(path){
 
-		var deferred = when.defer();
-
 		this.pageLoader.abort();
 
 		var normalizedPath = path.toLowerCase();
 
 		if(normalizedPath in this.templates){
-			deferred.resolve(this.templates[normalizedPath]);
+			return when.resolve(this.templates[normalizedPath]);
 		}else{
+
+			var deferred = when.defer();
 			this.pageLoader.loadPage(path, deferred.resolver);
+
+			return deferred.promise.then(function(content){
+				return content;
+			}, function(notFound){
+				var errorTemplate = "error" + notFound.error;
+				if(errorTemplate in this.templates){
+					return this.templates[errorTemplate];
+				}else{
+					return notFound.content;
+				}
+			}.bind(this));
 		}
-
-
-		return deferred.promise;
 	};
 
 	return Templates;
@@ -2130,12 +2173,14 @@ define('ordnung/spa',[
 		_document = document || window.document;
 		_config = utils.extend(_config, config);
 		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
-		_originalTitle = document.title;
-		_templates = new Templates(_document, _config);
+		_originalTitle = _document.title;
 		_currentPageEventSubscriber = new EventSubscriber();
 
 		return applyViewModels(_document, _currentPageEventSubscriber.subscribeForever).then(function(){
+			if(_outlet.outletExists()){
+				_templates = new Templates(_document, _config);
 			hashNavigation.start(_config, pageChanged, _document);
+			}
 		});
 	}
 

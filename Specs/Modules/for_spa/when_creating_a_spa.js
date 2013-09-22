@@ -1,7 +1,7 @@
 describe("when creating a spa", {
 	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
 	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}},
-	"ordnung/spa/Outlet": function(){return sinon.spy();},
+	"ordnung/spa/Outlet": "Mocks/OutletMock",
 	"ordnung/spa/Templates": function(){return sinon.spy();}
 },[
 	"ordnung/spa",
@@ -71,7 +71,7 @@ describe("when creating a spa", {
 		});
 
 		it("should create an outlet", function(){
-			expect(OutletSpy.callCount).toBe(1);
+			expect(OutletSpy.constructed.callCount).toBe(1);
 		});
 
 		it("should start the hashNavigation", function(){

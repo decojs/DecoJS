@@ -37,6 +37,7 @@ describe("when the user naviagtes to a page", {
 		};
 
 		OutletSpy.prototype.element = "something";
+		OutletSpy.outletExists.returns(true);
 
 		promise = spa.start({}, doc);
 		promise.then(done);

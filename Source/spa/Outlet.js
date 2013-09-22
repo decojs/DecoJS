@@ -9,6 +9,10 @@ define([
 		this.document = document || window.document;
 	}
 
+	Outlet.prototype.outletExists = function(){
+		return this.element == null;
+	};
+
 	Outlet.prototype.unloadCurrentPage = function(){
 		ko.cleanNode(this.element);
 		this.element.innerHTML = "";

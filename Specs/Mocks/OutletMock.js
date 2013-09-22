@@ -1,7 +1,9 @@
 define([], function(){
 
-	function Outlet(){}
-
+	function Outlet(){
+		Outlet.constructed();
+	}
+	Outlet.constructed = sinon.spy();
 	Outlet.prototype.indicatePageIsLoading = Outlet.indicatePageIsLoading = sinon.spy();
 	Outlet.prototype.unloadCurrentPage = Outlet.unloadCurrentPage = sinon.spy();
 	Outlet.prototype.setPageContent = Outlet.setPageContent = sinon.spy();
@@ -9,10 +11,11 @@ define([], function(){
 	Outlet.prototype.setDocumentTitle = Outlet.setDocumentTitle = sinon.spy();
 	Outlet.prototype.extractAndRunPageJavaScript = Outlet.extractAndRunPageJavaScript = sinon.spy();
 	Outlet.prototype.pageHasLoaded = Outlet.pageHasLoaded = sinon.spy();
-
+	Outlet.prototype.outletExists = Outlet.outletExists = sinon.stub().returns(true);
 	Outlet.prototype.element;
 	
 	Outlet.reset = function(){
+		Outlet.constructed.reset();
 		Outlet.indicatePageIsLoading.reset();
 		Outlet.unloadCurrentPage.reset();
 		Outlet.setPageContent.reset();

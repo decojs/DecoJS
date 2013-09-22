@@ -29,7 +29,7 @@ describe("when subscribing to events", {
 			};
 		});
 
-
+		
 		spa.start({}, doc).then(done);
 	});
 

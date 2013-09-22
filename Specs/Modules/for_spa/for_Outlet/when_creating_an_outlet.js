@@ -22,6 +22,11 @@ describe("when creating an outlet", [
 		expect(outlet.unloadCurrentPage.length).toBe(0);
 	});
 
+	it("should have a way to tell if an outlet exists", function(){
+		expect(outlet.outletExists).toBeA(Function);
+		expect(outlet.unloadCurrentPage.length).toBe(0);
+	});
+
 	it("should have a way to set the page content", function(){
 		expect(outlet.setPageContent).toBeA(Function);
 		expect(outlet.setPageContent.length).toBe(1);

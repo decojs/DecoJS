@@ -46,11 +46,13 @@ define([
 		_config = utils.extend(_config, config);
 		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
 		_originalTitle = _document.title;
-		_templates = new Templates(_document, _config);
 		_currentPageEventSubscriber = new EventSubscriber();
 
 		return applyViewModels(_document, _currentPageEventSubscriber.subscribeForever).then(function(){
+			if(_outlet.outletExists()){
+				_templates = new Templates(_document, _config);
 			hashNavigation.start(_config, pageChanged, _document);
+			}
 		});
 	}
 

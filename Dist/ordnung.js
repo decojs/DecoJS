@@ -637,7 +637,7 @@ define('ordnung/spa/Outlet',[
 	}
 
 	Outlet.prototype.outletExists = function(){
-		return this.element == null;
+		return this.element != null;
 	};
 
 	Outlet.prototype.unloadCurrentPage = function(){

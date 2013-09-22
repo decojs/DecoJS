@@ -1,4 +1,16 @@
-define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils, ko, when, callbacks) {
+define([
+	"ordnung/utils",
+	"ordnung/errorHandler",
+	"knockout", 
+	"when", 
+	"when/callbacks"
+], function (
+	utils, 
+	errorHandler,
+	ko, 
+	when, 
+	callbacks
+) {
 
 
 	function getAttributes(target){
@@ -18,18 +30,30 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 
 
 	function loadViewModel(data){
+
 		return callbacks.call(require, [
 			data.viewModelName
 		]).then(function(ViewModel){
 			data.ViewModel = ViewModel;
 			return data;
+		}, function(error){
+			errorHandler.onError(new Error("could not load the following modules: "+error.requireModules));
+			return null;
 		});
 	}
 
 	function applyViewModel(subscribe, data) {
-		var viewModel = new data.ViewModel(data.model, subscribe);
-		ko.applyBindings(viewModel, data.target);
-	};
+		try{
+			var viewModel = new data.ViewModel(data.model, subscribe);
+			ko.applyBindings(viewModel, data.target);
+		}catch(e){
+			errorHandler.onError(e);
+		}
+	}
+
+	function viewModelLoadedSuccessfully(data){
+		return data != null && data.ViewModel != null;
+	}
 
 	return function (domElement, subscribe) {
 
@@ -40,7 +64,7 @@ define(["ordnung/utils", "knockout", "when", "when/callbacks"], function (utils,
 		var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
 
 		return when.all(viewModelsLoaded).then(function(list){
-			list.forEach(applyViewModel.bind(null, subscribe))
+			list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
 		});
 	};
 });

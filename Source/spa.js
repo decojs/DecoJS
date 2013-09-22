@@ -45,7 +45,7 @@ define([
 		_document = document || window.document;
 		_config = utils.extend(_config, config);
 		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
-		_originalTitle = document.title;
+		_originalTitle = _document.title;
 		_templates = new Templates(_document, _config);
 		_currentPageEventSubscriber = new EventSubscriber();
 

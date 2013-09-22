@@ -41,6 +41,21 @@ define([], function(){
 
 			return doc;
 
+		},
+		withAnError404Template: function(){
+			var doc = {
+				querySelectorAll: sinon.stub()
+			};
+
+			doc.querySelectorAll.returns([
+				{
+					id:"error404",
+					innerHTML: "could not be found"
+				}
+			]);
+
+			return doc;
+
 		}
 	}
 });

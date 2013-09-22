@@ -27,7 +27,7 @@ describe("when getting a non existing template", {
 		expect(result.then).toBeDefined();
 	});
 
-	it("should call the loadTemplate method", function(){
+	it("should call the loadPage method", function(){
 		expect(PageLoader.loadPageSpy.callCount).toBe(1);
 	});
 

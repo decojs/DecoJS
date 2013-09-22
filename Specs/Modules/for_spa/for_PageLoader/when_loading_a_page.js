@@ -72,6 +72,10 @@ describe("when loading a page", {
 		it("the promise should be rejected", function(){
 			expect(resolver.reject.callCount).toBe(1);
 		});
+
+		it("the promise should contain the error code", function(){
+			expect(resolver.reject.firstCall.args[0].error).toBe(404);
+		});
 	});
 
 	describe("when a new page is requetsed before the old one is resolved", function(){

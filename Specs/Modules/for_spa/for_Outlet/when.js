@@ -122,4 +122,25 @@ describe("when", {
 		});
 	});
 
+
+	describe("constructing with an element", function(){
+
+		it("should return true when asked if the outlet exists", function(){
+			expect(outlet.outletExists()).toBe(true);
+		});
+	});
+
+
+	describe("constructing without an element", function(){
+
+		beforeEach(function(){
+
+			outlet = new Outlet(null, document);
+		});
+
+		it("should return false when asked if the outlet exists", function(){
+			expect(outlet.outletExists()).toBe(false);
+		});
+	});
+
 });

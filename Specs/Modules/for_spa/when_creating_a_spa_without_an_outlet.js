@@ -24,11 +24,7 @@ describe("when creating a spa without an outlet", {
 	beforeEach(function(done){
 
 		doc = {
-			querySelector: sinon.spy(),
-			location: {
-				hash: "",
-				replace: sinon.spy()
-			}
+			querySelector: sinon.spy()
 
 		};
 		OutletSpy.outletExists.returns(false);
@@ -46,6 +42,10 @@ describe("when creating a spa without an outlet", {
 
 	it("should ask the outlet if there is an outlet", function(){
 		expect(OutletSpy.outletExists.callCount).toBe(1);
+	});
+
+	it("should apply view models to the document", function(){
+		expect(applyViewModelsSpy.callCount).toBe(1);
 	});
 
 	it("should not start the hashNavigation", function(){

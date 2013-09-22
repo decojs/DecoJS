@@ -44,7 +44,7 @@ define([
 
 	function applyViewModel(subscribe, data) {
 		try{
-			var viewModel = new data.ViewModel(data.model, subscribe);
+			var viewModel = new data.ViewModel(data.model || {}, subscribe);
 			ko.applyBindings(viewModel, data.target);
 		}catch(e){
 			errorHandler.onError(e);

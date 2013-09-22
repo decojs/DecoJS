@@ -17,7 +17,7 @@ define([
 			if(xhr.status === 200)
 				resolver.resolve(xhr.responseText);
 			else
-				resolver.reject(xhr.responseText);
+				resolver.reject({error: xhr.status, content: xhr.responseText});
 		});
 	};
 

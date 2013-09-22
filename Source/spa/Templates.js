@@ -33,20 +33,28 @@ define([
 
 	Templates.prototype.getTemplate = function(path){
 
-		var deferred = when.defer();
-
 		this.pageLoader.abort();
 
 		var normalizedPath = path.toLowerCase();
 
 		if(normalizedPath in this.templates){
-			deferred.resolve(this.templates[normalizedPath]);
+			return when.resolve(this.templates[normalizedPath]);
 		}else{
+
+			var deferred = when.defer();
 			this.pageLoader.loadPage(path, deferred.resolver);
+
+			return deferred.promise.then(function(content){
+				return content;
+			}, function(notFound){
+				var errorTemplate = "error" + notFound.error;
+				if(errorTemplate in this.templates){
+					return this.templates[errorTemplate];
+				}else{
+					return notFound.content;
+				}
+			}.bind(this));
 		}
-
-
-		return deferred.promise;
 	};
 
 	return Templates;

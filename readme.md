@@ -15,6 +15,8 @@ Ordnung is only dependent on [Require.js](http://requirejs.org) and [Knockout.js
 
 ## Development
 
+The rest of this readme is for contributors to this project.
+
 This project requires node.js, grunt and bower. Download and install [node js](http://www.nodejs.org) on your machine. Next install [bower](https://github.com/bower/bower) and [grunt](http://gruntjs.com) from the terminal: 
 
 ```shell

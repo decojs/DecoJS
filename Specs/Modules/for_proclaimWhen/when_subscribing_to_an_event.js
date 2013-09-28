@@ -21,4 +21,17 @@ describe("when subscribing to a event", ["ordnung/proclaimWhen"], function(procl
 		proclaim.somethingHappens();
 		expect(spyOnIt.calledOnce).toBe(true);
 	});
+
+	describe("multiple times", function(){
+
+		because(function(){
+			when.somethingHappens(spyOnIt);
+		});
+
+		it("should call the function only once", function(){
+			proclaim.somethingHappens();
+			expect(spyOnIt.callCount).toBe(1);
+		});
+	});
+
 });

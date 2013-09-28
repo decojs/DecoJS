@@ -7,12 +7,15 @@ define([], function () {
 	}
 
 	function subscribeTo(name, event, subscriber) {
-		event.subscribers.push(subscriber);
+		var index = event.subscribers.indexOf(subscriber);
+		if(index < 0)
+			event.subscribers.push(subscriber);
 	}
 	
-	function unsubscribeTo(name, event, subscriber){
+	function unsubscribeFrom(name, event, subscriber){
 		var index = event.subscribers.indexOf(subscriber);
-		event.subscribers.splice(index, 1);
+		if(index >= 0)
+			event.subscribers.splice(index, 1);
 	}
 	function extendEvent(name, event){
 		event.subscribers = [];
@@ -26,7 +29,7 @@ define([], function () {
 		}
 
 		extendedEvent.dont = function(subscriber){
-			unsubscribeTo(name, event, subscriber);
+			unsubscribeFrom(name, event, subscriber);
 		};
 
 		return extendedEvent;

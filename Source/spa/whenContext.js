@@ -14,49 +14,55 @@ define([
 	}
 
 
-	function destroyContext(eventSubscribers, onDestroyListeners, childContexts){
+	function destroyContext(){
 		var subscriber, listener, context;
-		while(subscriber = eventSubscribers.pop())
+		while(subscriber = this.eventSubscribers.pop())
 			subscriber();
-		while(listener = onDestroyListeners.pop())
+		while(listener = this.onDestroyListeners.pop())
 			listener();
-		while(context = childContexts.pop())
+		while(context = this.childContexts.pop())
+			context.destroyContext();
+	}
+
+	function whenSomething(){
+		if(arguments.length == 0){
+			var childContext = createContext();
+			this.childContexts.push(childContext);
+			return childContext.when;
+		}else if(arguments.length == 1 && typeof arguments[0] === "function"){
+			return {
+				dont: unsubscribe.bind(null, arguments[0])
+			}
+		}else if(arguments.length == 2 && typeof arguments[1] === "function"){
+			this.eventSubscribers.push(subscribe(arguments[0], arguments[1]));
+		}
+	}
+
+	function thisIsDestroyed(reaction){
+		this.onDestroyListeners.push(reaction);
+	}
+	function destroyChildContexts(){
+		var context;
+		while(context = this.childContexts.pop())
 			context.destroyContext();
 	}
 
 	function createContext(){
-
-		var onDestroyListeners = [];
-		var childContexts = [];
-		var eventSubscribers = [];
-
-		function when(){
-			if(arguments.length == 0){
-				var context = createContext();
-				childContexts.push(context);
-				return context.when;
-			}else if(arguments.length == 1 && typeof arguments[0] === "function"){
-				return {
-					dont: unsubscribe.bind(null, arguments[0])
-				}
-			}else if(arguments.length == 2 && typeof arguments[1] === "function"){
-				eventSubscribers.push(subscribe(arguments[0], arguments[1]));
-			}
+		var context = {
+			onDestroyListeners: [],
+			childContexts: [],
+			eventSubscribers: []
 		};
 
-		when.thisIsDestroyed = function(reaction){
-			onDestroyListeners.push(reaction);
-		};
+		var when = whenSomething.bind(context);
 
-		when.destroyChildContexts = function(){
-			var context;
-			while(context = childContexts.pop())
-				context.destroyContext();
-		};
+		when.thisIsDestroyed = thisIsDestroyed.bind(context);
+
+		when.destroyChildContexts = destroyChildContexts.bind(context);
 
 		return {
 			when: when,
-			destroyContext: destroyContext.bind(this, eventSubscribers, onDestroyListeners, childContexts)
+			destroyContext: destroyContext.bind(context)
 		};
 	}
 

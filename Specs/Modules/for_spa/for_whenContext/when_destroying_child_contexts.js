@@ -50,4 +50,18 @@ describe("when destroying child contexts", [
 
 	});
 
+	describe("when a destroyed context is used", function(){
+
+		var spy;
+
+		because(function(){
+			whenContext.destroyChildContexts();
+		});
+
+		it("should throw an exception", function(){
+			expect(when).toThrow();
+		});
+
+	});
+
 });

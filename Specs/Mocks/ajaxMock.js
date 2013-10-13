@@ -1,4 +1,4 @@
-define([], function(){
+define(["/base/Source/ajax.js"], function(realAjax){
 	function ajax(url, object, method, callback){
 		ajax.spy(url, object, method, callback);
 		if(ajax.respondImmediately){
@@ -21,18 +21,12 @@ define([], function(){
 	}
 
 
-	function addParamToUrl(url, name, value){
-		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : "&") : "?") + encodeURIComponent(name) + "=" + encodeURIComponent(value);
-	}
-
-	function addToPath(url, segment){
-		return url + (url.match(/\/$/) ? "" : "/") + segment;
-	}
-
 	ajax.responseText = "";
 	ajax.spy = sinon.spy();
-	ajax.addToPath = addToPath;
-	ajax.addParamToUrl = addParamToUrl;
+	ajax.addToPath = realAjax.addToPath;
+	ajax.addParamToUrl = realAjax.addParamToUrl;
+	ajax.addParamsToUrl = realAjax.addParamsToUrl;
+	ajax.cacheBust = realAjax.cacheBust;
 	ajax.respondImmediately = true;
 
 	return ajax;

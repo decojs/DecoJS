@@ -14,7 +14,7 @@ describe("when getting a non existing template", {
 	beforeEach(function(){
 		templates = new Templates(document);
 		because: {
-			result = templates.getTemplate("path/to/template");
+			result = templates.getTemplate("path/to/cached/template");
 		}
 	});
 
@@ -33,6 +33,22 @@ describe("when getting a non existing template", {
 
 	it("should abort the previous loading", function(){
 		expect(PageLoader.abortSpy.callCount).toBe(1);
+	});
+
+	describe("for the second time", function(){
+
+		because(function(done){
+			PageLoader.loadPageSpy.firstCall.args[1].resolve("content of page");
+			result.then(function(){
+				templates.getTemplate("path/to/cached/template");
+				done();
+			});
+		});
+
+		it("should not call the pageLoader again", function(){
+			expect(PageLoader.loadPageSpy.callCount).toBe(1);
+		});
+
 	});
 
 	

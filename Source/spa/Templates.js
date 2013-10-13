@@ -33,7 +33,7 @@ define([
 
 	function Templates(document, config){
 		this.pageLoader = new PageLoader(config || defaultConfig());
-
+		this.cachePages = (config && 'cachePages' in config ? config.cachePages : true)
 		this.templates = findTemplatesInDocument(document);
 	}
 
@@ -46,13 +46,16 @@ define([
 		if(normalizedPath in this.templates){
 			return when.resolve(this.templates[normalizedPath]);
 		}else{
-
 			var deferred = when.defer();
-			this.pageLoader.loadPage(path, deferred.resolver);
 
+			this.pageLoader.loadPage(path, deferred.resolver);
+			
 			return deferred.promise.then(function(content){
+				if(this.cachePages)
+					this.templates[normalizedPath] = content;
+				
 				return content;
-			}, function(notFound){
+			}.bind(this), function(notFound){
 				var errorTemplate = "error" + notFound.error;
 				if(errorTemplate in this.templates){
 					return this.templates[errorTemplate];

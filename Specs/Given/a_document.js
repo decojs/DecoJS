@@ -13,6 +13,23 @@ define([], function(){
 	}
 
 	return {
+		withAnOutlet: function(){
+			var doc = createDocument("hello");
+			var outlet = doc.createElement("div");
+			outlet.setAttribute("data-outlet","true");
+			doc.body.appendChild(outlet);
+			var template = doc.createElement("script");
+			template.setAttribute("type","text/page-template");
+			template.setAttribute("id","index");
+			template.textContent='<div data-viewmodel="dummyVM"></div>';
+			doc.body.appendChild(template);
+			var template = doc.createElement("script");
+			template.setAttribute("type","text/page-template");
+			template.setAttribute("id","destroy/viewmodel/path");
+			template.textContent='<div data-viewmodel="dummyVM"></div>';
+			doc.body.appendChild(template);
+			return doc;	
+		},
 		withATitleAndBody: function(title){
 			var doc = createDocument(title);
 			return doc;

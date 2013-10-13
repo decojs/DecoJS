@@ -4,8 +4,8 @@ define([
 	ajax
 ){
 
-	function PageLoader(pathToUrl){
-		this.pathToUrl = pathToUrl;
+	function PageLoader(config){
+		this.pathToUrl = config && config.pathToUrl || function(a){ return a; };
 		this.currentXHR = null;
 	}
 

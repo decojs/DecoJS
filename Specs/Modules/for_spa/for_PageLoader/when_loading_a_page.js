@@ -16,7 +16,11 @@ describe("when loading a page", {
 
 		pathToUrlSpy = sinon.spy();
 
-		pageLoader = new PageLoader(pathToUrlSpy);
+		var config = {
+			pathToUrl: pathToUrlSpy
+		};
+
+		pageLoader = new PageLoader(config);
 		ajax.respondImmediately = false;
 
 		resolver = {

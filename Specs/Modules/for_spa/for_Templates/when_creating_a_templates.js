@@ -31,12 +31,16 @@ describe("when creating a templates", {
 		expect(PageLoader.callCount).toBe(1);
 	});
 
-	it("should send a default pathToUrl to the PageLoader", function(){
-		expect(PageLoader.firstCall.args[0]).toBeA(Function);
+	it("should send a default config to the PageLoader", function(){
+		expect(PageLoader.firstCall.args[0]).toBeAn(Object);
 	});
 
-	it("the default pathToUrl should be an identity function", function(){
-		expect(PageLoader.firstCall.args[0]("test")).toBe("test");
+	it("the default config shuld have a pathToUrl function", function(){
+		expect(PageLoader.firstCall.args[0].pathToUrl).toBeA(Function);
+	});
+
+	it("the default config.pathToUrl should be an identity function", function(){
+		expect(PageLoader.firstCall.args[0].pathToUrl("test")).toBe("test");
 	});
 
 	it("should have a getTemplate method", function(){
@@ -68,8 +72,8 @@ describe("when creating a templates", {
 			PageLoader.reset();
 		});
 
-		it("should send the config.pathToUrl to the PageLoader", function(){
-			expect(PageLoader.firstCall.args[0]).toBe(config.pathToUrl);
+		it("should send the config to the PageLoader", function(){
+			expect(PageLoader.firstCall.args[0]).toBe(config);
 		});
 
 	});

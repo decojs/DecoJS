@@ -8,6 +8,12 @@ define([
 	when
 ){
 
+	function defaultConfig(){
+		return {
+			pathToUrl: function(a){ return a; }
+		}
+	}
+
 	function findTemplatesInDocument(doc){
 
 		var nodeList = doc.querySelectorAll("[type='text/page-template']");
@@ -26,7 +32,7 @@ define([
 
 
 	function Templates(document, config){
-		this.pageLoader = new PageLoader(config && config.pathToUrl || function(a){ return a; });
+		this.pageLoader = new PageLoader(config || defaultConfig());
 
 		this.templates = findTemplatesInDocument(document);
 	}

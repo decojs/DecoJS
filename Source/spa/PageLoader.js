@@ -4,8 +4,9 @@ define([
 	ajax
 ){
 
-	function PageLoader(pathToUrl){
-		this.pathToUrl = pathToUrl;
+	function PageLoader(config){
+		this.pathToUrl = config && config.pathToUrl || function(a){ return a; };
+		this.cache = (config && 'cachePages' in config ? config.cachePages : true);
 		this.currentXHR = null;
 	}
 
@@ -13,7 +14,12 @@ define([
 
 		this.abort();
 
-		this.currentXHR = ajax(this.pathToUrl(path), {}, "GET", function(xhr){
+		var url = this.pathToUrl(path);
+
+		if(this.cache === false)
+			url = ajax.cacheBust(url);
+
+		this.currentXHR = ajax(url, {}, "GET", function(xhr){
 			if(xhr.status === 200)
 				resolver.resolve(xhr.responseText);
 			else

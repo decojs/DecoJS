@@ -6,8 +6,8 @@ define([], function(){
 		start: function(config, listener, doc){
 			_listener = listener;
 		},
-		listener: function(){
-			return _listener;
+		navigateToPage: function(path){
+			return _listener(path);
 		}
 	}
 });

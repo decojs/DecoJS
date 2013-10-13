@@ -28,7 +28,7 @@ define([
 		_outlet.setPageContent(content);
 		_outlet.setDocumentTitle(_outlet.getPageTitle() || _originalTitle);
 		_outlet.extractAndRunPageJavaScript();
-		return applyViewModels(_outlet.element, _whenContext);
+		return applyViewModels(_outlet.element, _whenContext());
 	}
 
 	function pageChanged(path){
@@ -51,7 +51,7 @@ define([
 		return applyViewModels(_document, whenContext()).then(function(){
 			if(_outlet.outletExists()){
 				_templates = new Templates(_document, _config);
-			hashNavigation.start(_config, pageChanged, _document);
+				hashNavigation.start(_config, pageChanged, _document);
 			}
 		});
 	}

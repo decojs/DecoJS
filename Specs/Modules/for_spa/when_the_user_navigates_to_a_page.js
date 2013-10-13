@@ -21,7 +21,8 @@ describe("when the user naviagtes to a page", {
 ){
 
 	var promise,
-		doc;
+		doc,
+		contextCount;
 
 	beforeEach(function(done){
 
@@ -49,11 +50,13 @@ describe("when the user naviagtes to a page", {
 		applyViewModelsSpy.reset();
 		OutletSpy.reset();
 		TemplatesSpy.reset();
+		whenContextMock.reset();
 	});
 
 	describe("when the page has changed", function(){
 		because(function(done){
-			hashNavigationSpy.listener()("some/path").then(done);
+			contextCount = whenContextMock.context.length;
+			hashNavigationSpy.navigateToPage("some/path").then(done);
 		});
 
 		it("should indicate on the outlet that the page is loading", function(){
@@ -92,12 +95,16 @@ describe("when the user naviagtes to a page", {
 			expect(whenContextMock.context[0].destroyChildContexts.callCount).toBe(1);
 		});
 
+		it("should create a new context for the new page", function(){
+			expect(whenContextMock.context.length).toBe(contextCount + 1);
+		});
+
 	});
 
 	describe("when the page has no title", function(){
 		because(function(done){
 			OutletSpy.getPageTitle.returns("");
-			hashNavigationSpy.listener()("some/path").then(done);
+			hashNavigationSpy.navigateToPage("some/path").then(done);
 		});
 
 		it("should set the title to the original document title", function(){
@@ -109,7 +116,7 @@ describe("when the user naviagtes to a page", {
 	describe("when the page has a title", function(){
 		because(function(done){
 			OutletSpy.getPageTitle.returns("a title");
-			hashNavigationSpy.listener()("some/path").then(done);
+			hashNavigationSpy.navigateToPage("some/path").then(done);
 		});
 
 		it("should set the title to the new page title", function(){

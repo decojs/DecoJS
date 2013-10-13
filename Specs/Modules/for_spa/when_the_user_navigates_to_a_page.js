@@ -10,19 +10,22 @@ describe("when the user naviagtes to a page", {
 	"ordnung/spa/hashNavigation",
 	"ordnung/spa/Outlet",
 	"ordnung/spa/Templates",
-	"ordnung/spa/whenContext"
+	"ordnung/spa/whenContext",
+	"ordnung/events"
 ], function(
 	spa,
 	applyViewModelsSpy,
 	hashNavigationSpy,
 	OutletSpy,
 	TemplatesSpy,
-	whenContextMock
+	whenContextMock,
+	when
 ){
 
 	var promise,
 		doc,
-		contextCount;
+		contextCount,
+		pageChangedSpy;
 
 	beforeEach(function(done){
 
@@ -44,6 +47,9 @@ describe("when the user naviagtes to a page", {
 		promise.then(done);
 
 		applyViewModelsSpy.reset();
+
+		pageChangedSpy = sinon.spy();
+		when.thePageHasChanged(pageChangedSpy);
 	});
 
 	afterEach(function(){
@@ -51,6 +57,7 @@ describe("when the user naviagtes to a page", {
 		OutletSpy.reset();
 		TemplatesSpy.reset();
 		whenContextMock.reset();
+		when.thePageHasChanged.dont(pageChangedSpy);
 	});
 
 	describe("when the page has changed", function(){
@@ -97,6 +104,12 @@ describe("when the user naviagtes to a page", {
 
 		it("should create a new context for the new page", function(){
 			expect(whenContextMock.context.length).toBe(contextCount + 1);
+		});
+
+		it("should proclaim that the current page has changed", function(){
+			expect(pageChangedSpy.callCount).toBe(1);
+			expect(pageChangedSpy.firstCall.args[0]).toBe("some/path");
+			expect(pageChangedSpy.firstCall.args[1]).toEqual(["some", "path"]);
 		});
 
 	});

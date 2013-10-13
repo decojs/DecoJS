@@ -7,7 +7,7 @@ define([], function(){
 			_listener = listener;
 		},
 		navigateToPage: function(path){
-			return _listener(path);
+			return _listener(path, path.split("/"));
 		}
 	}
 });

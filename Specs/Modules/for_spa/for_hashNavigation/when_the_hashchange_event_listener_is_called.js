@@ -46,6 +46,7 @@ describe("when the hashchange event listener is called", [
 		it("should call onPageChanged with the new path", function(){
 			expect(onPageChangedSpy.callCount).toBe(1);
 			expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath");
+			expect(onPageChangedSpy.firstCall.args[1]).toEqual(["newPath"]);
 		});
 	});
 
@@ -85,7 +86,7 @@ describe("when the hashchange event listener is called", [
 			onHashChange();
 		});
 
-		it("should call document.location.replace with the new path, ending with index", function(){
+		it("should call document.location.replace with the new path, which is home", function(){
 			expect(replaceSpy.callCount).toBe(1);
 			expect(replaceSpy.firstCall.args[0]).toBe("#/home");
 		});
@@ -99,9 +100,10 @@ describe("when the hashchange event listener is called", [
 			onHashChange();
 		});
 
-		it("should call document.location.replace with the new path, ending with index", function(){
+		it("should call onPageChanged with the new path, ending with home", function(){
 			expect(onPageChangedSpy.callCount).toBe(1);
 			expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath/home");
+			expect(onPageChangedSpy.firstCall.args[1]).toEqual(["newPath", "home"]);
 		});
 	});
 
@@ -113,7 +115,7 @@ describe("when the hashchange event listener is called", [
 			onHashChange();
 		});
 
-		it("should call document.location.replace with the new path, ending with index", function(){
+		it("should call document.location.replace with the new path, ending with home", function(){
 			expect(replaceSpy.callCount).toBe(1);
 			expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
 		});

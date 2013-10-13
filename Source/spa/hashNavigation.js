@@ -54,7 +54,7 @@ define([
 			document.location.replace("#/" + newHash);
 		}else{
 			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'));
+			onPageChanged(this.currentPath.join('/'), this.currentPath);
 		}
 
 	}

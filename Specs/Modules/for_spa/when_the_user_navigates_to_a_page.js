@@ -1,5 +1,5 @@
 describe("when the user naviagtes to a page", {
-	"ordnung/spa/EventSubscriber": "Mocks/EventSubscriberMock",
+	"ordnung/spa/whenContext": "Mocks/whenContextMock",
 	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
 	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock",
 	"ordnung/spa/Outlet": "Mocks/OutletMock",
@@ -10,14 +10,14 @@ describe("when the user naviagtes to a page", {
 	"ordnung/spa/hashNavigation",
 	"ordnung/spa/Outlet",
 	"ordnung/spa/Templates",
-	"ordnung/spa/EventSubscriber"
+	"ordnung/spa/whenContext"
 ], function(
 	spa,
 	applyViewModelsSpy,
 	hashNavigationSpy,
 	OutletSpy,
 	TemplatesSpy,
-	EventSubscriberMock
+	whenContextMock
 ){
 
 	var promise,
@@ -89,7 +89,7 @@ describe("when the user naviagtes to a page", {
 		});
 
 		it("should unsubscribe from the page events", function(){
-			expect(EventSubscriberMock.instance.unsubscribeAllEvents.callCount).toBe(1);
+			expect(whenContextMock.context[0].destroyChildContexts.callCount).toBe(1);
 		});
 
 	});

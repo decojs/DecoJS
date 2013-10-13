@@ -392,7 +392,7 @@ define('ordnung/ajax',[], function(){
 		var params = []
 		for(var key in data){
 			var value = data[key];
-			params.push(key + "=" + encodeURIComponent(value));
+			params.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
 		}
 		return params.join("&");
 	}
@@ -401,10 +401,18 @@ define('ordnung/ajax',[], function(){
 		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : "&") : "?") + encodeURIComponent(name) + "=" + encodeURIComponent(value);
 	}
 
+	function addParamsToUrl(url, data){
+		var params = dataToParams(data);
+		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : (params.length > 0 ? "&" : "")) : "?") + params;
+	}
+
 	function addToPath(url, segment){
 		return url + (url.match(/\/$/) ? "" : "/") + segment;
 	}
 
+	function cacheBust(url){
+		return addParamToUrl(url, "cacheKey", Math.floor(Math.random()*Math.pow(2,53)));
+	}
 
 	function ajax(url, object, method, callback){
 		var xhr = new XMLHttpRequest();
@@ -417,20 +425,18 @@ define('ordnung/ajax',[], function(){
 			if(isPost){
 				data = dataToParams(object);
 			} else {
-				url += "?" + dataToParams(object);
+				url = addParamsToUrl(url, object);
 			}
 		}
 		
 		if(isPost){
-			url = addParamToUrl(url, "cacheKey", Math.floor(Math.random()*10000));
+			url = cacheBust(url);
 		}
 
-		xhr.open(isPost ? "POST" : "GET", url, true);
+		xhr.open(method, url, true);
 		
 		if(isPost && data){
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhr.setRequestHeader("Content-length", data.length);
-			xhr.setRequestHeader("Connection", "close");
 		}
 		
 		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -446,7 +452,9 @@ define('ordnung/ajax',[], function(){
 	}
 
 	ajax.addParamToUrl = addParamToUrl;
+	ajax.addParamsToUrl = addParamsToUrl;
 	ajax.addToPath = addToPath;
+	ajax.cacheBust = cacheBust;
 
 
 	return ajax;
@@ -683,36 +691,79 @@ define('ordnung/spa/Outlet',[
 	return Outlet;
 
 });
-define('ordnung/spa/EventSubscriber',[
+define('ordnung/spa/whenContext',[
 	
 ], function(
 	
 ){
-	
 
-	function EventSubscriber(){
-		var _currentPageEventSubscribers = [];
+	function unsubscribe(event, reaction){
+		event.dont(reaction);
+	}
 
-		this.unsubscribeAllEvents = function(){
-			var stopSubscription;
-			while(stopSubscription = _currentPageEventSubscribers.pop()){
-				stopSubscription();
+	function subscribe(event, reaction){
+		event(reaction);
+		return event.dont.bind(null, reaction);
+	}
+
+	function whenSomething(){
+		if(this.destroyed) throw new Error("This context has been destroyed!");
+
+		if(arguments.length == 0){
+			var childContext = createContext();
+			this.childContexts.push(childContext);
+			return childContext.when;
+		}else if(arguments.length == 1 && typeof arguments[0] === "function"){
+			return {
+				dont: unsubscribe.bind(null, arguments[0])
 			}
-		}
-
-		this.subscribe = function(event, reaction){
-			_currentPageEventSubscribers.push(function(){
-				event.dont(reaction);
-			});
-			event(reaction);
-		}
-
-		this.subscribeForever = function(event, reaction){
-			event(reaction);
+		}else if(arguments.length == 2 && typeof arguments[1] === "function"){
+			this.eventSubscribers.push(subscribe(arguments[0], arguments[1]));
 		}
 	}
 
-	return EventSubscriber
+	function thisIsDestroyed(reaction){
+		this.onDestroyListeners.push(reaction);
+	}
+
+	function destroyChildContexts(){
+		var context;
+		while(context = this.childContexts.pop())
+			context.destroyContext();
+	}
+
+	function destroyContext(){
+		var subscriber, listener, context;
+		while(subscriber = this.eventSubscribers.pop())
+			subscriber();
+		while(listener = this.onDestroyListeners.pop())
+			listener();
+		while(context = this.childContexts.pop())
+			context.destroyContext();
+		this.destroyed = true;
+	}
+
+	function createContext(){
+		var context = {
+			destroyed: false,
+			onDestroyListeners: [],
+			childContexts: [],
+			eventSubscribers: []
+		};
+
+		var when = whenSomething.bind(context);
+
+		when.thisIsDestroyed = thisIsDestroyed.bind(context);
+
+		when.destroyChildContexts = destroyChildContexts.bind(context);
+
+		return {
+			when: when,
+			destroyContext: destroyContext.bind(context)
+		};
+	}
+
+	return createContext().when;
 });
 define('ordnung/errorHandler',[], function(){
 	return {
@@ -2005,7 +2056,7 @@ define('ordnung/spa/hashNavigation',[
 			document.location.replace("#/" + newHash);
 		}else{
 			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'));
+			onPageChanged(this.currentPath.join('/'), this.currentPath);
 		}
 
 	}
@@ -2040,8 +2091,9 @@ define('ordnung/spa/PageLoader',[
 	ajax
 ){
 
-	function PageLoader(pathToUrl){
-		this.pathToUrl = pathToUrl;
+	function PageLoader(config){
+		this.pathToUrl = config && config.pathToUrl || function(a){ return a; };
+		this.cache = (config && 'cachePages' in config ? config.cachePages : true);
 		this.currentXHR = null;
 	}
 
@@ -2049,7 +2101,12 @@ define('ordnung/spa/PageLoader',[
 
 		this.abort();
 
-		this.currentXHR = ajax(this.pathToUrl(path), {}, "GET", function(xhr){
+		var url = this.pathToUrl(path);
+
+		if(this.cache === false)
+			url = ajax.cacheBust(url);
+
+		this.currentXHR = ajax(url, {}, "GET", function(xhr){
 			if(xhr.status === 200)
 				resolver.resolve(xhr.responseText);
 			else
@@ -2075,6 +2132,12 @@ define('ordnung/spa/Templates',[
 	when
 ){
 
+	function defaultConfig(){
+		return {
+			pathToUrl: function(a){ return a; }
+		}
+	}
+
 	function findTemplatesInDocument(doc){
 
 		var nodeList = doc.querySelectorAll("[type='text/page-template']");
@@ -2093,8 +2156,8 @@ define('ordnung/spa/Templates',[
 
 
 	function Templates(document, config){
-		this.pageLoader = new PageLoader(config && config.pathToUrl || function(a){ return a; });
-
+		this.pageLoader = new PageLoader(config || defaultConfig());
+		this.cachePages = (config && 'cachePages' in config ? config.cachePages : true)
 		this.templates = findTemplatesInDocument(document);
 	}
 
@@ -2107,13 +2170,16 @@ define('ordnung/spa/Templates',[
 		if(normalizedPath in this.templates){
 			return when.resolve(this.templates[normalizedPath]);
 		}else{
-
 			var deferred = when.defer();
-			this.pageLoader.loadPage(path, deferred.resolver);
 
+			this.pageLoader.loadPage(path, deferred.resolver);
+			
 			return deferred.promise.then(function(content){
+				if(this.cachePages)
+					this.templates[normalizedPath] = content;
+				
 				return content;
-			}, function(notFound){
+			}.bind(this), function(notFound){
 				var errorTemplate = "error" + notFound.error;
 				if(errorTemplate in this.templates){
 					return this.templates[errorTemplate];
@@ -2126,97 +2192,60 @@ define('ordnung/spa/Templates',[
 
 	return Templates;
 });
-define('ordnung/spa',[
-	"ordnung/spa/Outlet",
-	"ordnung/spa/EventSubscriber",
-	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Templates",
-	"ordnung/utils"
-], function(
-	Outlet,
-	EventSubscriber,
-	applyViewModels,
-	hashNavigation,
-	Templates,
-	utils
-){
-
-	var _config = {
-			index: "index"
-		},
-		_document,
-		_outlet,
-		_originalTitle,
-		_templates,
-		_currentPageEventSubscriber;
-
-	function applyContent(content){
-		_outlet.unloadCurrentPage();
-		_outlet.setPageContent(content);
-		_outlet.setDocumentTitle(_outlet.getPageTitle() || _originalTitle);
-		_outlet.extractAndRunPageJavaScript();
-		return applyViewModels(_outlet.element, _currentPageEventSubscriber.subscribe);
-	}
-
-	function pageChanged(path){
-		_outlet.indicatePageIsLoading();
-		_currentPageEventSubscriber.unsubscribeAllEvents();
-		return _templates.getTemplate(path)
-			.then(applyContent)
-			.then(function(){
-				_outlet.pageHasLoaded();
-			});
-	}
-
-	function start(config, document){
-		_document = document || window.document;
-		_config = utils.extend(_config, config);
-		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
-		_originalTitle = _document.title;
-		_currentPageEventSubscriber = new EventSubscriber();
-
-		return applyViewModels(_document, _currentPageEventSubscriber.subscribeForever).then(function(){
-			if(_outlet.outletExists()){
-				_templates = new Templates(_document, _config);
-			hashNavigation.start(_config, pageChanged, _document);
-			}
-		});
-	}
-
-	return {
-		start: start
-	};
-});
 define('ordnung/proclaimWhen',[], function () {
 
-	function publish(name, event, data) {
-		event.subscribers.forEach(function (item) {
+	function publish(name, subscribers, data) {
+		subscribers.forEach(function (item) {
 			item.apply(item, data);
 		});
 	}
 
-	function subscribeTo(name, event, subscriber) {
-		event.subscribers.push(subscriber);
+	function subscribeTo(name, subscribers, subscriber) {
+		var index = subscribers.indexOf(subscriber);
+		if(index < 0)
+			subscribers.push(subscriber);
+		return index < 0;
 	}
 	
-	function unsubscribeTo(name, event, subscriber){
-		var index = event.subscribers.indexOf(subscriber);
-		event.subscribers.splice(index, 1);
+	function unsubscribeFrom(name, subscribers, subscriber){
+		var index = subscribers.indexOf(subscriber);
+		if(index >= 0)
+			subscribers.splice(index, 1);
+		return index >= 0;
 	}
 	function extendEvent(name, event){
 		event.subscribers = [];
+		event.subscribeSubscribers = [];
+		event.unsubscribeSubscribers = [];
 
 		var extendedEvent = function(){
 			if(arguments.length == 1 && typeof arguments[0] === "function"){
-				subscribeTo(name, event, arguments[0]);
+				if(subscribeTo(name, event.subscribers, arguments[0]))
+					publish(name+".isSubscribedTo", event.subscribeSubscribers);
 			}else{
-				publish(name, event, arguments);
+				publish(name, event.subscribers, arguments);
 			}
 		}
 
 		extendedEvent.dont = function(subscriber){
-			unsubscribeTo(name, event, subscriber);
+			if(unsubscribeFrom(name, event.subscribers, subscriber))
+				publish(name+".isUnsubscribedFrom", event.unsubscribeSubscribers);
+		};
+
+		extendedEvent.isSubscribedTo = function(subscriber){
+			subscribeTo(name+".isSubscribedTo", event.subscribeSubscribers, subscriber);
+		};
+
+		extendedEvent.isSubscribedTo.dont = function(subscriber){
+			unsubscribeFrom(name+".isSubscribedTo", event.subscribeSubscribers, subscriber);
+		};
+
+		extendedEvent.isUnsubscribedFrom = function(subscriber){
+			subscribeTo(name+".isUnsubscribedFrom", event.unsubscribeSubscribers, subscriber);
+		};
+
+		extendedEvent.isUnsubscribedFrom.dont = function(subscriber){
+			unsubscribeFrom(name+".isUnsubscribedFrom", event.unsubscribeSubscribers, subscriber);
 		};
 
 		return extendedEvent;
@@ -2243,6 +2272,76 @@ define('ordnung/proclaimWhen',[], function () {
 	
 });
 
+define('ordnung/events',['ordnung/proclaimWhen'], function(proclaimWhen){
+	return proclaimWhen.extend({
+		thePageHasChanged: function(path, segments, url){ }
+	});
+});
+define('ordnung/spa',[
+	"ordnung/spa/Outlet",
+	"ordnung/spa/whenContext",
+	"ordnung/spa/applyViewModels",
+	"ordnung/spa/hashNavigation",
+	"ordnung/spa/Templates",
+	"ordnung/utils",
+	"ordnung/events"
+], function(
+	Outlet,
+	whenContext,
+	applyViewModels,
+	hashNavigation,
+	Templates,
+	utils,
+	proclaim
+){
+
+	var _config = {
+			index: "index"
+		},
+		_document,
+		_outlet,
+		_originalTitle,
+		_templates,
+		_whenContext;
+
+	function applyContent(content){
+		_outlet.unloadCurrentPage();
+		_outlet.setPageContent(content);
+		_outlet.setDocumentTitle(_outlet.getPageTitle() || _originalTitle);
+		_outlet.extractAndRunPageJavaScript();
+		return applyViewModels(_outlet.element, _whenContext());
+	}
+
+	function pageChanged(path, segments){
+		_outlet.indicatePageIsLoading();
+		_whenContext.destroyChildContexts();
+		return _templates.getTemplate(path)
+			.then(applyContent)
+			.then(function(){
+				_outlet.pageHasLoaded();
+				proclaim.thePageHasChanged(path, segments, document.location)
+			});
+	}
+
+	function start(config, document){
+		_document = document || window.document;
+		_config = utils.extend(_config, config);
+		_outlet = new Outlet(_document.querySelector("[data-outlet]"), _document);
+		_originalTitle = _document.title;
+		_whenContext = whenContext();
+
+		return applyViewModels(_document, whenContext()).then(function(){
+			if(_outlet.outletExists()){
+				_templates = new Templates(_document, _config);
+				hashNavigation.start(_config, pageChanged, _document);
+			}
+		});
+	}
+
+	return {
+		start: start
+	};
+});
 define('ordnung/qvc/constraints/NotEmpty',[], function(){
 	function NotEmpty(attributes){
 		

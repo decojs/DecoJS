@@ -12,10 +12,11 @@
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.2.8",
+  "version": "0.2.9",
   "devDependencies": {
     "karma": "latest",
     "karma-firefox-launcher": "latest",
+    "karma-phantomjs-launcher": "latest",
     "karma-chrome-launcher": "latest",
     "karma-ie-launcher": "latest",
     "requirejs": "latest",

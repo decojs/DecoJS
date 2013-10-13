@@ -4,7 +4,7 @@ define([], function(){
 	function when(){
 
 		function subWhen(){
-
+			return when();
 		}
 		subWhen.destroyChildContexts = sinon.spy();
 		when.context.push(subWhen);
@@ -12,6 +12,9 @@ define([], function(){
 	}
 	when.context = [];
 
+	when.reset = function(){
+		when.context = [];
+	}
 
 	return when;
 

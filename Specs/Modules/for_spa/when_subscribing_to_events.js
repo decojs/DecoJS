@@ -51,7 +51,7 @@ describe("when subscribing to events", {
 	describe("when the page changes", function(){
 
 		beforeEach(function(){
-			hashNavigationMock.listener()("some/path");
+			hashNavigationMock.navigateToPage("some/path");
 			event();
 		});
 

@@ -4,14 +4,16 @@ define([
 	"ordnung/spa/applyViewModels",
 	"ordnung/spa/hashNavigation",
 	"ordnung/spa/Templates",
-	"ordnung/utils"
+	"ordnung/utils",
+	"ordnung/events"
 ], function(
 	Outlet,
 	whenContext,
 	applyViewModels,
 	hashNavigation,
 	Templates,
-	utils
+	utils,
+	proclaim
 ){
 
 	var _config = {
@@ -31,13 +33,14 @@ define([
 		return applyViewModels(_outlet.element, _whenContext());
 	}
 
-	function pageChanged(path){
+	function pageChanged(path, segments){
 		_outlet.indicatePageIsLoading();
 		_whenContext.destroyChildContexts();
 		return _templates.getTemplate(path)
 			.then(applyContent)
 			.then(function(){
 				_outlet.pageHasLoaded();
+				proclaim.thePageHasChanged(path, segments, document.location)
 			});
 	}
 

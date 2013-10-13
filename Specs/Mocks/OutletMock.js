@@ -23,7 +23,7 @@ define([], function(){
 		Outlet.setDocumentTitle.reset();
 		Outlet.extractAndRunPageJavaScript.reset();
 		Outlet.pageHasLoaded.reset();
-
+		Outlet.outletExists.reset();
 	}
 
 	return Outlet;

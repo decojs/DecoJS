@@ -69,6 +69,14 @@ On the build server all of these steps (installing dependencies, building the pr
 grunt
 ```
 
+### Releasing a new version
+
+Grunt can be used to create a new version. This will commit the latest changes, increment the version and tag the commit with v<MAJOR>.<MINOR>.<PATCH>:
+
+```shell
+grunt release
+```
+
 
 ## License
 

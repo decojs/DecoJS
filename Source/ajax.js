@@ -3,7 +3,7 @@ define([], function(){
 		var params = []
 		for(var key in data){
 			var value = data[key];
-			params.push(key + "=" + encodeURIComponent(value));
+			params.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
 		}
 		return params.join("&");
 	}
@@ -12,10 +12,18 @@ define([], function(){
 		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : "&") : "?") + encodeURIComponent(name) + "=" + encodeURIComponent(value);
 	}
 
+	function addParamsToUrl(url, data){
+		var params = dataToParams(data);
+		return url + (url.match(/\?/) ? (url.match(/&$/) ? "" : (params.length > 0 ? "&" : "")) : "?") + params;
+	}
+
 	function addToPath(url, segment){
 		return url + (url.match(/\/$/) ? "" : "/") + segment;
 	}
 
+	function cacheBust(url){
+		return addParamToUrl(url, "cacheKey", Math.floor(Math.random()*Math.pow(2,53)));
+	}
 
 	function ajax(url, object, method, callback){
 		var xhr = new XMLHttpRequest();
@@ -28,15 +36,15 @@ define([], function(){
 			if(isPost){
 				data = dataToParams(object);
 			} else {
-				url += "?" + dataToParams(object);
+				url = addParamsToUrl(url, object);
 			}
 		}
 		
 		if(isPost){
-			url = addParamToUrl(url, "cacheKey", Math.floor(Math.random()*10000));
+			url = cacheBust(url);
 		}
 
-		xhr.open(isPost ? "POST" : "GET", url, true);
+		xhr.open(method, url, true);
 		
 		if(isPost && data){
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -55,7 +63,9 @@ define([], function(){
 	}
 
 	ajax.addParamToUrl = addParamToUrl;
+	ajax.addParamsToUrl = addParamsToUrl;
 	ajax.addToPath = addToPath;
+	ajax.cacheBust = cacheBust;
 
 
 	return ajax;

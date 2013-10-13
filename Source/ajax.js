@@ -40,8 +40,6 @@ define([], function(){
 		
 		if(isPost && data){
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhr.setRequestHeader("Content-length", data.length);
-			xhr.setRequestHeader("Connection", "close");
 		}
 		
 		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');

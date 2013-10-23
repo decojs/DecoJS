@@ -107,6 +107,7 @@ define([
 			return execute;
 		};
 		execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
+		execute.validator = executable.validator;
 		
 		return execute;
 	}

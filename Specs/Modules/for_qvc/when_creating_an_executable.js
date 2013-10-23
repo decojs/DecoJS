@@ -13,6 +13,10 @@ describe("when creating an executable", {
 	afterEach(function(){
 		ajaxMock.spy.reset();
 	});
+
+	it("should expose the validator", function(){
+		expect(executable.validator).toBeDefined();
+	});
 	
 	describe("and setting the success callback", function(){
 	

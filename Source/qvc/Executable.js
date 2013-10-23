@@ -53,7 +53,7 @@ define(["ordnung/qvc/ExecutableResult", "ordnung/qvc/Validatable", "ordnung/util
 		
 		this.onError = function () {
 			self.hasError(true);
-			if("violations" in self.result)
+			if("violations" in self.result && self.result.violations != null)
 				self.applyViolations(self.result.violations);
 			self.callbacks.error(self.result);
 		};

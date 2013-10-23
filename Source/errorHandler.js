@@ -1,7 +1,9 @@
 define([], function(){
 	return {
 		onError: function(error){
-			console.error(error.stack);
+			setTimeout(function(){
+				throw error;
+			},1);
 		}
 	};
 });

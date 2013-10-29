@@ -7,6 +7,9 @@ define(["ordnung/qvc/Validator", "knockout"], function(Validator, ko){
 				var validator = value.validator;
 				if (validator) {
 					ko.applyBindingsToNode(element, { hidden: validator.isValid, text: validator.message }, validator);
+				}else{
+					var attributes = Array.prototype.reduce.call(element.attributes, function(s,e){return s+" "+e.localName+"=\""+e.value+"\""}, "");
+					throw new Error("Could not bind `validationMessageFor` to value on element <"+element.tagName.toLowerCase() + attributes +">");
 				}
 			}
 		};

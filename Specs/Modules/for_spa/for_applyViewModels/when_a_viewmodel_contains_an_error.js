@@ -16,13 +16,13 @@ describe("when_a_viewmodel_contains_an_error", {
 
 		subscribe = sinon.spy();
 
-		define("dummyVM", [], function(){
-			return function DummyVM(){
+		define("ErrorVM", [], function(){
+			return function ErrorVM(){
 				throw new Error("uh oh!");
 			};
 		});
 		
-		var elm = an_element.withAViewModel("dummyVM", {});
+		var elm = an_element.withAViewModel("ErrorVM", {});
 
 		because: {
 			applyViewModels(elm, subscribe).then(done);
@@ -30,7 +30,7 @@ describe("when_a_viewmodel_contains_an_error", {
 	});
 
 	afterEach(function(){
-		require.undef("dummyVM");
+		require.undef("ErrorVM");
 		errorHandler.onError.reset();
 	});
 

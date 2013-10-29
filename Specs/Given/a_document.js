@@ -13,7 +13,7 @@ define([], function(){
 	}
 
 	return {
-		withAnOutlet: function(){
+		withAnOutlet: function(name){
 			var doc = createDocument("hello");
 			var outlet = doc.createElement("div");
 			outlet.setAttribute("data-outlet","true");
@@ -21,12 +21,12 @@ define([], function(){
 			var template = doc.createElement("script");
 			template.setAttribute("type","text/page-template");
 			template.setAttribute("id","index");
-			template.textContent='<div data-viewmodel="dummyVM"></div>';
+			template.textContent='<div data-viewmodel="'+name+'"></div>';
 			doc.body.appendChild(template);
 			var template = doc.createElement("script");
 			template.setAttribute("type","text/page-template");
 			template.setAttribute("id","destroy/viewmodel/path");
-			template.textContent='<div data-viewmodel="dummyVM"></div>';
+			template.textContent='<div></div>';
 			doc.body.appendChild(template);
 			return doc;	
 		},

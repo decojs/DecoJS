@@ -1,7 +1,6 @@
 describe(["ordnung/spa/applyViewModels"], "when calling applyViewModels", function(applyViewModels){
 
-	var dummyVM,
-		promise;
+	var promise;
 
 	beforeEach(function(){
 

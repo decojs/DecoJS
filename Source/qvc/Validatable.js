@@ -1,15 +1,21 @@
 define(["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExtensions"],function(utils, Validator, ko){
 	
-	function recursivlyExtendParameters(parameters, validatableFields) {
+	function recursivlyExtendParameters(parameters, validatableFields, parents) {
 		for (var key in parameters) {
 			var property = parameters[key];
+			var path = parents.concat([key]);
 			if (ko.isObservable(property)) {
-				property.extend({ validation: {} });
+				property.extend({
+					validation: {
+						name:key,
+						path:path.join(".")
+					}
+				});
 				validatableFields.push(property);
 			}
 			property = ko.utils.unwrapObservable(property);
 			if (typeof property === "object") {
-				recursivlyExtendParameters(property, validatableFields);
+				recursivlyExtendParameters(property, validatableFields, path);
 			}
 		}
 	}
@@ -67,7 +73,7 @@ define(["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExt
 		
 		
 		init: {
-			recursivlyExtendParameters(self.validatableParameters, self.validatableFields);
+			recursivlyExtendParameters(self.validatableParameters, self.validatableFields, []);
 			if(constraintResolver)
 				constraintResolver.applyValidationConstraints(name, self);
 		}

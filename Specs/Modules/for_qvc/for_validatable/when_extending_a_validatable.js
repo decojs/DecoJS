@@ -24,6 +24,14 @@ describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable",
 		it("should extend the observable with validator", function(){
 			expect(parameters.name.validator).toBeDefined();
 		});
+		
+		it("should set the correct name on the validator", function(){
+			expect(parameters.name.validator.name).toBe("name");
+		});
+		
+		it("should set the correct path on the validator", function(){
+			expect(parameters.name.validator.path).toBe("name");
+		});
 	});
 	
 	describe("with nested fields inside an observable", function(){
@@ -51,6 +59,14 @@ describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable",
 			expect(parameters.address.validator).toBeDefined();
 			expect(parameters.name.validator).toBeDefined();
 		});
+		
+		it("should set the correct name on the validator", function(){
+			expect(parameters.address().street.validator.name).toBe("street");
+		});
+		
+		it("should set the correct path on the validator", function(){
+			expect(parameters.address().street.validator.path).toBe("address.street");
+		});
 	});
 	
 	describe("with nested fields", function(){
@@ -76,6 +92,14 @@ describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable",
 			expect(parameters.address.street.validator).toBeDefined();
 			expect(parameters.address.postCode.validator).toBeDefined();
 			expect(parameters.name.validator).toBeDefined();
+		});
+		
+		it("should set the correct name on the validator", function(){
+			expect(parameters.address.street.validator.name).toBe("street");
+		});
+		
+		it("should set the correct path on the validator", function(){
+			expect(parameters.address.street.validator.path).toBe("address.street");
 		});
 	});
 });

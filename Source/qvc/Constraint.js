@@ -1,16 +1,16 @@
 define([], function(){
 	
-	function Constraint(name, attributes){		
-		this.name = name;
+	function Constraint(type, attributes){		
+		this.type = type;
 		this.attributes = attributes;
 		this.message = attributes.message;
 		
 		
-		this.init(name);
+		this.init(type);
 	}
 		
-	Constraint.prototype.init = function(name){
-		require(["ordnung/qvc/constraints/" + name], function(Tester){
+	Constraint.prototype.init = function(type){
+		require(["ordnung/qvc/constraints/" + type], function(Tester){
 			var tester = new Tester(this.attributes);
 			this.validate = tester.isValid.bind(tester);
 		}.bind(this));

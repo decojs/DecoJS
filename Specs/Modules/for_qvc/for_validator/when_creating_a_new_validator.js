@@ -5,7 +5,7 @@ describe("when creating a new validator", {
 	var validator;
 	
 	beforeEach(function(){
-		validator = new Validator();
+		validator = new Validator(ko.observable(), {name:"name", path:"some.name"});
 	});
 	
 	it("should be valid by default", function(){
@@ -14,6 +14,14 @@ describe("when creating a new validator", {
 	
 	it("should have an empty message", function(){
 		expect(validator.message()).toBe("");
+	});
+	
+	it("should have a name", function(){
+		expect(validator.name).toBe("name");
+	});
+	
+	it("should have a path", function(){
+		expect(validator.path).toBe("some.name");
 	});
 	
 	describe("when reseting the validator", function(){

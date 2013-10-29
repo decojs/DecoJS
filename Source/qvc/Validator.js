@@ -1,11 +1,32 @@
-define(["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
-	function Validator(){
+define([
+	"ordnung/qvc/Constraint", 
+	"knockout"
+], function(
+	Constraint, 
+	ko
+){
+
+	function interpolate(message, attributes, value, name, path){
+		return message.replace(/\{([^}]+)\}/, function(match, key){
+			if(key == "value") return value;
+			if(key == "this.name") return name;
+			if(key == "this.path") return path;
+			if(key in attributes) return attributes[key];
+			return match;
+		});
+	}
+	
+
+	function Validator(target, options){
 		var self = this;
 		
 		this.constraints = [];
 		
 		this.isValid = ko.observable(true);
 		this.message = ko.observable("");
+
+		this.name = options && options.name;
+		this.path = options && options.path;
 	}
 	
 	Validator.prototype.setConstraints = function(constraints){
@@ -27,7 +48,7 @@ define(["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
 				return true;
 			}else{
 				this.isValid(false);
-				this.message(constraint.message);
+				this.message(interpolate(constraint.message, constraint.attributes, value, this.name, this.path));
 				return false;
 			}
 		}.bind(this))){

@@ -64,17 +64,17 @@ define('ordnung/qvc/ExecutableResult',["ordnung/utils"], function(utils){
 });
 define('ordnung/qvc/Constraint',[], function(){
 	
-	function Constraint(name, attributes){		
-		this.name = name;
+	function Constraint(type, attributes){		
+		this.type = type;
 		this.attributes = attributes;
 		this.message = attributes.message;
 		
 		
-		this.init(name);
+		this.init(type);
 	}
 		
-	Constraint.prototype.init = function(name){
-		require(["ordnung/qvc/constraints/" + name], function(Tester){
+	Constraint.prototype.init = function(type){
+		require(["ordnung/qvc/constraints/" + type], function(Tester){
 			var tester = new Tester(this.attributes);
 			this.validate = tester.isValid.bind(tester);
 		}.bind(this));
@@ -87,14 +87,35 @@ define('ordnung/qvc/Constraint',[], function(){
 	
 	return Constraint;
 });
-define('ordnung/qvc/Validator',["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
-	function Validator(){
+define('ordnung/qvc/Validator',[
+	"ordnung/qvc/Constraint", 
+	"knockout"
+], function(
+	Constraint, 
+	ko
+){
+
+	function interpolate(message, attributes, value, name, path){
+		return message.replace(/\{([^}]+)\}/, function(match, key){
+			if(key == "value") return value;
+			if(key == "this.name") return name;
+			if(key == "this.path") return path;
+			if(key in attributes) return attributes[key];
+			return match;
+		});
+	}
+	
+
+	function Validator(target, options){
 		var self = this;
 		
 		this.constraints = [];
 		
 		this.isValid = ko.observable(true);
 		this.message = ko.observable("");
+
+		this.name = options && options.name;
+		this.path = options && options.path;
 	}
 	
 	Validator.prototype.setConstraints = function(constraints){
@@ -116,7 +137,7 @@ define('ordnung/qvc/Validator',["ordnung/qvc/Constraint", "knockout"], function(
 				return true;
 			}else{
 				this.isValid(false);
-				this.message(constraint.message);
+				this.message(interpolate(constraint.message, constraint.attributes, value, this.name, this.path));
 				return false;
 			}
 		}.bind(this))){
@@ -136,6 +157,9 @@ define('ordnung/qvc/koExtensions',["ordnung/qvc/Validator", "knockout"], functio
 				var validator = value.validator;
 				if (validator) {
 					ko.applyBindingsToNode(element, { hidden: validator.isValid, text: validator.message }, validator);
+				}else{
+					var attributes = Array.prototype.reduce.call(element.attributes, function(s,e){return s+" "+e.localName+"=\""+e.value+"\""}, "");
+					throw new Error("Could not bind `validationMessageFor` to value on element <"+element.tagName.toLowerCase() + attributes +">");
 				}
 			}
 		};
@@ -159,16 +183,22 @@ define('ordnung/qvc/koExtensions',["ordnung/qvc/Validator", "knockout"], functio
 });
 define('ordnung/qvc/Validatable',["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExtensions"],function(utils, Validator, ko){
 	
-	function recursivlyExtendParameters(parameters, validatableFields) {
+	function recursivlyExtendParameters(parameters, validatableFields, parents) {
 		for (var key in parameters) {
 			var property = parameters[key];
+			var path = parents.concat([key]);
 			if (ko.isObservable(property)) {
-				property.extend({ validation: {} });
+				property.extend({
+					validation: {
+						name:key,
+						path:path.join(".")
+					}
+				});
 				validatableFields.push(property);
 			}
 			property = ko.utils.unwrapObservable(property);
 			if (typeof property === "object") {
-				recursivlyExtendParameters(property, validatableFields);
+				recursivlyExtendParameters(property, validatableFields, path);
 			}
 		}
 	}
@@ -226,7 +256,7 @@ define('ordnung/qvc/Validatable',["ordnung/utils", "ordnung/qvc/Validator", "kno
 		
 		
 		init: {
-			recursivlyExtendParameters(self.validatableParameters, self.validatableFields);
+			recursivlyExtendParameters(self.validatableParameters, self.validatableFields, []);
 			if(constraintResolver)
 				constraintResolver.applyValidationConstraints(name, self);
 		}
@@ -352,7 +382,7 @@ define('ordnung/qvc/Executable',["ordnung/qvc/ExecutableResult", "ordnung/qvc/Va
 		
 		this.onError = function () {
 			self.hasError(true);
-			if("violations" in self.result)
+			if("violations" in self.result && self.result.violations != null)
 				self.applyViolations(self.result.violations);
 			self.callbacks.error(self.result);
 		};
@@ -617,6 +647,7 @@ define('ordnung/qvc',[
 			return execute;
 		};
 		execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
+		execute.validator = executable.validator;
 		
 		return execute;
 	}
@@ -768,7 +799,9 @@ define('ordnung/spa/whenContext',[
 define('ordnung/errorHandler',[], function(){
 	return {
 		onError: function(error){
-			console.error(error.stack);
+			setTimeout(function(){
+				throw error;
+			},1);
 		}
 	};
 });

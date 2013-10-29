@@ -1,6 +1,6 @@
 {
 	"name": "ordnung",
-	"version": "0.2.9",
+	"version": "0.2.10",
 	"main": "Dist/ordnung.js",
 	"ignore": [
 		"**/.*",

@@ -1,4 +1,4 @@
-describe("when_a_viewmodel_cannot_be_found", {
+describe("when a viewmodel cannot be found", {
 	"ordnung/errorHandler": "Mocks/errorHandlerMock"
 },[
 	"ordnung/spa/applyViewModels",
@@ -10,9 +10,13 @@ describe("when_a_viewmodel_cannot_be_found", {
 	errorHandler
 ){
 
-	var subscribe;
+	var subscribe,
+		realRequire;
 
 	beforeEach(function(done){
+
+		realRequire = require;
+		require = sinon.stub().callsArgWith(2, "error");
 
 		subscribe = sinon.spy();
 		
@@ -25,6 +29,7 @@ describe("when_a_viewmodel_cannot_be_found", {
 
 	afterEach(function(){
 		errorHandler.onError.reset();
+		require = realRequire;
 	});
 
 	it("should report the error to the errorHandler", function(){

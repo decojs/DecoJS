@@ -16,12 +16,12 @@ describe("when the viewmodel is destroyed", {
 
 	beforeEach(function(done){
 
-		var doc = a_document.withAnOutlet();//an_element.withAViewModel("dummyVM");
+		var doc = a_document.withAnOutlet("DestroyVM");
 
 		react = sinon.spy();
 
-		define("dummyVM", [], function(){
-			return function DummyVM(model, when){
+		define("DestroyVM", [], function(){
+			return function DestroyVM(model, when){
 				done();
 				when.thisIsDestroyed(react);
 			};
@@ -33,7 +33,7 @@ describe("when the viewmodel is destroyed", {
 	});
 
 	afterEach(function(){
-		require.undef("dummyVM");
+		require.undef("DestroyVM");
 	});
 
 	describe("when the page changes", function(){

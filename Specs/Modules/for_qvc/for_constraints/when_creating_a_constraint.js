@@ -10,7 +10,7 @@ describe("with an case insensitive flag", ["ordnung/qvc/Constraint"], function(C
 	});
 
 	it("should have a name", function(){
-		expect(constraint.name).toBe("Pattern");
+		expect(constraint.type).toBe("Pattern");
 	});
 
 	it("should have a message", function(){

@@ -1,4 +1,20 @@
-define(["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
+define([
+	"ordnung/qvc/Constraint", 
+	"knockout"
+], function(
+	Constraint, 
+	ko
+){
+
+	function interpolate(message, attributes, value){
+		return message
+			.replace("{value}", value)
+			.replace(/\{(\w+)\}/, function(match, key){
+				return attributes[key];
+			});
+	}
+	
+
 	function Validator(){
 		var self = this;
 		
@@ -27,7 +43,7 @@ define(["ordnung/qvc/Constraint", "knockout"], function(Constraint, ko){
 				return true;
 			}else{
 				this.isValid(false);
-				this.message(constraint.message);
+				this.message(interpolate(constraint.message, constraint.attributes, value));
 				return false;
 			}
 		}.bind(this))){

@@ -3,7 +3,7 @@ define(["/base/Source/ajax.js"], function(realAjax){
 		ajax.spy(url, object, method, callback);
 		if(ajax.respondImmediately){
 			callback({
-				status:200,
+				status:ajax.responseCode,
 				responseText: ajax.responseText
 			});
 		}else{
@@ -20,7 +20,7 @@ define(["/base/Source/ajax.js"], function(realAjax){
 		}
 	}
 
-
+	ajax.responseCode = 200;
 	ajax.responseText = "";
 	ajax.spy = sinon.spy();
 	ajax.addToPath = realAjax.addToPath;
@@ -28,6 +28,11 @@ define(["/base/Source/ajax.js"], function(realAjax){
 	ajax.addParamsToUrl = realAjax.addParamsToUrl;
 	ajax.cacheBust = realAjax.cacheBust;
 	ajax.respondImmediately = true;
-
+	ajax.reset = function(){
+		ajax.spy.reset();
+		ajax.responseCode = 200;
+		ajax.responseText = "";
+		ajax.respondImmediately = true;
+	}
 	return ajax;
 });

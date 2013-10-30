@@ -4,6 +4,7 @@ define([
 	"ordnung/utils", 
 	"ordnung/ajax",
 	"ordnung/qvc/ConstraintResolver",
+	"ordnung/errorHandler",
 	"knockout", 
 	"ordnung/qvc/koExtensions"], 
 	function(
@@ -12,6 +13,7 @@ define([
 		utils,
 		ajax,
 		ConstraintResolver,
+		errorHandler,
 		ko){
 	
 	function QVC(){
@@ -33,10 +35,14 @@ define([
 					if (executable.result.success === true) {
 						executable.onSuccess();
 					} else {
+						if(executable.result.exception && executable.result.exception.message){
+							errorHandler.onError(executable.result.exception.message);
+						}
 						executable.onError();
 					}
 				} else {
 					executable.result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
+					errorHandler.onError(executable.result.exception.message);
 					executable.onError();
 				}
 				executable.onComplete();
@@ -53,10 +59,15 @@ define([
 						if("parameters" in response == false){
 							response.parameters = [];
 						}
+						if(response.exception && response.exception.message){
+							errorHandler.onError(response.exception.message);
+						}
 					}catch(e){
 						var response = {parameters: []};
 					}
 					callback(name, response.parameters);
+				}else{
+					errorHandler.onError(xhr.responseText);
 				}
 			});
 		};

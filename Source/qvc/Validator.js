@@ -7,7 +7,7 @@ define([
 ){
 
 	function interpolate(message, attributes, value, name, path){
-		return message.replace(/\{([^}]+)\}/, function(match, key){
+		return message.replace(/\{([^}]+)\}/g, function(match, key){
 			if(key == "value") return value;
 			if(key == "this.name") return name;
 			if(key == "this.path") return path;

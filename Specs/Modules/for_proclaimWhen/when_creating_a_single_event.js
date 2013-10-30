@@ -20,6 +20,10 @@ describe("when creating a single event", ["ordnung/proclaimWhen"], function(proc
 			
 		});
 	
+		it("should have a toString method", function(){
+			expect(event1+"").toBe("[Event anonymous event]");
+		});
+	
 		it("should trigger when the event is published", function(){
 			expect(spy.callCount).toBe(1);
 		});
@@ -36,6 +40,10 @@ describe("when creating a single event", ["ordnung/proclaimWhen"], function(proc
 				event1();
 			}
 			
+		});
+	
+		it("should have a toString method", function(){
+			expect(event1+"").toBe("[Event my event]");
 		});
 	
 		it("should trigger when the event is published", function(){

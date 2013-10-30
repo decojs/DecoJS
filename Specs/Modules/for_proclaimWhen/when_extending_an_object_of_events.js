@@ -14,4 +14,9 @@ describe("when extending an object of events", ["ordnung/proclaimWhen"], functio
 		expect(events.event1).toBeDefined();
 		expect(events.event2).toBeDefined();
 	});
+
+	it("should give them all toString methods", function(){
+		expect(events.event1+"").toBe("[Event event1]");
+		expect(events.event2+"").toBe("[Event event2]");
+	});
 });

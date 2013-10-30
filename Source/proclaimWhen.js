@@ -54,6 +54,10 @@ define([], function () {
 			unsubscribeFrom(name+".isUnsubscribedFrom", event.unsubscribeSubscribers, subscriber);
 		};
 
+		extendedEvent.toString = function(){
+			return "[Event "+name+"]";
+		}
+
 		return extendedEvent;
 	}
 	

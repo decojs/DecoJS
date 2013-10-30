@@ -41,6 +41,22 @@ describe("when the message should be interpolated", [
 			expect(validator.message()).toBe("test an attribute");
 		});
 	});
+	describe("with multiple attributes", function(){
+	
+		beforeEach(function(){
+			validator = new Validator();
+			validator.constraints = [
+				a_constraint.whichIsInvalid("dummy", "{value} is not between {min} and {max}", {min:1, max:10})
+			];
+			
+			
+			validator.validate(17)
+		});
+	
+		it("should interpolate the value into the message", function(){
+			expect(validator.message()).toBe("17 is not between 1 and 10");
+		});
+	});
 
 	describe("with a value containing curly braces", function(){
 	

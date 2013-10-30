@@ -1,5 +1,14 @@
 # Ordnung.js Release Notes
 
+## 0.2.11 (2013/10/30)
+
+### Features:
+* Exceptions thrown by the server are forwarded to the errorHandler (issue 21)
+* Events have a toString method, producing a nice string
+
+### Fixed bugs:
+* String interpolation now supports multiple properties in a single error message (issue 10)
+
 ## 0.2.10 (2013/10/29)
 
 ### Features:

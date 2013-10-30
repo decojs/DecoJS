@@ -96,7 +96,7 @@ define('ordnung/qvc/Validator',[
 ){
 
 	function interpolate(message, attributes, value, name, path){
-		return message.replace(/\{([^}]+)\}/, function(match, key){
+		return message.replace(/\{([^}]+)\}/g, function(match, key){
 			if(key == "value") return value;
 			if(key == "this.name") return name;
 			if(key == "this.path") return path;
@@ -538,12 +538,22 @@ define('ordnung/qvc/ConstraintResolver',[], function(){
 	
 	return ConstraintResolver;
 });
+define('ordnung/errorHandler',[], function(){
+	return {
+		onError: function(error){
+			setTimeout(function(){
+				throw error;
+			},1);
+		}
+	};
+});
 define('ordnung/qvc',[
 	"ordnung/qvc/Executable", 
 	"ordnung/qvc/ExecutableResult", 
 	"ordnung/utils", 
 	"ordnung/ajax",
 	"ordnung/qvc/ConstraintResolver",
+	"ordnung/errorHandler",
 	"knockout", 
 	"ordnung/qvc/koExtensions"], 
 	function(
@@ -552,6 +562,7 @@ define('ordnung/qvc',[
 		utils,
 		ajax,
 		ConstraintResolver,
+		errorHandler,
 		ko){
 	
 	function QVC(){
@@ -573,10 +584,14 @@ define('ordnung/qvc',[
 					if (executable.result.success === true) {
 						executable.onSuccess();
 					} else {
+						if(executable.result.exception && executable.result.exception.message){
+							errorHandler.onError(executable.result.exception.message);
+						}
 						executable.onError();
 					}
 				} else {
 					executable.result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
+					errorHandler.onError(executable.result.exception.message);
 					executable.onError();
 				}
 				executable.onComplete();
@@ -593,10 +608,15 @@ define('ordnung/qvc',[
 						if("parameters" in response == false){
 							response.parameters = [];
 						}
+						if(response.exception && response.exception.message){
+							errorHandler.onError(response.exception.message);
+						}
 					}catch(e){
 						var response = {parameters: []};
 					}
 					callback(name, response.parameters);
+				}else{
+					errorHandler.onError(xhr.responseText);
 				}
 			});
 		};
@@ -795,15 +815,6 @@ define('ordnung/spa/whenContext',[
 	}
 
 	return createContext().when;
-});
-define('ordnung/errorHandler',[], function(){
-	return {
-		onError: function(error){
-			setTimeout(function(){
-				throw error;
-			},1);
-		}
-	};
 });
 /** @license MIT License (c) copyright 2011-2013 original author or authors */
 
@@ -2280,6 +2291,10 @@ define('ordnung/proclaimWhen',[], function () {
 		extendedEvent.isUnsubscribedFrom.dont = function(subscriber){
 			unsubscribeFrom(name+".isUnsubscribedFrom", event.unsubscribeSubscribers, subscriber);
 		};
+
+		extendedEvent.toString = function(){
+			return "[Event "+name+"]";
+		}
 
 		return extendedEvent;
 	}

@@ -19,17 +19,13 @@ module.exports = function(grunt) {
           out: "Dist/ordnung.js",
           paths: {
             "knockout": "empty:",
-            "ordnung": "Source"
+            "when": "empty:"
           },
           packages: [
-              { name: 'when', location: 'node_modules/when', main: 'when' }
+              { name: 'ordnung', location: 'Source/ordnung', main: 'ordnung' }
           ],
           include: [
-            "ordnung/qvc",
-            "ordnung/spa",
-            "ordnung/proclaimWhen",
-            "ordnung/utils",
-            "ordnung/ajax",
+            "ordnung",
             "ordnung/qvc/constraints/NotEmpty",
             "ordnung/qvc/constraints/Pattern"
           ],

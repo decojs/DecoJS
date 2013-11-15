@@ -28,6 +28,14 @@ define('ordnung/utils',[], function(){
 			while(word.charAt(word.length - 1) == character) word = word.substr(0, word.length - 1);
 			return word;
 		},
+		after: function(word, character){
+			var index = word.indexOf(character);
+			if(index < 0){
+				return "";
+			}else{
+				return word.substr(index+1);
+			}
+		},
 		popTail: function(array){
 			return array.slice(0, -1);
 		},
@@ -932,7 +940,7 @@ define('ordnung/spa/hashNavigation',[
 
 	function hashChanged(config, onPageChanged, document){
 
-		var path = _.trim(document.location.hash, '#');
+		var path = _.after(document.location.href, '#');
 
 		var isRelative = _.startsWith(path, '/') == false;
 		var isFolder = _.endsWith(path, '/');
@@ -942,7 +950,7 @@ define('ordnung/spa/hashNavigation',[
 			document.location.replace("#/" + newHash);
 		}else{
 			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'), this.currentPath);
+			onPageChanged(this.currentPath.join('/'), this.currentPath.map(function(p){return decodeURIComponent(p);}));
 		}
 
 	}

@@ -1,6 +1,15 @@
 # Ordnung.js Release Notes
 
-## 0.2.11 (2013/10/30)
+## 0.2.12 (2013-11-15)
+
+### Features:
+* Depends on Knockout 3.0 (issue 29)
+* A better packaged and distributed project (issue 4)
+
+### Fixed bugs:
+* Url decoding did not work on safari (issue 34)
+
+## 0.2.11 (2013-10-30)
 
 ### Features:
 * Exceptions thrown by the server are forwarded to the errorHandler (issue 21)
@@ -9,7 +18,7 @@
 ### Fixed bugs:
 * String interpolation now supports multiple properties in a single error message (issue 10)
 
-## 0.2.10 (2013/10/29)
+## 0.2.10 (2013-10-29)
 
 ### Features:
 * validation messages support string interpolation (issue 10)

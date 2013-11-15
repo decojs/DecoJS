@@ -6,15 +6,12 @@ jazzmine.requireConfig({
   paths: {
     "Mocks": "Specs/Mocks",
     "Given": "Specs/Given",
-    "knockout": "bower_components/knockout.js/knockout",
-    "ordnung": "Source"
+    "knockout": "bower_components/knockout.js/knockout"
   },
   packages: [
-      { name: 'when', location: 'node_modules/when', main: 'when' }
-  ],
-
-  shim: {
-  }
+      { name: 'when', location: 'bower_components/when', main: 'when' },
+      { name: 'ordnung', location: 'Source/ordnung', main: 'ordnung' }
+  ]
 });
 
 

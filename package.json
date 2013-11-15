@@ -23,7 +23,6 @@
     "jazzmine": "latest",
     "sinon": "latest",
     "jasmine-sinon": "latest",
-    "when": "2.3.0",
     "grunt": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-bower-task": "~0.3.1",

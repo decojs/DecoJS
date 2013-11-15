@@ -1,4 +1,4 @@
-define(["/base/Source/ajax.js"], function(realAjax){
+define(["/base/Source/ordnung/ajax.js"], function(realAjax){
 	function ajax(url, object, method, callback){
 		ajax.spy(url, object, method, callback);
 		if(ajax.respondImmediately){

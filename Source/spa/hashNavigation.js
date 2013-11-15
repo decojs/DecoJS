@@ -44,7 +44,7 @@ define([
 
 	function hashChanged(config, onPageChanged, document){
 
-		var path = _.trim(document.location.hash, '#');
+		var path = _.after(document.location.href, '#');
 
 		var isRelative = _.startsWith(path, '/') == false;
 		var isFolder = _.endsWith(path, '/');
@@ -54,7 +54,7 @@ define([
 			document.location.replace("#/" + newHash);
 		}else{
 			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'), this.currentPath);
+			onPageChanged(this.currentPath.join('/'), this.currentPath.map(function(p){return decodeURIComponent(p);}));
 		}
 
 	}

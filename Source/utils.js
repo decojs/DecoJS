@@ -27,6 +27,14 @@ define([], function(){
 			while(word.charAt(word.length - 1) == character) word = word.substr(0, word.length - 1);
 			return word;
 		},
+		after: function(word, character){
+			var index = word.indexOf(character);
+			if(index < 0){
+				return "";
+			}else{
+				return word.substr(index+1);
+			}
+		},
 		popTail: function(array){
 			return array.slice(0, -1);
 		},

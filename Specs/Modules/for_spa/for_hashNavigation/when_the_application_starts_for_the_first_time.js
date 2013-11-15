@@ -36,7 +36,7 @@ describe("when the application starts for the first time", [
 	describe("with an empty hash", function(){
 
 		because(function(){
-			doc.location.hash = "";
+			doc.location.href = "http://example.com/";
 			result = hashNavigation.start(config, onPageChangedSpy, doc, global);
 		});
 
@@ -49,7 +49,7 @@ describe("when the application starts for the first time", [
 	describe("with an empty hash", function(){
 
 		because(function(){
-			doc.location.hash = "#/";
+			doc.location.href = "http://example.com/#/";
 			result = hashNavigation.start(config, onPageChangedSpy, doc, global);
 		});
 

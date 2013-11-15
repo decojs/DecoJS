@@ -17,7 +17,7 @@ describe("when the page has a hash location", [
 		removeEventListenerSpy = sinon.spy();
 		doc = {
 			location: {
-				hash: "#/myPath"
+				href: "http://example.com/#/myPath"
 			}
 		};
 

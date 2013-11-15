@@ -21,7 +21,7 @@ describe("when the hashchange event listener is called", [
 
 		doc = {
 			location: {
-				hash: "#/myPath/home",
+				href: "http://example.com/#/myPath/home",
 				replace: replaceSpy
 			}
 		};
@@ -39,7 +39,7 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			onPageChangedSpy.reset();
-			doc.location.hash = "#/newPath";
+			doc.location.href = "http://example.com/#/newPath";
 			onHashChange();
 		});
 
@@ -54,7 +54,7 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			replaceSpy.reset();
-			doc.location.hash = "#newPath";
+			doc.location.href = "http://example.com/#newPath";
 			onHashChange();
 		});
 
@@ -68,7 +68,7 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			replaceSpy.reset();
-			doc.location.hash = "#/newPath/";
+			doc.location.href = "http://example.com/#/newPath/";
 			onHashChange();
 		});
 
@@ -82,7 +82,7 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			replaceSpy.reset();
-			doc.location.hash = "#../home";
+			doc.location.href = "http://example.com/#../home";
 			onHashChange();
 		});
 
@@ -96,7 +96,7 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			onPageChangedSpy.reset();
-			doc.location.hash = "#/newPath//home";
+			doc.location.href = "http://example.com/#/newPath//home";
 			onHashChange();
 		});
 
@@ -111,13 +111,42 @@ describe("when the hashchange event listener is called", [
 
 		because(function(){
 			replaceSpy.reset();
-			doc.location.hash = "#./home";
+			doc.location.href = "http://example.com/#./home";
 			onHashChange();
 		});
 
 		it("should call document.location.replace with the new path, ending with home", function(){
 			expect(replaceSpy.callCount).toBe(1);
 			expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
+		});
+	});
+
+	describe("with a path starting with .", function(){
+
+		because(function(){
+			replaceSpy.reset();
+			doc.location.href = "http://example.com/#./home";
+			onHashChange();
+		});
+
+		it("should call document.location.replace with the new path, ending with home", function(){
+			expect(replaceSpy.callCount).toBe(1);
+			expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
+		});
+	});
+
+	describe("with a path containing url encoded data", function(){
+
+		because(function(){
+			onPageChangedSpy.reset();
+			doc.location.href = "http://example.com/#/%3A%2F%2F/%C3%BC";
+			onHashChange();
+		});
+
+		it("should call onPageChanged with the new path, with the url decoded sement", function(){
+			expect(onPageChangedSpy.callCount).toBe(1);
+			expect(onPageChangedSpy.firstCall.args[0]).toBe("%3A%2F%2F/%C3%BC");
+			expect(onPageChangedSpy.firstCall.args[1]).toEqual(["://", "ü"]);
 		});
 	});
 });

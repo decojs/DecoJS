@@ -1,5 +1,12 @@
 # Ordnung.js Release Notes
 
+## 0.2.13 (2013-11-29)
+
+### Fixed bugs:
+* Pages can now contain templates inside script tags (without Ordnung trying to execute the template) (issue 40)
+* The list of modules which Require was unable to load is now spread across multiple lines (issue 39)
+* When the server returns an empty list of constraints for a field, it ignores that field (issue 38)
+
 ## 0.2.12 (2013-11-15)
 
 ### Features:

@@ -296,6 +296,9 @@ define('ordnung/qvc/Validatable',["ordnung/utils", "ordnung/qvc/Validator", "kno
 		fields.forEach(function(field){
 			var fieldName = field.name;
 			var constraints = field.constraints;
+
+			if(constraints == null || constraints.length == 0)
+				return;
 			
 			var object = findField(fieldName, parameters, "Error applying constraints to field");
 			
@@ -726,7 +729,7 @@ define('ordnung/spa/Outlet',[
 	};
 
 	Outlet.prototype.extractAndRunPageJavaScript = function(){
-		var scripts = this.element.querySelectorAll("script");
+		var scripts = this.element.querySelectorAll("script[type='text/javascript']");
 		for(var i=0; i<scripts.length; i++){
 			scripts[i].parentNode.removeChild(scripts[i]);
 			if(scripts[i].id === '') throw new Error("The script must have an id");
@@ -734,6 +737,7 @@ define('ordnung/spa/Outlet',[
 				var script = this.document.createElement("script");
 				script.id = scripts[i].id;
 				script.text = scripts[i].textContent;
+				script.setAttribute('type', scripts[i].getAttribute('type'));
 				this.document.body.appendChild(script);
 			}
 		}
@@ -863,7 +867,7 @@ define('ordnung/spa/applyViewModels',[
 			data.ViewModel = ViewModel;
 			return data;
 		}, function(error){
-			errorHandler.onError(new Error("could not load the following modules: "+error.requireModules));
+			errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
 			return null;
 		});
 	}

@@ -32,6 +32,7 @@ module.exports = function(grunt) {
           
           
           optimize: "none",
+          normalizeDirDefines: "all",
           generateSourceMaps: true,
           preserveLicenseComments: false
         }

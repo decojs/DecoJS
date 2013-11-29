@@ -105,6 +105,9 @@ define(["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExt
 		fields.forEach(function(field){
 			var fieldName = field.name;
 			var constraints = field.constraints;
+
+			if(constraints == null || constraints.length == 0)
+				return;
 			
 			var object = findField(fieldName, parameters, "Error applying constraints to field");
 			

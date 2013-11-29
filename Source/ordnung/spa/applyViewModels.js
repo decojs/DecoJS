@@ -37,7 +37,7 @@ define([
 			data.ViewModel = ViewModel;
 			return data;
 		}, function(error){
-			errorHandler.onError(new Error("could not load the following modules: "+error.requireModules));
+			errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
 			return null;
 		});
 	}

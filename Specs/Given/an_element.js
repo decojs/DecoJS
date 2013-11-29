@@ -31,19 +31,14 @@ define([], function(){
 		withScriptTags: function(){
 			var elm = document.createElement("div");
 			for(var i=0; i<5; i++){
-				var child = document.createElement("script");
-				child.textContent = "child number "+i;
-				elm.appendChild(child);
+				elm.innerHTML += '<script type="text/javascript">child number '+i+'</script>';
 			}
 			return elm;
 		},
-		withScriptTagsWithIds: function(){
+		withScriptTagsWithIds: function(type){
 			var elm = document.createElement("div");
 			for(var i=0; i<5; i++){
-				var child = document.createElement("script");
-				child.id = "script"+i;
-				child.textContent = "child number "+i;
-				elm.appendChild(child);
+				elm.innerHTML += '<script type="' + (type || 'text/javascript') + '" id="script' + i + '">child number '+i+'</script>';
 			}
 			return elm;
 		}

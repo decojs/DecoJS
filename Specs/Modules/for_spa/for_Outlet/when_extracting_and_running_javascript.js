@@ -31,6 +31,30 @@ describe("when extracting and running JavaScript", [
 			expect(doc.body.children.length).toBe(5);
 		});
 
+		it("should retain the type of the script tag", function(){
+			expect(doc.body.children[4].getAttribute("type")).toBe("text/javascript");
+		});
+
+	});
+
+	describe("when the script tags don't have their type set to text/javascript", function(){
+		beforeEach(function(){
+
+			doc = a_document.withATitleAndBody("my pretty page");
+
+			elm = an_element.withScriptTagsWithIds("template");
+
+			outlet = new Outlet(elm, doc);
+
+			because: {
+				outlet.extractAndRunPageJavaScript();
+			}
+		});
+
+		it("should not append all the script tags to the body", function(){
+			expect(doc.body.children.length).toBe(0);
+		});
+
 	});
 
 	describe("when the script tags don't have ids", function(){

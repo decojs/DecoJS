@@ -3,8 +3,8 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 	var validatable,
 		parameters,
 		constraintRules,
-		setOptionsSpy,
-		option;
+		setConstraintssSpy,
+		constraintss;
 	
 	describe("to an validatable with one field", function(){
 		
@@ -14,31 +14,31 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 			}
 			validatable = new Validatable("",parameters);
 			
-			setOptionsSpy = sinon.spy();
+			setConstraintssSpy = sinon.spy();
 			
 			parameters.name.validator = {
-				setConstraints: setOptionsSpy
+				setConstraints: setConstraintssSpy
 			};
 			
-			option = {option: "NotEmpty"};
+			constraints = [{name: "NotEmpty", attributes:{}}];
 			
 			constraintRules = [
 				{
 					name:"name",
-					constraints:option
+					constraints:constraints
 				}
 			];
 			
 			validatable.applyConstraints(constraintRules);
 		});
 		
-		it("should set the options of the field", function(){
-			expect(setOptionsSpy.called).toBe(true);
-			expect(setOptionsSpy.callCount).toBe(1);
+		it("should set the constraintss of the field", function(){
+			expect(setConstraintssSpy.called).toBe(true);
+			expect(setConstraintssSpy.callCount).toBe(1);
 		});
 		
 		it("should set the correct constraint", function(){
-			expect(setOptionsSpy.getCall(0).args[0]).toBe(option);
+			expect(setConstraintssSpy.getCall(0).args[0]).toBe(constraints);
 		});
 	});
 	
@@ -54,37 +54,37 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 			};
 			validatable = new Validatable("",parameters);
 			
-			setOptionsSpy = sinon.spy();
+			setConstraintssSpy = sinon.spy();
 			
 			parameters.name.validator = {
-				setConstraints: setOptionsSpy
+				setConstraints: setConstraintssSpy
 			};
 			parameters.address.street.validator = {
-				setConstraints: setOptionsSpy
+				setConstraints: setConstraintssSpy
 			};
 			
-			option = {option: "NotEmpty"};
+			constraints = [{name: "NotEmpty", attributes:{}}];
 			constraintRules = [
 				{
 					name:"name",
-					constraints:option
+					constraints:constraints
 				},
 				{
 					name:"address.street",
-					constraints:option
+					constraints:constraints
 				}
 			];
 			
 			validatable.applyConstraints(constraintRules);
 		});
 		
-		it("should set the options of the field", function(){
-			expect(setOptionsSpy.called).toBe(true);
-			expect(setOptionsSpy.callCount).toBe(2);
+		it("should set the constraintss of the field", function(){
+			expect(setConstraintssSpy.called).toBe(true);
+			expect(setConstraintssSpy.callCount).toBe(2);
 		});
 		
 		it("should set the correct constraint", function(){
-			expect(setOptionsSpy.getCall(0).args[0]).toBe(option);
+			expect(setConstraintssSpy.getCall(0).args[0]).toBe(constraints);
 		});
 	});
 	
@@ -100,37 +100,37 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 			};
 			validatable = new Validatable("",parameters);
 			
-			setOptionsSpy = sinon.spy();
+			setConstraintssSpy = sinon.spy();
 			
 			parameters.name.validator = {
-				setConstraints: setOptionsSpy
+				setConstraints: setConstraintssSpy
 			};
 			parameters.address().street.validator = {
-				setConstraints: setOptionsSpy
+				setConstraints: setConstraintssSpy
 			};
 			
-			option = {option: "NotEmpty"};
+			constraints = [{name: "NotEmpty", attributes:{}}];
 			constraintRules = [
 				{
 					name:"name",
-					constraints:option
+					constraints:constraints
 				},
 				{
 					name:"address.street",
-					constraints:option
+					constraints:constraints
 				}
 			];
 			
 			validatable.applyConstraints(constraintRules);
 		});
 		
-		it("should set the options of the field", function(){
-			expect(setOptionsSpy.called).toBe(true);
-			expect(setOptionsSpy.callCount).toBe(2);
+		it("should set the constraintss of the field", function(){
+			expect(setConstraintssSpy.called).toBe(true);
+			expect(setConstraintssSpy.callCount).toBe(2);
 		});
 		
 		it("should set the correct constraint", function(){
-			expect(setOptionsSpy.getCall(0).args[0]).toBe(option);
+			expect(setConstraintssSpy.getCall(0).args[0]).toBe(constraints);
 		});
 	});
 	
@@ -147,11 +147,11 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 				setConstraints: function(){}
 			};
 			
-			option = {option: "NotEmpty"};
+			constraints = [{name: "NotEmpty", attributes:{}}];
 			constraintRules = [
 				{
 					name:"address",
-					constraints:option
+					constraints:constraints
 				}
 			];
 			
@@ -172,11 +172,11 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 			};
 			validatable = new Validatable("",parameters);
 			
-			option = {option: "NotEmpty"};
+			constraints = [{name: "NotEmpty", attributes:{}}];
 			constraintRules = [
 				{
 					name:"name",
-					constraints:option
+					constraints:constraints
 				}
 			];
 			
@@ -186,6 +186,31 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 			expect(function(){
 				validatable.applyConstraints(constraintRules);
 			}).toThrow(new Error("Error applying constraints to field: name\nIt is not an observable or is not extended with a validator. \nname=`\"name\"`"));
+		});
+	});
+	
+	describe("to an validatable where the field is not an observable, but the constraint list is empty", function(){
+	
+		beforeEach(function(){
+			parameters = {
+				name: "name"
+			};
+			validatable = new Validatable("",parameters);
+			
+			constraints = [];
+			constraintRules = [
+				{
+					name:"name",
+					constraints:constraints
+				}
+			];
+			
+		});
+		
+		it("to trow an exception", function(){
+			expect(function(){
+				validatable.applyConstraints(constraintRules);
+			}).not.toThrow();
 		});
 	});
 });

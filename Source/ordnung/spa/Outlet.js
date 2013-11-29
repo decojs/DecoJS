@@ -32,7 +32,7 @@ define([
 	};
 
 	Outlet.prototype.extractAndRunPageJavaScript = function(){
-		var scripts = this.element.querySelectorAll("script");
+		var scripts = this.element.querySelectorAll("script[type='text/javascript']");
 		for(var i=0; i<scripts.length; i++){
 			scripts[i].parentNode.removeChild(scripts[i]);
 			if(scripts[i].id === '') throw new Error("The script must have an id");
@@ -40,6 +40,7 @@ define([
 				var script = this.document.createElement("script");
 				script.id = scripts[i].id;
 				script.text = scripts[i].textContent;
+				script.setAttribute('type', scripts[i].getAttribute('type'));
 				this.document.body.appendChild(script);
 			}
 		}

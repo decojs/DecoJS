@@ -16,7 +16,7 @@ describe("when a viewmodel cannot be found", {
 	beforeEach(function(done){
 
 		realRequire = require;
-		require = sinon.stub().callsArgWith(2, "error");
+		require = sinon.stub().callsArgWith(2, {requireModules:["IdoNotExist", "IdoNotExistEither"]});
 
 		subscribe = sinon.spy();
 		
@@ -38,5 +38,9 @@ describe("when a viewmodel cannot be found", {
 
 	it("should pass an error to the errorHandler", function(){
 		expect(errorHandler.onError.firstCall.args[0]).toBeAn(Error);
+	});
+
+	it("should put each module on a separate line", function(){
+		expect(errorHandler.onError.firstCall.args[0].message).toBe("Could not load the following modules:\nIdoNotExist\nIdoNotExistEither");
 	});
 });

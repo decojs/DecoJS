@@ -1,4 +1,4 @@
-describe("when subscribing to subscriptions", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when subscribing to subscriptions", ["deco/proclaimWhen"], function(proclaimWhen){
 	
 	var when,
 		spy1,

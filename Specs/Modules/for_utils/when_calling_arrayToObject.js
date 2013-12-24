@@ -1,5 +1,5 @@
 describe("when calling arrayToObject", [
-	"ordnung/utils"
+	"deco/utils"
 ], function(
 	utils
 ){

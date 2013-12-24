@@ -1,6 +1,6 @@
 define([
-  'ordnung/qvc',
-  'ordnung/spa'
+  'deco/qvc',
+  'deco/spa'
 ], function(
   qvc,
   spa

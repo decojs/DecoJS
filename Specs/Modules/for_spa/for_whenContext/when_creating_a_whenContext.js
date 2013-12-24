@@ -1,5 +1,5 @@
 describe("when creating a whenContext", [
-	'ordnung/spa/whenContext'
+	'deco/spa/whenContext'
 ], function(
 	whenContext
 ){

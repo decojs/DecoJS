@@ -1,21 +1,36 @@
 {
-	"name": "ordnung",
-	"version": "0.2.13",
-	"main": "Dist/ordnung.js",
-	"ignore": [
-		"**/.*",
-		"**/*.cmd",
-		"/*.js",
-		"node_modules",
-		"bower_components",
-		"Specs"
-	],
-	"dependencies": {
-		"requirejs": "2.1.8",
-		"knockout.js": "3.0.0",
-		"json2": "latest",
-		"es5-shim": "2.1.0",
-		"when": "2.3.0"
-	},
-	"_source": "https://github.com/mariusGundersen/OrdnungJS"
+  "name": "deco",
+  "description": "Scalable frontend architecture",
+  "keywords": [
+    "spa",
+    "llp",
+    "knockout",
+    "require",
+    "maintainable",
+    "scalable",
+    "architecture",
+    "deco",
+    "decojs"
+  ],
+  "authors": [
+    "Marius Gundersen <bower@mariusgundersen.net>"
+  ],
+  "version": "0.3.0",
+  "main": "Dist/deco.js",
+  "ignore": [
+    "**/.*",
+    "**/*.cmd",
+    "/*.js",
+    "node_modules",
+    "bower_components",
+    "Specs"
+  ],
+  "dependencies": {
+    "requirejs": "2.1.8",
+    "knockout.js": "3.0.0",
+    "json2": "latest",
+    "es5-shim": "2.1.0",
+    "when": "2.3.0"
+  },
+  "_source": "https://github.com/decojs/DecoJS"
 }

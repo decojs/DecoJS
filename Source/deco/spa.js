@@ -1,11 +1,11 @@
 define([
-	"ordnung/spa/Outlet",
-	"ordnung/spa/whenContext",
-	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Templates",
-	"ordnung/utils",
-	"ordnung/events"
+	"deco/spa/Outlet",
+	"deco/spa/whenContext",
+	"deco/spa/applyViewModels",
+	"deco/spa/hashNavigation",
+	"deco/spa/Templates",
+	"deco/utils",
+	"deco/events"
 ], function(
 	Outlet,
 	whenContext,

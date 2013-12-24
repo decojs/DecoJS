@@ -1,4 +1,4 @@
-define(["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExtensions"],function(utils, Validator, ko){
+define(["deco/utils", "deco/qvc/Validator", "knockout", "deco/qvc/koExtensions"],function(utils, Validator, ko){
 	
 	function recursivlyExtendParameters(parameters, validatableFields, parents) {
 		for (var key in parameters) {

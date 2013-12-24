@@ -1,4 +1,4 @@
-describe("when creating multiple events with the same name", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when creating multiple events with the same name", ["deco/proclaimWhen"], function(proclaimWhen){
 	
 	var events1,
 		events2;

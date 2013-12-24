@@ -1,4 +1,4 @@
-describe("when subscribing to a event", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when subscribing to a event", ["deco/proclaimWhen"], function(proclaimWhen){
 
 	
 	var when,

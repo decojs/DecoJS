@@ -1,17 +1,17 @@
 describe("when the user naviagtes to a page", {
-	"ordnung/spa/whenContext": "Mocks/whenContextMock",
-	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
-	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock",
-	"ordnung/spa/Outlet": "Mocks/OutletMock",
-	"ordnung/spa/Templates": "Mocks/TemplatesMock"
+	"deco/spa/whenContext": "Mocks/whenContextMock",
+	"deco/spa/applyViewModels": "Mocks/applyViewModelsMock",
+	"deco/spa/hashNavigation": "Mocks/hashNavigationMock",
+	"deco/spa/Outlet": "Mocks/OutletMock",
+	"deco/spa/Templates": "Mocks/TemplatesMock"
 },[
-	"ordnung/spa",
-	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Outlet",
-	"ordnung/spa/Templates",
-	"ordnung/spa/whenContext",
-	"ordnung/events"
+	"deco/spa",
+	"deco/spa/applyViewModels",
+	"deco/spa/hashNavigation",
+	"deco/spa/Outlet",
+	"deco/spa/Templates",
+	"deco/spa/whenContext",
+	"deco/events"
 ], function(
 	spa,
 	applyViewModelsSpy,

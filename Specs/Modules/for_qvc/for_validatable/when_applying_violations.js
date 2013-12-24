@@ -1,6 +1,6 @@
 describe("when applying violations", {
-	"ordnung/qvc/Validator": "Mocks/ValidatorMock"
-},["knockout", "ordnung/qvc/Validatable", "ordnung/qvc/Validator"], function(ko, Validatable, Validator){
+	"deco/qvc/Validator": "Mocks/ValidatorMock"
+},["knockout", "deco/qvc/Validatable", "deco/qvc/Validator"], function(ko, Validatable, Validator){
 
 	var validatable,
 		observable,

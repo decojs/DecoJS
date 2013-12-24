@@ -1,6 +1,6 @@
 define([
-	"ordnung/utils",
-	"ordnung/errorHandler",
+	"deco/utils",
+	"deco/errorHandler",
 	"knockout", 
 	"when", 
 	"when/callbacks"

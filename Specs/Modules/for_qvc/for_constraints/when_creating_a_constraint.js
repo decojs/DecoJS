@@ -1,4 +1,4 @@
-describe("with an case insensitive flag", ["ordnung/qvc/Constraint"], function(Constraint){
+describe("with an case insensitive flag", ["deco/qvc/Constraint"], function(Constraint){
 
 	var constraint,
 		attributes;

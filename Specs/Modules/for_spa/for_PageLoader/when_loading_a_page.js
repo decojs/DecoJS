@@ -1,8 +1,8 @@
 describe("when loading a page", {
-	"ordnung/ajax": "Mocks/ajaxMock"
+	"deco/ajax": "Mocks/ajaxMock"
 },[
-	"ordnung/spa/PageLoader",
-	"ordnung/ajax"
+	"deco/spa/PageLoader",
+	"deco/ajax"
 ], function(
 	PageLoader,
 	ajax

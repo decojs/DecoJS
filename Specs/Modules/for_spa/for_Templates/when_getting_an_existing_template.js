@@ -1,8 +1,8 @@
 describe("when getting an existing template", {
-	"ordnung/spa/PageLoader": "Mocks/PageLoaderMock"
+	"deco/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
-	"ordnung/spa/Templates",
-	"ordnung/spa/PageLoader",
+	"deco/spa/Templates",
+	"deco/spa/PageLoader",
 	"Given/a_document"
 ], function(
 	Templates,

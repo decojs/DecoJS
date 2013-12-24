@@ -1,5 +1,5 @@
 describe("when creating an outlet", [
-	"ordnung/spa/Outlet"
+	"deco/spa/Outlet"
 ], function(
 	Outlet
 ){

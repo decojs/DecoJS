@@ -1,5 +1,5 @@
 describe("when the hashchange event listener is called", [
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	hashNavigation
 ){

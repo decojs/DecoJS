@@ -1,5 +1,5 @@
 describe("when making a request", [
-	"ordnung/ajax"
+	"deco/ajax"
 ], function(
 	ajax
 ){

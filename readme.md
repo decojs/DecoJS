@@ -1,19 +1,19 @@
-# Ordnung.js
+# DecoJS
 
-A framework for building maintainable frontend applications
+Scalable frontend architecture
 
 ## Getting Started
 
 This project can be used with bower. This will install both the concatenated and minified files, along with the sourcemap for both of them. It will also install the dependencies needed to run the project
 
 ```shell
-bower install ordnung
+bower install deco
 ```
 
-Ordnung is only dependent on [Require.js](http://requirejs.org) and [Knockout.js](http://knockoutjs.com). With these three files you are ready to make your own awesome single page application!
+DecoJS is only dependent on [Require.js](http://requirejs.org), [Knockout.js](http://knockoutjs.com) and [When.js](https://github.com/cujojs/when). For more information on building websites with DecoJS, go to [DecoJS.com](http://decojs.com)!s
 
 
-## Development
+## Contribution
 
 The rest of this readme is for contributors to this project.
 

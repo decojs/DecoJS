@@ -1,12 +1,12 @@
 describe("when subscribing to events", {
-	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock",
-	"ordnung/spa/Outlet": "Mocks/OutletMock",
-	"ordnung/spa/PageLoader":"Mocks/PageLoaderMock"
+	"deco/spa/hashNavigation": "Mocks/hashNavigationMock",
+	"deco/spa/Outlet": "Mocks/OutletMock",
+	"deco/spa/PageLoader":"Mocks/PageLoaderMock"
 },[
-	"ordnung/spa",
+	"deco/spa",
 	"Given/an_element",
 	"Given/an_event",
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	spa,
 	an_element,

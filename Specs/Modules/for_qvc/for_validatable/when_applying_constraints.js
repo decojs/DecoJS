@@ -1,4 +1,4 @@
-describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "ordnung/qvc/koExtensions"], function(ko, Validatable){
+describe("when applying constraints", ["knockout", "deco/qvc/Validatable", "deco/qvc/koExtensions"], function(ko, Validatable){
 
 	var validatable,
 		parameters,
@@ -10,7 +10,7 @@ describe("when applying constraints", ["knockout", "ordnung/qvc/Validatable", "o
 		
 		beforeEach(function(){
 			parameters = {
-				name: ko.observable("ordnung")
+				name: ko.observable("deco")
 			}
 			validatable = new Validatable("",parameters);
 			

@@ -1,5 +1,5 @@
 describe("when calling addEventListener", [
-	"ordnung/utils"
+	"deco/utils"
 ], function(
 	utils
 ){

@@ -1,6 +1,6 @@
 describe("when subscribing to events", [
-	'ordnung/spa/whenContext',
-	'ordnung/proclaimWhen'
+	'deco/spa/whenContext',
+	'deco/proclaimWhen'
 ], function(
 	whenContext,
 	proclaimWhen

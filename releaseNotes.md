@@ -1,9 +1,12 @@
-# Ordnung.js Release Notes
+# DecoJS Release Notes
+
+## 0.3.0 (2013-12-24)
+* Changed the name of project to DecoJS and moved it to [decojs.com](http://decojs.com)
 
 ## 0.2.13 (2013-11-29)
 
 ### Fixed bugs:
-* Pages can now contain templates inside script tags (without Ordnung trying to execute the template) (issue 40)
+* Pages can now contain templates inside script tags (without Deco trying to execute the template) (issue 40)
 * The list of modules which Require was unable to load is now spread across multiple lines (issue 39)
 * When the server returns an empty list of constraints for a field, it ignores that field (issue 38)
 

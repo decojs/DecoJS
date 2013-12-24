@@ -1,5 +1,5 @@
 define([
-	"ordnung/qvc/Constraint", 
+	"deco/qvc/Constraint", 
 	"knockout"
 ], function(
 	Constraint, 

@@ -1,4 +1,4 @@
-describe("when adding param to url", ["ordnung/ajax"], function(ajax){
+describe("when adding param to url", ["deco/ajax"], function(ajax){
 	describe("when the url contains a question mark", function(){
 		describe("when it ends without an &", function(){
 			it("should add a &", function(){

@@ -1,8 +1,8 @@
 describe("when the page loader returns a 404", {
-	"ordnung/spa/PageLoader": "Mocks/PageLoaderMock"
+	"deco/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
-	"ordnung/spa/Templates",
-	"ordnung/spa/PageLoader",
+	"deco/spa/Templates",
+	"deco/spa/PageLoader",
 	"Given/a_document"
 ], function(
 	Templates,

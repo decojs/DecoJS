@@ -1,4 +1,4 @@
-define(["ordnung/qvc/ExecutableResult", "ordnung/qvc/Validatable", "ordnung/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
+define(["deco/qvc/ExecutableResult", "deco/qvc/Validatable", "deco/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
 
 	function Executable(name, type, parameters, callbacks, qvc){
 		var self = this;

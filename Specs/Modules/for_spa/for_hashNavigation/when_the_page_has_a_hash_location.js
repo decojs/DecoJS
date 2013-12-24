@@ -1,5 +1,5 @@
 describe("when the page has a hash location", [
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	hashNavigation
 ){

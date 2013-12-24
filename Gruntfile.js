@@ -16,18 +16,18 @@ module.exports = function(grunt) {
       compile: {
         options: {
           baseUrl: ".",
-          out: "Dist/ordnung.js",
+          out: "Dist/deco.js",
           paths: {
             "knockout": "empty:",
             "when": "empty:"
           },
           packages: [
-              { name: 'ordnung', location: 'Source/ordnung', main: 'ordnung' }
+              { name: 'deco', location: 'Source/deco', main: 'deco' }
           ],
           include: [
-            "ordnung",
-            "ordnung/qvc/constraints/NotEmpty",
-            "ordnung/qvc/constraints/Pattern"
+            "deco",
+            "deco/qvc/constraints/NotEmpty",
+            "deco/qvc/constraints/Pattern"
           ],
           
           
@@ -42,11 +42,11 @@ module.exports = function(grunt) {
       //https://github.com/gruntjs/grunt-contrib-uglify
       my_target: {
         options: {
-          sourceMap: 'Dist/ordnung.min.js.map',
-          sourceMapIn: 'Dist/ordnung.js.map', // input sourcemap from a previous compilation
+          sourceMap: 'Dist/deco.min.js.map',
+          sourceMapIn: 'Dist/deco.js.map', // input sourcemap from a previous compilation
         },
         files: {
-          'Dist/ordnung.min.js': ['Dist/ordnung.js']
+          'Dist/deco.min.js': ['Dist/deco.js']
         }
       }
     },

@@ -10,7 +10,7 @@ jazzmine.requireConfig({
   },
   packages: [
       { name: 'when', location: 'bower_components/when', main: 'when' },
-      { name: 'ordnung', location: 'Source/ordnung', main: 'ordnung' }
+      { name: 'deco', location: 'Source/deco', main: 'deco' }
   ]
 });
 

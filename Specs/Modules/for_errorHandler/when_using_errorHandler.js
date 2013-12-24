@@ -1,5 +1,5 @@
 describe("when using errorHandler", [
-	"ordnung/errorHandler"
+	"deco/errorHandler"
 ], function(
 	errorHandler
 ){

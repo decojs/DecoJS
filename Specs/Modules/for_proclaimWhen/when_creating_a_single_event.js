@@ -1,4 +1,4 @@
-describe("when creating a single event", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when creating a single event", ["deco/proclaimWhen"], function(proclaimWhen){
 	
 	var spy,
 		event1;

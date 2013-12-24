@@ -1,9 +1,9 @@
 describe("when creating a templates", {
-	"ordnung/spa/PageLoader": function(){ return sinon.spy(); }
+	"deco/spa/PageLoader": function(){ return sinon.spy(); }
 },[
-	"ordnung/spa/Templates",
+	"deco/spa/Templates",
 	"Given/a_document",
-	"ordnung/spa/PageLoader"
+	"deco/spa/PageLoader"
 ], function(
 	Templates,
 	a_document,

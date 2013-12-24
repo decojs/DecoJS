@@ -1,5 +1,5 @@
 define([
-	"ordnung/utils"
+	"deco/utils"
 ],function(
 	_
 ){

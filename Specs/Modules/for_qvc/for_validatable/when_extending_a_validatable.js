@@ -1,4 +1,4 @@
-describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable", "ordnung/qvc/koExtensions"], function(ko, Validatable){
+describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "deco/qvc/koExtensions"], function(ko, Validatable){
 
 	var parameters,
 		validatable,
@@ -9,7 +9,7 @@ describe("when extending a Validatable", ["knockout", "ordnung/qvc/Validatable",
 		
 		beforeEach(function(){
 			parameters = {
-				name: ko.observable("ordnung")
+				name: ko.observable("deco")
 			};
 			validatable = new Validatable("",parameters);
 			validatableFields = validatable.validatableFields;

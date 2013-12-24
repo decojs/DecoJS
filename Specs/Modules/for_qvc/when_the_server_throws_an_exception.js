@@ -1,10 +1,10 @@
 describe("when the server throws an exception", {
-	"ordnung/ajax":"Mocks/ajaxMock",
-	"ordnung/errorHandler":"Mocks/errorHandlerMock"
+	"deco/ajax":"Mocks/ajaxMock",
+	"deco/errorHandler":"Mocks/errorHandlerMock"
 },[
-	"ordnung/qvc",
-	"ordnung/ajax",
-	"ordnung/errorHandler",
+	"deco/qvc",
+	"deco/ajax",
+	"deco/errorHandler",
 	"knockout"
 ], function(
 	qvc,

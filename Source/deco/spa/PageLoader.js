@@ -1,5 +1,5 @@
 define([
-	"ordnung/ajax"
+	"deco/ajax"
 ], function(
 	ajax
 ){

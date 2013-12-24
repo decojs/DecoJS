@@ -1,5 +1,5 @@
 describe("when onError is called", [
-	'ordnung/qvc/Executable'
+	'deco/qvc/Executable'
 ], function(
 	Executable
 ){

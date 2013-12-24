@@ -5,7 +5,7 @@ describe("when", {
 		};
 	}
 },[
-	"ordnung/spa/Outlet",
+	"deco/spa/Outlet",
 	"Given/an_element",
 	"knockout"
 ], function(

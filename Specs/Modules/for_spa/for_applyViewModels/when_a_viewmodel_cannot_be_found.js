@@ -1,9 +1,9 @@
 describe("when a viewmodel cannot be found", {
-	"ordnung/errorHandler": "Mocks/errorHandlerMock"
+	"deco/errorHandler": "Mocks/errorHandlerMock"
 },[
-	"ordnung/spa/applyViewModels",
+	"deco/spa/applyViewModels",
 	"Given/an_element",
-	"ordnung/errorHandler"
+	"deco/errorHandler"
 ], function(
 	applyViewModels,
 	an_element,

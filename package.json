@@ -1,18 +1,23 @@
 {
-  "name": "ordnung",
-  "description": "framework for building maintainable single page applications",
+  "name": "deco",
+  "description": "Scalable frontend architecture",
   "keywords": [
     "spa",
+    "llp",
     "knockout",
     "require",
-    "maintainable"
+    "maintainable",
+    "scalable",
+    "architecture"
+    "deco",
+    "decojs"
   ],
   "author": {
     "name": "Marius Gundersen",
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.2.13",
+  "version": "0.3.0",
   "devDependencies": {
     "karma": "latest",
     "karma-firefox-launcher": "latest",
@@ -33,6 +38,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mariusGundersen/OrdnungJS"
+    "url": "https://github.com/decojs/DecoJS"
   }
 }

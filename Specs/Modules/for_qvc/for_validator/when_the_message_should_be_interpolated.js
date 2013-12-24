@@ -1,5 +1,5 @@
 describe("when the message should be interpolated", [
-	"ordnung/qvc/Validator",
+	"deco/qvc/Validator",
 	"Given/a_constraint"
 ], function(
 	Validator,

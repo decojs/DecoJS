@@ -1,4 +1,4 @@
-describe("when extending an object of events", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when extending an object of events", ["deco/proclaimWhen"], function(proclaimWhen){
 
 	
 	var events;

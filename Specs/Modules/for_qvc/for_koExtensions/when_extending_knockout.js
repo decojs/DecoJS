@@ -6,7 +6,7 @@ describe("when extending knockout", {
 		}
 	}
 },[
-	'ordnung/qvc/koExtensions',
+	'deco/qvc/koExtensions',
 	'knockout'
 ], function(
 	koExtensions,

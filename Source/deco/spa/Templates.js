@@ -1,6 +1,6 @@
 define([
-	"ordnung/spa/PageLoader",
-	"ordnung/utils",
+	"deco/spa/PageLoader",
+	"deco/utils",
 	"when"
 ], function(
 	PageLoader,

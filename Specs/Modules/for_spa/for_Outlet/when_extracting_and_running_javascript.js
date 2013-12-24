@@ -1,5 +1,5 @@
 describe("when extracting and running JavaScript", [
-	"ordnung/spa/Outlet",
+	"deco/spa/Outlet",
 	"Given/an_element",
 	"Given/a_document"
 ], function(

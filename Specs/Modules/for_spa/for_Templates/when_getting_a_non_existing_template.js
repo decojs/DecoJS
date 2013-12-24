@@ -1,8 +1,8 @@
 describe("when getting a non existing template", {
-	"ordnung/spa/PageLoader": "Mocks/PageLoaderMock"
+	"deco/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
-	"ordnung/spa/Templates",
-	"ordnung/spa/PageLoader"
+	"deco/spa/Templates",
+	"deco/spa/PageLoader"
 ], function(
 	Templates,
 	PageLoader

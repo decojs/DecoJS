@@ -1,5 +1,5 @@
 describe("when destroying child contexts", [
-	'ordnung/spa/whenContext'
+	'deco/spa/whenContext'
 ], function(
 	whenContext
 ){

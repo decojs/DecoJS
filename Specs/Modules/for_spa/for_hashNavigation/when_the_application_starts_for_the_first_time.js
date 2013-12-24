@@ -1,5 +1,5 @@
 describe("when the application starts for the first time", [
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	hashNavigation
 ){

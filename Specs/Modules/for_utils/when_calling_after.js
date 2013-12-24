@@ -1,5 +1,5 @@
 describe("when calling after", [
-  "ordnung/utils"
+  "deco/utils"
 ], function(
   utils
 ){

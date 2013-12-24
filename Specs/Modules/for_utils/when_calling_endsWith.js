@@ -1,5 +1,5 @@
 describe("when calling endsWith", [
-	"ordnung/utils"
+	"deco/utils"
 ], function(
 	utils
 ){

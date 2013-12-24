@@ -1,5 +1,5 @@
 describe("when calling popTail", [
-	"ordnung/utils"
+	"deco/utils"
 ], function(
 	utils
 ){

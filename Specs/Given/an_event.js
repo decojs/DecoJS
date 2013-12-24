@@ -1,5 +1,5 @@
 define([
-	"ordnung/proclaimWhen"
+	"deco/proclaimWhen"
 ], function(
 	proclaimWhen
 ){

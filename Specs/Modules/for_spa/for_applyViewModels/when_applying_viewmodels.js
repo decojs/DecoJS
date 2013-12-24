@@ -1,5 +1,5 @@
 describe("when applying viewmodels", [
-	"ordnung/spa/applyViewModels",
+	"deco/spa/applyViewModels",
 	"Given/an_element"
 ], function(
 	applyViewModels,

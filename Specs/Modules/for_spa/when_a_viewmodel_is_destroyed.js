@@ -1,10 +1,10 @@
 describe("when the viewmodel is destroyed", {
-	"ordnung/spa/hashNavigation": "Mocks/hashNavigationMock"
+	"deco/spa/hashNavigation": "Mocks/hashNavigationMock"
 },[
-	"ordnung/spa",
+	"deco/spa",
 	"Given/an_element",
 	"Given/a_document",
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	spa,
 	an_element,

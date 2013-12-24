@@ -1,14 +1,14 @@
 describe("when creating a spa without an outlet", {
-	"ordnung/spa/applyViewModels": "Mocks/applyViewModelsMock",
-	"ordnung/spa/hashNavigation": function(){return {start: sinon.spy()}},
-	"ordnung/spa/Outlet": "Mocks/OutletMock",
-	"ordnung/spa/Templates": function(){return sinon.spy();}
+	"deco/spa/applyViewModels": "Mocks/applyViewModelsMock",
+	"deco/spa/hashNavigation": function(){return {start: sinon.spy()}},
+	"deco/spa/Outlet": "Mocks/OutletMock",
+	"deco/spa/Templates": function(){return sinon.spy();}
 },[
-	"ordnung/spa",
-	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Outlet",
-	"ordnung/spa/Templates"
+	"deco/spa",
+	"deco/spa/applyViewModels",
+	"deco/spa/hashNavigation",
+	"deco/spa/Outlet",
+	"deco/spa/Templates"
 ], function(
 	spa,
 	applyViewModelsSpy,

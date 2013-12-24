@@ -1,6 +1,6 @@
 describe("when creating a new validator", { 
-	"ordnung/qvc/Constraint": "Mocks/ConstraintMock"
-},["knockout", "ordnung/qvc/Validator"], function(ko, Validator){
+	"deco/qvc/Constraint": "Mocks/ConstraintMock"
+},["knockout", "deco/qvc/Validator"], function(ko, Validator){
 
 	var validator;
 	

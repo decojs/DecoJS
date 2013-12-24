@@ -1,5 +1,5 @@
 
-define('ordnung/utils',[], function(){
+define('deco/utils',[], function(){
 	return {
 		toArray: function(obj){
 			var array = [];
@@ -55,7 +55,7 @@ define('ordnung/utils',[], function(){
 	};
 });
 
-define('ordnung/qvc/ExecutableResult',["ordnung/utils"], function(utils){
+define('deco/qvc/ExecutableResult',["deco/utils"], function(utils){
 	function ExecutableResult(result){
 		
 		this.success = false;
@@ -70,7 +70,7 @@ define('ordnung/qvc/ExecutableResult',["ordnung/utils"], function(utils){
 	
 	return ExecutableResult;
 });
-define('ordnung/qvc/Constraint',[], function(){
+define('deco/qvc/Constraint',[], function(){
 	
 	function Constraint(type, attributes){		
 		this.type = type;
@@ -82,7 +82,7 @@ define('ordnung/qvc/Constraint',[], function(){
 	}
 		
 	Constraint.prototype.init = function(type){
-		require(["ordnung/qvc/constraints/" + type], function(Tester){
+		require(["deco/qvc/constraints/" + type], function(Tester){
 			var tester = new Tester(this.attributes);
 			this.validate = tester.isValid.bind(tester);
 		}.bind(this));
@@ -95,8 +95,8 @@ define('ordnung/qvc/Constraint',[], function(){
 	
 	return Constraint;
 });
-define('ordnung/qvc/Validator',[
-	"ordnung/qvc/Constraint", 
+define('deco/qvc/Validator',[
+	"deco/qvc/Constraint", 
 	"knockout"
 ], function(
 	Constraint, 
@@ -156,7 +156,7 @@ define('ordnung/qvc/Validator',[
 	
 	return Validator;
 });
-define('ordnung/qvc/koExtensions',["ordnung/qvc/Validator", "knockout"], function(Validator, ko){
+define('deco/qvc/koExtensions',["deco/qvc/Validator", "knockout"], function(Validator, ko){
 
 	if (ko != null) {
 		ko.bindingHandlers.validationMessageFor = {
@@ -189,7 +189,7 @@ define('ordnung/qvc/koExtensions',["ordnung/qvc/Validator", "knockout"], functio
 	
 
 });
-define('ordnung/qvc/Validatable',["ordnung/utils", "ordnung/qvc/Validator", "knockout", "ordnung/qvc/koExtensions"],function(utils, Validator, ko){
+define('deco/qvc/Validatable',["deco/utils", "deco/qvc/Validator", "knockout", "deco/qvc/koExtensions"],function(utils, Validator, ko){
 	
 	function recursivlyExtendParameters(parameters, validatableFields, parents) {
 		for (var key in parameters) {
@@ -338,7 +338,7 @@ define('ordnung/qvc/Validatable',["ordnung/utils", "ordnung/qvc/Validator", "kno
 	
 	return Validatable;
 });
-define('ordnung/qvc/Executable',["ordnung/qvc/ExecutableResult", "ordnung/qvc/Validatable", "ordnung/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
+define('deco/qvc/Executable',["deco/qvc/ExecutableResult", "deco/qvc/Validatable", "deco/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
 
 	function Executable(name, type, parameters, callbacks, qvc){
 		var self = this;
@@ -428,7 +428,7 @@ define('ordnung/qvc/Executable',["ordnung/qvc/ExecutableResult", "ordnung/qvc/Va
 	
 	return Executable;
 });
-define('ordnung/ajax',[], function(){
+define('deco/ajax',[], function(){
 	function dataToParams(data){
 		var params = []
 		for(var key in data){
@@ -500,7 +500,7 @@ define('ordnung/ajax',[], function(){
 
 	return ajax;
 });
-define('ordnung/qvc/ConstraintResolver',[], function(){
+define('deco/qvc/ConstraintResolver',[], function(){
 
 
 	function findConstraint(name, constraints) {
@@ -549,7 +549,7 @@ define('ordnung/qvc/ConstraintResolver',[], function(){
 	
 	return ConstraintResolver;
 });
-define('ordnung/errorHandler',[], function(){
+define('deco/errorHandler',[], function(){
 	return {
 		onError: function(error){
 			setTimeout(function(){
@@ -558,15 +558,15 @@ define('ordnung/errorHandler',[], function(){
 		}
 	};
 });
-define('ordnung/qvc',[
-	"ordnung/qvc/Executable", 
-	"ordnung/qvc/ExecutableResult", 
-	"ordnung/utils", 
-	"ordnung/ajax",
-	"ordnung/qvc/ConstraintResolver",
-	"ordnung/errorHandler",
+define('deco/qvc',[
+	"deco/qvc/Executable", 
+	"deco/qvc/ExecutableResult", 
+	"deco/utils", 
+	"deco/ajax",
+	"deco/qvc/ConstraintResolver",
+	"deco/errorHandler",
 	"knockout", 
-	"ordnung/qvc/koExtensions"], 
+	"deco/qvc/koExtensions"], 
 	function(
 		Executable,
 		ExecutableResult,
@@ -695,7 +695,7 @@ define('ordnung/qvc',[
 		}
 	}
 });
-define('ordnung/spa/Outlet',[
+define('deco/spa/Outlet',[
 	"knockout"
 ], function(
 	ko
@@ -754,7 +754,7 @@ define('ordnung/spa/Outlet',[
 	return Outlet;
 
 });
-define('ordnung/spa/whenContext',[
+define('deco/spa/whenContext',[
 	
 ], function(
 	
@@ -828,9 +828,9 @@ define('ordnung/spa/whenContext',[
 
 	return createContext().when;
 });
-define('ordnung/spa/applyViewModels',[
-	"ordnung/utils",
-	"ordnung/errorHandler",
+define('deco/spa/applyViewModels',[
+	"deco/utils",
+	"deco/errorHandler",
 	"knockout", 
 	"when", 
 	"when/callbacks"
@@ -898,8 +898,8 @@ define('ordnung/spa/applyViewModels',[
 		});
 	};
 });
-define('ordnung/spa/hashNavigation',[
-	"ordnung/utils"
+define('deco/spa/hashNavigation',[
+	"deco/utils"
 ],function(
 	_
 ){
@@ -983,8 +983,8 @@ define('ordnung/spa/hashNavigation',[
 	};
 
 });
-define('ordnung/spa/PageLoader',[
-	"ordnung/ajax"
+define('deco/spa/PageLoader',[
+	"deco/ajax"
 ], function(
 	ajax
 ){
@@ -1020,9 +1020,9 @@ define('ordnung/spa/PageLoader',[
 
 	return PageLoader;
 });
-define('ordnung/spa/Templates',[
-	"ordnung/spa/PageLoader",
-	"ordnung/utils",
+define('deco/spa/Templates',[
+	"deco/spa/PageLoader",
+	"deco/utils",
 	"when"
 ], function(
 	PageLoader,
@@ -1090,7 +1090,7 @@ define('ordnung/spa/Templates',[
 
 	return Templates;
 });
-define('ordnung/proclaimWhen',[], function () {
+define('deco/proclaimWhen',[], function () {
 
 	function publish(name, subscribers, data) {
 		subscribers.forEach(function (item) {
@@ -1174,19 +1174,19 @@ define('ordnung/proclaimWhen',[], function () {
 	
 });
 
-define('ordnung/events',['ordnung/proclaimWhen'], function(proclaimWhen){
+define('deco/events',['deco/proclaimWhen'], function(proclaimWhen){
 	return proclaimWhen.extend({
 		thePageHasChanged: function(path, segments, url){ }
 	});
 });
-define('ordnung/spa',[
-	"ordnung/spa/Outlet",
-	"ordnung/spa/whenContext",
-	"ordnung/spa/applyViewModels",
-	"ordnung/spa/hashNavigation",
-	"ordnung/spa/Templates",
-	"ordnung/utils",
-	"ordnung/events"
+define('deco/spa',[
+	"deco/spa/Outlet",
+	"deco/spa/whenContext",
+	"deco/spa/applyViewModels",
+	"deco/spa/hashNavigation",
+	"deco/spa/Templates",
+	"deco/utils",
+	"deco/events"
 ], function(
 	Outlet,
 	whenContext,
@@ -1244,9 +1244,9 @@ define('ordnung/spa',[
 		start: start
 	};
 });
-define('ordnung/ordnung',[
-  'ordnung/qvc',
-  'ordnung/spa'
+define('deco/deco',[
+  'deco/qvc',
+  'deco/spa'
 ], function(
   qvc,
   spa
@@ -1273,9 +1273,9 @@ define('ordnung/ordnung',[
   };
 
 });
-define('ordnung', ['ordnung/ordnung'], function (main) { return main; });
+define('deco', ['deco/deco'], function (main) { return main; });
 
-define('ordnung/qvc/constraints/NotEmpty',[], function(){
+define('deco/qvc/constraints/NotEmpty',[], function(){
 	function NotEmpty(attributes){
 		
 	}
@@ -1288,7 +1288,7 @@ define('ordnung/qvc/constraints/NotEmpty',[], function(){
 	
 	return NotEmpty;
 });
-define('ordnung/qvc/constraints/Pattern',[], function(){
+define('deco/qvc/constraints/Pattern',[], function(){
 	function Pattern(attributes){		
 
 		attributes.flags = attributes.flags || [];
@@ -1314,4 +1314,4 @@ define('ordnung/qvc/constraints/Pattern',[], function(){
 	
 	return Pattern;
 });
-//# sourceMappingURL=ordnung.js.map
+//# sourceMappingURL=deco.js.map

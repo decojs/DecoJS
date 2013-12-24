@@ -1,5 +1,5 @@
 describe("when starting hashNavigation", [
-	"ordnung/spa/hashNavigation"
+	"deco/spa/hashNavigation"
 ], function(
 	hashNavigation
 ){

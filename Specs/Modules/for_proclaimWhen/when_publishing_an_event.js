@@ -1,4 +1,4 @@
-describe("when publishing an event", ["ordnung/proclaimWhen"], function(proclaimWhen){
+describe("when publishing an event", ["deco/proclaimWhen"], function(proclaimWhen){
 	var when,
 		proclaim,
 		spyOnIt;

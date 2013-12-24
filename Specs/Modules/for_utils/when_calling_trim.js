@@ -1,5 +1,5 @@
 describe("when calling trim", [
-	"ordnung/utils"
+	"deco/utils"
 ], function(
 	utils
 ){

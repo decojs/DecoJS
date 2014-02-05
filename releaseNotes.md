@@ -1,5 +1,9 @@
 # DecoJS Release Notes
 
+## 0.3.1 (2013-02-05)
+* Updated to latest version of RequireJS, since the previous version seems to have disapeared from the internet (issue 8)
+* Fixed bad JSON in package.json
+
 ## 0.3.0 (2013-12-24)
 * Changed the name of project to DecoJS and moved it to [decojs.com](http://decojs.com)
 

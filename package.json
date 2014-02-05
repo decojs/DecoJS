@@ -8,7 +8,7 @@
     "require",
     "maintainable",
     "scalable",
-    "architecture"
+    "architecture",
     "deco",
     "decojs"
   ],
@@ -17,7 +17,7 @@
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "devDependencies": {
     "karma": "latest",
     "karma-firefox-launcher": "latest",
@@ -26,7 +26,7 @@
     "karma-ie-launcher": "latest",
     "requirejs": "latest",
     "jazzmine": "latest",
-    "sinon": "latest",
+    "sinon": "1.7.1",
     "jasmine-sinon": "latest",
     "grunt": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.1",

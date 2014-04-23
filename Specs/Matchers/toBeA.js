@@ -1,7 +1,7 @@
 
 
 
-(function(){
+(function(jazzmine){
   
   function functionName(m){
     return m.name || m.toString().match(/function\s+([^(]+)/)[1];
@@ -28,15 +28,17 @@
     return actual === expected;
   }
 
-  beforeEach(function(){
-    this.addMatchers({
-      toBeA: function(type){
-        return toBeA.call(this, "a ", type)
-      },
-      toBeAn: function(type){
-        return toBeA.call(this, "an ", type)
-      }
-    });
+  
+  
+  
+  
+  jazzmine.addMatchers({
+    toBeA: function(type){
+      return toBeA.call(this, "a ", type)
+    },
+    toBeAn: function(type){
+      return toBeA.call(this, "an ", type)
+    }
   });
 
-})();
+})(jazzmine);

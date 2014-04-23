@@ -1,4 +1,4 @@
-define(["/base/Source/deco/ajax.js"], function(realAjax){
+define(["__mocked__"], function(realAjax){
   function ajax(url, object, method, callback){
     ajax.spy(url, object, method, callback);
     if(ajax.respondImmediately){

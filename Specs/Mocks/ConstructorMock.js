@@ -1,11 +1,11 @@
 define([], function(){
-	var spy = sinon.spy();
+  var spy = sinon.spy();
 
-	function Constructor(){
-		spy.apply(null, arguments);
-	}
-	
-	Constructor.spy = spy;
-	
-	return Constructor;
+  function Constructor(){
+    spy.apply(null, arguments);
+  }
+  
+  Constructor.spy = spy;
+  
+  return Constructor;
 });

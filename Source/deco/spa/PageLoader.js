@@ -1,37 +1,37 @@
 define([
-	"deco/ajax"
+  "deco/ajax"
 ], function(
-	ajax
+  ajax
 ){
 
-	function PageLoader(config){
-		this.pathToUrl = config && config.pathToUrl || function(a){ return a; };
-		this.cache = (config && 'cachePages' in config ? config.cachePages : true);
-		this.currentXHR = null;
-	}
+  function PageLoader(config){
+    this.pathToUrl = config && config.pathToUrl || function(a){ return a; };
+    this.cache = (config && 'cachePages' in config ? config.cachePages : true);
+    this.currentXHR = null;
+  }
 
-	PageLoader.prototype.loadPage = function(path, resolver){
+  PageLoader.prototype.loadPage = function(path, resolver){
 
-		this.abort();
+    this.abort();
 
-		var url = this.pathToUrl(path);
+    var url = this.pathToUrl(path);
 
-		if(this.cache === false)
-			url = ajax.cacheBust(url);
+    if(this.cache === false)
+      url = ajax.cacheBust(url);
 
-		this.currentXHR = ajax(url, {}, "GET", function(xhr){
-			if(xhr.status === 200)
-				resolver.resolve(xhr.responseText);
-			else
-				resolver.reject({error: xhr.status, content: xhr.responseText});
-		});
-	};
+    this.currentXHR = ajax(url, {}, "GET", function(xhr){
+      if(xhr.status === 200)
+        resolver.resolve(xhr.responseText);
+      else
+        resolver.reject({error: xhr.status, content: xhr.responseText});
+    });
+  };
 
-	PageLoader.prototype.abort = function(){
-		if(this.currentXHR && this.currentXHR.readyState !== 4){
-			this.currentXHR.abort();
-		}
-	};
+  PageLoader.prototype.abort = function(){
+    if(this.currentXHR && this.currentXHR.readyState !== 4){
+      this.currentXHR.abort();
+    }
+  };
 
-	return PageLoader;
+  return PageLoader;
 });

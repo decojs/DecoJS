@@ -1,11 +1,11 @@
 define([
-	"deco/proclaimWhen"
+  "deco/proclaimWhen"
 ], function(
-	proclaimWhen
+  proclaimWhen
 ){
-	return {
-		withNoParams: function(){
-			return proclaimWhen.create("withNoParams", function(){});
-		}
-	}
+  return {
+    withNoParams: function(){
+      return proclaimWhen.create("withNoParams", function(){});
+    }
+  }
 });

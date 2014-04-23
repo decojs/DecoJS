@@ -1,14 +1,14 @@
 describe("when calling endsWith", [
-	"deco/utils"
+  "deco/utils"
 ], function(
-	utils
+  utils
 ){
 
-	it("should return true when the last character matches the test", function(){
-		expect(utils.endsWith("abcd", 'd')).toBe(true);
-	});
+  it("should return true when the last character matches the test", function(){
+    expect(utils.endsWith("abcd", 'd')).toBe(true);
+  });
 
-	it("should return false when the last character does not match the test", function(){
-		expect(utils.endsWith("abcd", 'b')).toBe(false);
-	});
+  it("should return false when the last character does not match the test", function(){
+    expect(utils.endsWith("abcd", 'b')).toBe(false);
+  });
 });

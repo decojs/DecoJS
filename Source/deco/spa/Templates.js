@@ -1,70 +1,70 @@
 define([
-	"deco/spa/PageLoader",
-	"deco/utils",
-	"when"
+  "deco/spa/PageLoader",
+  "deco/utils",
+  "when"
 ], function(
-	PageLoader,
-	utils,
-	when
+  PageLoader,
+  utils,
+  when
 ){
 
-	function defaultConfig(){
-		return {
-			pathToUrl: function(a){ return a; }
-		}
-	}
+  function defaultConfig(){
+    return {
+      pathToUrl: function(a){ return a; }
+    }
+  }
 
-	function findTemplatesInDocument(doc){
+  function findTemplatesInDocument(doc){
 
-		var nodeList = doc.querySelectorAll("[type='text/page-template']");
-		var nodes = utils.toArray(nodeList);
-		var templateList = nodes.map(function(template){
-			return {
-				id: template.id.toLowerCase(),
-				content: template.innerHTML
-			};
-		});
+    var nodeList = doc.querySelectorAll("[type='text/page-template']");
+    var nodes = utils.toArray(nodeList);
+    var templateList = nodes.map(function(template){
+      return {
+        id: template.id.toLowerCase(),
+        content: template.innerHTML
+      };
+    });
 
-		return utils.arrayToObject(templateList, function(item, object){
-			object[item.id] = item.content;
-		});
-	}
+    return utils.arrayToObject(templateList, function(item, object){
+      object[item.id] = item.content;
+    });
+  }
 
 
-	function Templates(document, config){
-		this.pageLoader = new PageLoader(config || defaultConfig());
-		this.cachePages = (config && 'cachePages' in config ? config.cachePages : true)
-		this.templates = findTemplatesInDocument(document);
-	}
+  function Templates(document, config){
+    this.pageLoader = new PageLoader(config || defaultConfig());
+    this.cachePages = (config && 'cachePages' in config ? config.cachePages : true)
+    this.templates = findTemplatesInDocument(document);
+  }
 
-	Templates.prototype.getTemplate = function(path){
+  Templates.prototype.getTemplate = function(path){
 
-		this.pageLoader.abort();
+    this.pageLoader.abort();
 
-		var normalizedPath = path.toLowerCase();
+    var normalizedPath = path.toLowerCase();
 
-		if(normalizedPath in this.templates){
-			return when.resolve(this.templates[normalizedPath]);
-		}else{
-			var deferred = when.defer();
+    if(normalizedPath in this.templates){
+      return when.resolve(this.templates[normalizedPath]);
+    }else{
+      var deferred = when.defer();
 
-			this.pageLoader.loadPage(path, deferred.resolver);
-			
-			return deferred.promise.then(function(content){
-				if(this.cachePages)
-					this.templates[normalizedPath] = content;
-				
-				return content;
-			}.bind(this), function(notFound){
-				var errorTemplate = "error" + notFound.error;
-				if(errorTemplate in this.templates){
-					return this.templates[errorTemplate];
-				}else{
-					return notFound.content;
-				}
-			}.bind(this));
-		}
-	};
+      this.pageLoader.loadPage(path, deferred.resolver);
+      
+      return deferred.promise.then(function(content){
+        if(this.cachePages)
+          this.templates[normalizedPath] = content;
+        
+        return content;
+      }.bind(this), function(notFound){
+        var errorTemplate = "error" + notFound.error;
+        if(errorTemplate in this.templates){
+          return this.templates[errorTemplate];
+        }else{
+          return notFound.content;
+        }
+      }.bind(this));
+    }
+  };
 
-	return Templates;
+  return Templates;
 });

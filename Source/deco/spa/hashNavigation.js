@@ -1,85 +1,85 @@
 define([
-	"deco/utils"
+  "deco/utils"
 ],function(
-	_
+  _
 ){
 
 
-	
-	function newPath(currentPath, link, index){
-		var isRelative = _.startsWith(link, '/') === false;
-		var isFolder = _.endsWith(link, '/');
-		
-		if(link === "/"){
-			var path = [];
-		}else if(link === ""){
-			var path = [index];
-		}else{
-			var path = _.trim(link, "/").split("/");
-		}
+  
+  function newPath(currentPath, link, index){
+    var isRelative = _.startsWith(link, '/') === false;
+    var isFolder = _.endsWith(link, '/');
+    
+    if(link === "/"){
+      var path = [];
+    }else if(link === ""){
+      var path = [index];
+    }else{
+      var path = _.trim(link, "/").split("/");
+    }
 
-		if(isFolder){
-			path.push(index);
-		}
-		if(isRelative){
-			path = _.popTail(currentPath).concat(path);
-		}
+    if(isFolder){
+      path.push(index);
+    }
+    if(isRelative){
+      path = _.popTail(currentPath).concat(path);
+    }
 
-		var out = [];
+    var out = [];
 
-		for(var i = path.length>>>0; i--;){
-			if(path[i] === ""){
-				continue;
-			}else if(path[i] === "."){
-				continue;
-			}else if(path[i] === "..") {
-				i--;
-			}else{
-				out.unshift(path[i]);
-			}
-		}
+    for(var i = path.length>>>0; i--;){
+      if(path[i] === ""){
+        continue;
+      }else if(path[i] === "."){
+        continue;
+      }else if(path[i] === "..") {
+        i--;
+      }else{
+        out.unshift(path[i]);
+      }
+    }
 
-		return out;
-	}
+    return out;
+  }
 
-	function hashChanged(config, onPageChanged, document){
+  function hashChanged(config, onPageChanged, document){
 
-		var path = _.after(document.location.href, '#');
+    var path = _.after(document.location.href, '#');
 
-		var isRelative = _.startsWith(path, '/') == false;
-		var isFolder = _.endsWith(path, '/');
+    var isRelative = _.startsWith(path, '/') == false;
+    var isFolder = _.endsWith(path, '/');
 
-		if(isRelative || isFolder){
-			var newHash = newPath(this.currentPath, path, config.index).join('/');
-			document.location.replace("#/" + newHash);
-		}else{
-			this.currentPath = newPath(this.currentPath, path, config.index);
-			onPageChanged(this.currentPath.join('/'), this.currentPath.map(function(p){return decodeURIComponent(p);}));
-		}
+    if(isRelative || isFolder){
+      var newHash = newPath(this.currentPath, path, config.index).join('/');
+      document.location.replace("#/" + newHash);
+    }else{
+      this.currentPath = newPath(this.currentPath, path, config.index);
+      onPageChanged(this.currentPath.join('/'), this.currentPath.map(function(p){return decodeURIComponent(p);}));
+    }
 
-	}
-	
-	function startHashNavigation(config, onPageChanged, doc, global){
-		doc = doc || document;
-		global = global || window;
+  }
+  
+  function startHashNavigation(config, onPageChanged, doc, global){
+    doc = doc || document;
+    global = global || window;
 
-		var state = {
-			currentPath: []
-		};
-		var onHashChanged = hashChanged.bind(state, config, onPageChanged, doc);
-		onHashChanged();
-		_.addEventListener(global, "hashchange", onHashChanged, false);
+    var state = {
+      currentPath: []
+    };
+    var onHashChanged = hashChanged.bind(state, config, onPageChanged, doc);
+    onHashChanged();
+    _.addEventListener(global, "hashchange", onHashChanged, false);
 
-		return {
-			stop: function(){
-				global.removeEventListener("hashchange", onHashChanged, false);
-			}
-		};
-	}
+    return {
+      stop: function(){
+        global.removeEventListener("hashchange", onHashChanged, false);
+      }
+    };
+  }
 
 
-	return {
-		start: startHashNavigation
-	};
+  return {
+    start: startHashNavigation
+  };
 
 });

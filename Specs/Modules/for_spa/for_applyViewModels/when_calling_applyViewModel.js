@@ -1,19 +1,19 @@
 describe(["deco/spa/applyViewModels"], "when calling applyViewModels", function(applyViewModels){
 
-	var promise;
+  var promise;
 
-	beforeEach(function(){
+  beforeEach(function(){
 
-		var elm = document.createElement("div");
+    var elm = document.createElement("div");
 
-		because: {
-			promise = applyViewModels(elm);
-		}
-	});
+    because: {
+      promise = applyViewModels(elm);
+    }
+  });
 
-	it("should return a promise", function(){
-		expect(promise).toBeDefined();
-		expect(promise.then).toBeDefined();
-	});
+  it("should return a promise", function(){
+    expect(promise).toBeDefined();
+    expect(promise.then).toBeDefined();
+  });
 
 });

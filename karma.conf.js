@@ -2,15 +2,14 @@ module.exports = function(config){
   config.set({
 
     frameworks: [
-      'jasmine'
+      'jasmine',
+      'requirejs'
     ],
 
     files: [
-      'bower_components/es5-shim/es5-shim.js', //for old IE
+      {pattern: 'bower_components/es5-shim/es5-shim.js', included: false}, //for old IE
       'bower_components/json2/json2.js', //for old IE
       'node_modules/jazzmine/bin/jazzmine.min.js',
-      'node_modules/requirejs/require.js',
-      'node_modules/karma-requirejs/lib/adapter.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/jasmine-sinon/lib/jasmine-sinon.js',

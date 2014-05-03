@@ -1,5 +1,9 @@
 # DecoJS Release Notes
 
+## 0.3.2 (2014-05-03)
+* Upgraded to latest version of dependencies
+* Fixed a memory leak caused by executables sticking around for too long (issue 14)
+
 ## 0.3.1 (2013-02-05)
 * Updated to latest version of RequireJS, since the previous version seems to have disapeared from the internet (issue 8)
 * Fixed bad JSON in package.json

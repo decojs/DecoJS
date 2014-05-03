@@ -1,12 +1,12 @@
 define(["when"], function(when){
-	function Templates(){}
+  function Templates(){}
 
-	Templates.prototype.getTemplate = Templates.getTemplate = sinon.stub();
-	Templates.getTemplate.returns(when.resolve("<p>my template</p>"));
+  Templates.prototype.getTemplate = Templates.getTemplate = sinon.stub();
+  Templates.getTemplate.returns(when.resolve("<p>my template</p>"));
 
-	Templates.reset = function(){
-		Templates.getTemplate.reset();
-	}
+  Templates.reset = function(){
+    Templates.getTemplate.reset();
+  }
 
-	return Templates;
+  return Templates;
 });

@@ -1,55 +1,55 @@
 describe("when getting a non existing template", {
-	"deco/spa/PageLoader": "Mocks/PageLoaderMock"
+  "deco/spa/PageLoader": "Mocks/PageLoaderMock"
 },[
-	"deco/spa/Templates",
-	"deco/spa/PageLoader"
+  "deco/spa/Templates",
+  "deco/spa/PageLoader"
 ], function(
-	Templates,
-	PageLoader
+  Templates,
+  PageLoader
 ){
 
-	var templates,
-		result;
+  var templates,
+    result;
 
-	beforeEach(function(){
-		templates = new Templates(document);
-		because: {
-			result = templates.getTemplate("path/to/cached/template");
-		}
-	});
+  beforeEach(function(){
+    templates = new Templates(document);
+    because: {
+      result = templates.getTemplate("path/to/cached/template");
+    }
+  });
 
-	afterEach(function(){
-		PageLoader.loadPageSpy.reset();
-		PageLoader.abortSpy.reset();
-	});
+  afterEach(function(){
+    PageLoader.loadPageSpy.reset();
+    PageLoader.abortSpy.reset();
+  });
 
-	it("should return a promise", function(){
-		expect(result.then).toBeDefined();
-	});
+  it("should return a promise", function(){
+    expect(result.then).toBeDefined();
+  });
 
-	it("should call the loadPage method", function(){
-		expect(PageLoader.loadPageSpy.callCount).toBe(1);
-	});
+  it("should call the loadPage method", function(){
+    expect(PageLoader.loadPageSpy.callCount).toBe(1);
+  });
 
-	it("should abort the previous loading", function(){
-		expect(PageLoader.abortSpy.callCount).toBe(1);
-	});
+  it("should abort the previous loading", function(){
+    expect(PageLoader.abortSpy.callCount).toBe(1);
+  });
 
-	describe("for the second time", function(){
+  describe("for the second time", function(){
 
-		because(function(done){
-			PageLoader.loadPageSpy.firstCall.args[1].resolve("content of page");
-			result.then(function(){
-				templates.getTemplate("path/to/cached/template");
-				done();
-			});
-		});
+    because(function(done){
+      PageLoader.loadPageSpy.firstCall.args[1].resolve("content of page");
+      result.then(function(){
+        templates.getTemplate("path/to/cached/template");
+        done();
+      });
+    });
 
-		it("should not call the pageLoader again", function(){
-			expect(PageLoader.loadPageSpy.callCount).toBe(1);
-		});
+    it("should not call the pageLoader again", function(){
+      expect(PageLoader.loadPageSpy.callCount).toBe(1);
+    });
 
-	});
+  });
 
-	
+  
 });

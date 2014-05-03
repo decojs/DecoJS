@@ -1,13 +1,13 @@
 define([], function(){
 
-	var _listener;
+  var _listener;
 
-	return {
-		start: function(config, listener, doc){
-			_listener = listener;
-		},
-		navigateToPage: function(path){
-			return _listener(path, path.split("/"));
-		}
-	}
+  return {
+    start: function(config, listener, doc){
+      _listener = listener;
+    },
+    navigateToPage: function(path){
+      return _listener(path, path.split("/"));
+    }
+  }
 });

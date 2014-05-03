@@ -1,67 +1,67 @@
 describe("when destroying child contexts", [
-	'deco/spa/whenContext'
+  'deco/spa/whenContext'
 ], function(
-	whenContext
+  whenContext
 ){
 
-	var when;
+  var when;
 
-	beforeEach(function(){
-		when = whenContext();
-	});
+  beforeEach(function(){
+    when = whenContext();
+  });
 
-	afterEach(function(){
-		whenContext.destroyChildContexts();
-	});
+  afterEach(function(){
+    whenContext.destroyChildContexts();
+  });
 
-	describe("when this context subscribes to thisIsDestroyed", function(){
+  describe("when this context subscribes to thisIsDestroyed", function(){
 
-		var spy;
+    var spy;
 
-		because(function(){
-			spy = sinon.spy();
+    because(function(){
+      spy = sinon.spy();
 
-			whenContext.thisIsDestroyed(spy);
+      whenContext.thisIsDestroyed(spy);
 
-			whenContext.destroyChildContexts();
-		});
+      whenContext.destroyChildContexts();
+    });
 
-		it("should not destroy itself", function(){
-			expect(spy.callCount).toBe(0);
-		});
+    it("should not destroy itself", function(){
+      expect(spy.callCount).toBe(0);
+    });
 
-	});
+  });
 
-	describe("when a child context subscribes to thisIsDestroyed", function(){
+  describe("when a child context subscribes to thisIsDestroyed", function(){
 
-		var spy;
+    var spy;
 
-		because(function(){
-			spy = sinon.spy();
+    because(function(){
+      spy = sinon.spy();
 
-			when.thisIsDestroyed(spy);
+      when.thisIsDestroyed(spy);
 
-			whenContext.destroyChildContexts();
-		});
+      whenContext.destroyChildContexts();
+    });
 
-		it("should destroy the child context", function(){
-			expect(spy.callCount).toBe(1);
-		});
+    it("should destroy the child context", function(){
+      expect(spy.callCount).toBe(1);
+    });
 
-	});
+  });
 
-	describe("when a destroyed context is used", function(){
+  describe("when a destroyed context is used", function(){
 
-		var spy;
+    var spy;
 
-		because(function(){
-			whenContext.destroyChildContexts();
-		});
+    because(function(){
+      whenContext.destroyChildContexts();
+    });
 
-		it("should throw an exception", function(){
-			expect(when).toThrow();
-		});
+    it("should throw an exception", function(){
+      expect(when).toThrow();
+    });
 
-	});
+  });
 
 });

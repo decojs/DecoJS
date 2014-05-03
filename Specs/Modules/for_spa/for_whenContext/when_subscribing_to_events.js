@@ -1,66 +1,66 @@
 describe("when subscribing to events", [
-	'deco/spa/whenContext',
-	'deco/proclaimWhen'
+  'deco/spa/whenContext',
+  'deco/proclaimWhen'
 ], function(
-	whenContext,
-	proclaimWhen
+  whenContext,
+  proclaimWhen
 ){
 
-	var event,
-		when;
+  var event,
+    when;
 
-	beforeEach(function(){
-		event = proclaimWhen.create(function(){});
+  beforeEach(function(){
+    event = proclaimWhen.create(function(){});
 
-		when = whenContext();
-	});
+    when = whenContext();
+  });
 
-	describe("when a child context subscribes to the event", function(){
+  describe("when a child context subscribes to the event", function(){
 
-		var spy;
+    var spy;
 
-		because(function(){
+    because(function(){
 
-			spy = sinon.spy();
+      spy = sinon.spy();
 
-			when(event, spy);
+      when(event, spy);
 
-			event();
-		});
+      event();
+    });
 
-		it("should notify the subscriber", function(){
-			expect(spy.callCount).toBe(1);
-		});
+    it("should notify the subscriber", function(){
+      expect(spy.callCount).toBe(1);
+    });
 
-		describe("when the child context is destroyed", function(){
+    describe("when the child context is destroyed", function(){
 
-			because(function(){
-				spy.reset();
+      because(function(){
+        spy.reset();
 
-				whenContext.destroyChildContexts();
+        whenContext.destroyChildContexts();
 
-				event();
-			});
+        event();
+      });
 
-			it("should no longer notify the subscriber", function(){
-				expect(spy.callCount).toBe(0);
-			});
-		});
+      it("should no longer notify the subscriber", function(){
+        expect(spy.callCount).toBe(0);
+      });
+    });
 
-		describe("when the child context unsubscribes from the event", function(){
+    describe("when the child context unsubscribes from the event", function(){
 
-			because(function(){
-				spy.reset();
+      because(function(){
+        spy.reset();
 
-				when(event).dont(spy);
+        when(event).dont(spy);
 
-				event();
-			});
+        event();
+      });
 
-			it("should no longer notify the subscriber", function(){
-				expect(spy.callCount).toBe(0);
-			});
-		});
-	});
+      it("should no longer notify the subscriber", function(){
+        expect(spy.callCount).toBe(0);
+      });
+    });
+  });
 
 });

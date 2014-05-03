@@ -21,7 +21,7 @@ define([
     this.hasError = ko.observable(false);
     this.result = new ExecutableResult();
     
-    this.parameters = parameters;
+    this.parameters = Object.seal(parameters);
     this.callbacks = utils.extend({
       beforeExecute: function () {},
       canExecute: function(){return true;},

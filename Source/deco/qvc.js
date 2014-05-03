@@ -120,6 +120,7 @@ define([
     execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
     execute.validator = executable.validator;
     execute.parameters = executable.parameters;
+    execute.validate = executable.validate.bind(executable);
     
     return execute;
   }

@@ -38,15 +38,8 @@ describe("when creating an executable", {
     expect(executable.clearValidationMessages).toBeDefined();
   });
   
-  it("should have a way to access the parameters", function(){
-    expect(executable.parameters).toBeDefined();
-  });
-  
-  it("should not be possible to add new parameters to an executable", function(){
-    expect(function(){
-      'use strict'
-      executable.parameters.something = "hello";
-    }).toThrow();
+  it("should have a way to manually run validation", function(){
+    expect(executable.validate).toBeDefined();
   });
   
   describe("when the name is missing", function(){

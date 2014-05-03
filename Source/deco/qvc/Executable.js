@@ -26,7 +26,8 @@ define([
       error: function () {},
       success: function () {},
       result: function(){},
-      complete: function () {}
+      complete: function () {},
+      invalid: function() {}
     }, callbacks);
   }
     
@@ -51,6 +52,7 @@ define([
 
     this.validate();
     if (!this.isValid()) {
+      this.callbacks.invalid();
       return false;
     }
 

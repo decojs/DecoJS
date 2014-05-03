@@ -95,6 +95,10 @@ define([
       executable.callbacks.error = callback;
       return execute;
     };
+    execute.invalid = function(callback){
+      executable.callbacks.invalid = callback;
+      return execute;
+    };
     execute.beforeExecute = function(callback){
       executable.callbacks.beforeExecute = callback;
       return execute;

@@ -34,6 +34,30 @@ describe("when creating an executable", {
     expect(executable.result()).toBe(null);
   });
   
+  it("should have way to set the beforeExecute listener", function(){
+    expect(executable.beforeExecute).toBeDefined();
+  });
+  
+  it("should have way to set the canExecute listener", function(){
+    expect(executable.canExecute).toBeDefined();
+  });
+  
+  it("should have way to set the success listener", function(){
+    expect(executable.success).toBeDefined();
+  });
+  
+  it("should have way to set the invalid listener", function(){
+    expect(executable.invalid).toBeDefined();
+  });
+  
+  it("should have way to set the complete listener", function(){
+    expect(executable.complete).toBeDefined();
+  });
+  
+  it("should have way to set the error listener", function(){
+    expect(executable.error).toBeDefined();
+  });
+  
   it("should have a way to clear validation messages", function(){
     expect(executable.clearValidationMessages).toBeDefined();
   });

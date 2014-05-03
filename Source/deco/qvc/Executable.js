@@ -9,9 +9,7 @@ define([
   utils, 
   ko){
 
-  function Executable(name, type, parameters, callbacks, qvc){
-    var self = this;
-    
+  function Executable(name, type, parameters, callbacks, qvc){    
     Validatable.call(this, name, parameters, qvc.constraintResolver)
     
     this.name = name;
@@ -33,7 +31,7 @@ define([
   }
     
   Executable.prototype = utils.inheritsFrom(Validatable);
-  
+    
   Executable.prototype.execute = function () {
     if (this.onBeforeExecute() === false) {
       return;
@@ -63,7 +61,6 @@ define([
 
     return true;
   };
-
 
   Executable.prototype.onError = function () {
     this.hasError(true);

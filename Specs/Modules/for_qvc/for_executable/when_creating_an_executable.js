@@ -46,7 +46,12 @@ describe("when creating an executable", {
     it("should throw an error", function(){
       expect(function(){
         qvc.createCommand();
-      }).toThrow(new Error("command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
+      }).toThrow(new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
+    });
+    it("should throw an error", function(){
+      expect(function(){
+        qvc.createQuery();
+      }).toThrow(new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])"));
     });
   });
   

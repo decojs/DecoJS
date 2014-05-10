@@ -33,7 +33,12 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-karma": "0.8.2",
     "grunt-bumpup": "~0.4.2",
-    "grunt-tagrelease": "~0.2.1"
+    "grunt-tagrelease": "~0.2.1",
+    "gulp-concat": "~2.2.0",
+    "gulp-amd-optimizer": "0.0.6",
+    "gulp-uglify": "~0.3.0",
+    "gulp": "~3.6.2",
+    "gulp-rename": "~1.2.0"
   },
   "repository": {
     "type": "git",

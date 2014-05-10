@@ -1,27 +1,24 @@
 var gulp = require('gulp');
-//var rename = require('gulp-rename');
+var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var requirejs = require('gulp-amd-optimizer');
 var uglify = require('gulp-uglify');
-//var onlyIf = require('gulp-if');
 
 
 var minify = true;
 
 var paths = {
     'source': [
-        "Source/**/*.js"
+        'Source/**/*.js'
     ],
     'specs': [
-        'www_source/pages/**/*.js'
-    ]
+        'Specs/**/*.js'
+    ],
+    'dest': 'Dist'
 };
 
 var requirejsOptions = {
   baseUrl: "Source",
-  //packages: [
-  //    { name: 'deco', location: 'Source/deco', main: 'deco' }
-  //],
   
   exclude: [
     "knockout",
@@ -37,7 +34,7 @@ gulp.task('watch', function() {
 });
 
 
-gulp.task('default', ['build'], function(){
+gulp.task('default', ['build', 'minify'], function(){
     
 });
 
@@ -45,6 +42,12 @@ gulp.task('build', function(){
   gulp.src(paths.source)
   .pipe(requirejs(requirejsOptions))
   .pipe(concat('deco.js'))
-  //.pipe(onlyIf(minify, uglify({outSourceMap: true})))
-  .pipe(gulp.dest('Dist'));
+  .pipe(gulp.dest(paths.dest));
+});
+
+gulp.task('minify', function(){
+  gulp.src(paths.dest+'/deco.js')
+  .pipe(rename('deco.min.js'))
+  .pipe(uglify({outSourceMap: true}))
+  .pipe(gulp.dest(paths.dest));
 });

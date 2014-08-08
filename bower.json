@@ -15,7 +15,7 @@
   "authors": [
     "Marius Gundersen <bower@mariusgundersen.net>"
   ],
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "Dist/deco.js",
   "ignore": [
     "**/.*",

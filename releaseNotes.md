@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.3.3 (2014-08-08)
+* Switched to json, instead of json2, which has a valid bower.json file
+
 ## 0.3.2 (2014-05-03)
 * Upgraded to latest version of dependencies
 * Fixed a memory leak caused by executables sticking around for too long (issue 14)

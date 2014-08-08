@@ -28,7 +28,7 @@
   "dependencies": {
     "requirejs": "2.1.11",
     "knockout.js": "3.0.0",
-    "json2": "latest",
+    "json": "latest",
     "es5-shim": "2.1.0",
     "when": "2.3.0"
   },

@@ -1,69 +1,14 @@
-define(["deco/utils", "deco/qvc/Validator", "knockout", "deco/qvc/koExtensions"],function(utils, Validator, ko){
+define([
+  "deco/utils", 
+  "deco/qvc/Validator", 
+  "knockout", 
+  "deco/qvc/koExtensions"
+], function(
+  utils, 
+  Validator, 
+  ko
+){
   
-  function recursivlyExtendParameters(parameters, validatableFields, parents) {
-    for (var key in parameters) {
-      var property = parameters[key];
-      var path = parents.concat([key]);
-      if (ko.isObservable(property)) {
-        property.extend({
-          validation: {
-            name:key,
-            path:path.join(".")
-          }
-        });
-        validatableFields.push(property);
-      }
-      property = ko.utils.unwrapObservable(property);
-      if (typeof property === "object") {
-        recursivlyExtendParameters(property, validatableFields, path);
-      }
-    }
-  }
-
-
-  function findField(fieldPath, parameters, errorMessage){
-    return fieldPath.split(".").reduce(function(object, name){
-      var path = object.path;
-      var field = ko.utils.unwrapObservable(object.field);
-      if (name in field) {
-        return {
-          field: field[name],
-          path: path + "." + name
-        };
-      } else {
-        throw new Error(errorMessage + ": " + fieldPath + "\n" +
-          name + " is not a member of " + path + "\n" +
-          path + " = `" + ko.toJSON(field) + "`");
-      }
-    }, {
-      field: parameters,
-      path: "parameters"
-    }).field;
-  }
-
-
-
-  
-  function applyViolationMessageToField(parameters, fieldPath, message) {
-    var object = findField(fieldPath, parameters, "Error applying violation");
-    
-    if (typeof message === "string" && "validator" in object) {
-      object.validator.isValid(false);
-      object.validator.message(message);
-    }else{
-      throw new Error("Error applying violation\n"+fieldPath+" is not validatable\nit should be an observable");
-    }
-  };
-
-  function applyViolationMessageToValidatable(validatable, message) {
-    validatable.validator.isValid(false);
-    var oldMessage = validatable.validator.message();
-    var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
-    validatable.validator.message(newMessage);
-  };
-
-
-
   function Validatable(name, parameters, constraintResolver){
     var self = this;
     
@@ -141,6 +86,70 @@ define(["deco/utils", "deco/qvc/Validator", "knockout", "deco/qvc/koExtensions"]
         validator.reset();
       }
     });
+  };
+  
+  
+  
+  function recursivlyExtendParameters(parameters, validatableFields, parents) {
+    for (var key in parameters) {
+      var property = parameters[key];
+      var path = parents.concat([key]);
+      if (ko.isObservable(property)) {
+        property.extend({
+          validation: {
+            name:key,
+            path:path.join(".")
+          }
+        });
+        validatableFields.push(property);
+      }
+      property = ko.utils.unwrapObservable(property);
+      if (typeof property === "object") {
+        recursivlyExtendParameters(property, validatableFields, path);
+      }
+    }
+  }
+
+
+  function findField(fieldPath, parameters, errorMessage){
+    return fieldPath.split(".").reduce(function(object, name){
+      var path = object.path;
+      var field = ko.utils.unwrapObservable(object.field);
+      if (name in field) {
+        return {
+          field: field[name],
+          path: path + "." + name
+        };
+      } else {
+        throw new Error(errorMessage + ": " + fieldPath + "\n" +
+          name + " is not a member of " + path + "\n" +
+          path + " = `" + ko.toJSON(field) + "`");
+      }
+    }, {
+      field: parameters,
+      path: "parameters"
+    }).field;
+  }
+
+
+
+  
+  function applyViolationMessageToField(parameters, fieldPath, message) {
+    var object = findField(fieldPath, parameters, "Error applying violation");
+    
+    if (typeof message === "string" && "validator" in object) {
+      object.validator.isValid(false);
+      object.validator.message(message);
+    }else{
+      throw new Error("Error applying violation\n"+fieldPath+" is not validatable\nit should be an observable");
+    }
+  };
+
+  function applyViolationMessageToValidatable(validatable, message) {
+    validatable.validator.isValid(false);
+    var oldMessage = validatable.validator.message();
+    var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
+    validatable.validator.message(newMessage);
   };
   
   

@@ -34,15 +34,48 @@ describe("when creating an executable", {
     expect(executable.result()).toBe(null);
   });
   
+  it("should have way to set the beforeExecute listener", function(){
+    expect(executable.beforeExecute).toBeDefined();
+  });
+  
+  it("should have way to set the canExecute listener", function(){
+    expect(executable.canExecute).toBeDefined();
+  });
+  
+  it("should have way to set the success listener", function(){
+    expect(executable.success).toBeDefined();
+  });
+  
+  it("should have way to set the invalid listener", function(){
+    expect(executable.invalid).toBeDefined();
+  });
+  
+  it("should have way to set the complete listener", function(){
+    expect(executable.complete).toBeDefined();
+  });
+  
+  it("should have way to set the error listener", function(){
+    expect(executable.error).toBeDefined();
+  });
+  
   it("should have a way to clear validation messages", function(){
     expect(executable.clearValidationMessages).toBeDefined();
+  });
+  
+  it("should have a way to manually run validation", function(){
+    expect(executable.validate).toBeDefined();
   });
   
   describe("when the name is missing", function(){
     it("should throw an error", function(){
       expect(function(){
         qvc.createCommand();
-      }).toThrow(new Error("command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
+      }).toThrow(new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
+    });
+    it("should throw an error", function(){
+      expect(function(){
+        qvc.createQuery();
+      }).toThrow(new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])"));
     });
   });
   

@@ -1,5 +1,6 @@
 define('deco/utils',[], function(){
   return {
+    
     toArray: function(obj){
       var array = [];
       // iterate backwards ensuring that length is an UInt32
@@ -8,6 +9,7 @@ define('deco/utils',[], function(){
       }
       return array;
     },
+    
     extend: function(dst, src){
       src = src || {};
       dst = dst || {};
@@ -16,17 +18,27 @@ define('deco/utils',[], function(){
       }
       return dst;
     },
+    
+    inheritsFrom: function(o){
+      function F() {}
+      F.prototype = o.prototype;
+
+      return new F();
+    },
+    
     arrayToObject: function(array, func){
       return array.reduce(function(collection, item){
         func(item, collection);
         return collection;
       }, {});
     },
+    
     trim: function(word, character){
       while(word.charAt(0) == character) word = word.substr(1);
       while(word.charAt(word.length - 1) == character) word = word.substr(0, word.length - 1);
       return word;
     },
+    
     after: function(word, character){
       var index = word.indexOf(character);
       if(index < 0){
@@ -35,15 +47,19 @@ define('deco/utils',[], function(){
         return word.substr(index+1);
       }
     },
+    
     popTail: function(array){
       return array.slice(0, -1);
     },
+    
     startsWith: function(word, character){
       return word.charAt(0) === character;
     },
+    
     endsWith: function(word, character){
       return word.charAt(word.length - 1) === character;
     },
+    
     addEventListener: function(element, event, listener, bubble){
       if('addEventListener' in element){
         element.addEventListener(event, listener, bubble);
@@ -188,72 +204,17 @@ define('deco/qvc/koExtensions',["deco/qvc/Validator", "knockout"], function(Vali
   
 
 });
-define('deco/qvc/Validatable',["deco/utils", "deco/qvc/Validator", "knockout", "deco/qvc/koExtensions"],function(utils, Validator, ko){
+define('deco/qvc/Validatable',[
+  "deco/utils", 
+  "deco/qvc/Validator", 
+  "knockout", 
+  "deco/qvc/koExtensions"
+], function(
+  utils, 
+  Validator, 
+  ko
+){
   
-  function recursivlyExtendParameters(parameters, validatableFields, parents) {
-    for (var key in parameters) {
-      var property = parameters[key];
-      var path = parents.concat([key]);
-      if (ko.isObservable(property)) {
-        property.extend({
-          validation: {
-            name:key,
-            path:path.join(".")
-          }
-        });
-        validatableFields.push(property);
-      }
-      property = ko.utils.unwrapObservable(property);
-      if (typeof property === "object") {
-        recursivlyExtendParameters(property, validatableFields, path);
-      }
-    }
-  }
-
-
-  function findField(fieldPath, parameters, errorMessage){
-    return fieldPath.split(".").reduce(function(object, name){
-      var path = object.path;
-      var field = ko.utils.unwrapObservable(object.field);
-      if (name in field) {
-        return {
-          field: field[name],
-          path: path + "." + name
-        };
-      } else {
-        throw new Error(errorMessage + ": " + fieldPath + "\n" +
-          name + " is not a member of " + path + "\n" +
-          path + " = `" + ko.toJSON(field) + "`");
-      }
-    }, {
-      field: parameters,
-      path: "parameters"
-    }).field;
-  }
-
-
-
-  
-  function applyViolationMessageToField(parameters, fieldPath, message) {
-    var object = findField(fieldPath, parameters, "Error applying violation");
-    
-    if (typeof message === "string" && "validator" in object) {
-      object.validator.isValid(false);
-      object.validator.message(message);
-    }else{
-      throw new Error("Error applying violation\n"+fieldPath+" is not validatable\nit should be an observable");
-    }
-  };
-
-  function applyViolationMessageToValidatable(validatable, message) {
-    validatable.validator.isValid(false);
-    var oldMessage = validatable.validator.message();
-    var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
-    validatable.validator.message(newMessage);
-  };
-
-
-
   function Validatable(name, parameters, constraintResolver){
     var self = this;
     
@@ -335,92 +296,159 @@ define('deco/qvc/Validatable',["deco/utils", "deco/qvc/Validator", "knockout", "
   
   
   
+  function recursivlyExtendParameters(parameters, validatableFields, parents) {
+    for (var key in parameters) {
+      var property = parameters[key];
+      var path = parents.concat([key]);
+      if (ko.isObservable(property)) {
+        property.extend({
+          validation: {
+            name:key,
+            path:path.join(".")
+          }
+        });
+        validatableFields.push(property);
+      }
+      property = ko.utils.unwrapObservable(property);
+      if (typeof property === "object") {
+        recursivlyExtendParameters(property, validatableFields, path);
+      }
+    }
+  }
+
+
+  function findField(fieldPath, parameters, errorMessage){
+    return fieldPath.split(".").reduce(function(object, name){
+      var path = object.path;
+      var field = ko.utils.unwrapObservable(object.field);
+      if (name in field) {
+        return {
+          field: field[name],
+          path: path + "." + name
+        };
+      } else {
+        throw new Error(errorMessage + ": " + fieldPath + "\n" +
+          name + " is not a member of " + path + "\n" +
+          path + " = `" + ko.toJSON(field) + "`");
+      }
+    }, {
+      field: parameters,
+      path: "parameters"
+    }).field;
+  }
+
+
+
+  
+  function applyViolationMessageToField(parameters, fieldPath, message) {
+    var object = findField(fieldPath, parameters, "Error applying violation");
+    
+    if (typeof message === "string" && "validator" in object) {
+      object.validator.isValid(false);
+      object.validator.message(message);
+    }else{
+      throw new Error("Error applying violation\n"+fieldPath+" is not validatable\nit should be an observable");
+    }
+  };
+
+  function applyViolationMessageToValidatable(validatable, message) {
+    validatable.validator.isValid(false);
+    var oldMessage = validatable.validator.message();
+    var newMessage = oldMessage.length == 0 ? message : oldMessage + ", " + message;
+    validatable.validator.message(newMessage);
+  };
+  
+  
+  
   return Validatable;
 });
-define('deco/qvc/Executable',["deco/qvc/ExecutableResult", "deco/qvc/Validatable", "deco/utils", "knockout"], function(ExecutableResult, Validatable, utils, ko){
+define('deco/qvc/Executable',[
+  "deco/qvc/ExecutableResult", 
+  "deco/qvc/Validatable", 
+  "deco/utils", 
+  "knockout"
+], function(
+  ExecutableResult, 
+  Validatable, 
+  utils, 
+  ko){
 
-  function Executable(name, type, parameters, callbacks, qvc){
-    var self = this;
+  function Executable(name, type, parameters, callbacks, qvc){    
+    Validatable.call(this, name, parameters, qvc.constraintResolver)
     
-    this.name;
-    this.type;
+    this.name = name;
+    this.type = type;
+    this.qvc = qvc;
     this.isBusy = ko.observable(false);
     this.hasError = ko.observable(false);
     this.result = new ExecutableResult();
     
-    this.parameters = {};
-    this.callbacks = {
+    this.parameters = Object.seal(parameters);
+    this.callbacks = utils.extend({
       beforeExecute: function () {},
       canExecute: function(){return true;},
       error: function () {},
       success: function () {},
       result: function(){},
-      complete: function () {}
-    };
-    
-    
-    this.execute = function () {
-      if (self.onBeforeExecute() === false) {
-        return;
-      }
-      qvc.execute(self);
-    };
-
-    this.onBeforeExecute = function () {
-      
-      if (self.isBusy()) {
-        return false;
-      }
-      
-      self.hasError(false);
-      
-      self.callbacks.beforeExecute();
-      
-      self.validate();
-      if (!self.isValid()) {
-        return false;
-      }
-      
-      if (self.callbacks.canExecute() === false) {
-        return false;
-      }
-      self.isBusy(true);
-      
-      return true;
-    };
-    
-    
-    this.onError = function () {
-      self.hasError(true);
-      if("violations" in self.result && self.result.violations != null)
-        self.applyViolations(self.result.violations);
-      self.callbacks.error(self.result);
-    };
-
-    this.onSuccess = function () {
-      self.hasError(false);
-      self.clearValidationMessages();
-      self.callbacks.success(self.result);
-      self.callbacks.result(self.result.result);
-    };
-
-    this.onComplete = function () {
-      if (!self.hasError()) {
-        self.callbacks.complete(self.result);
-        self.clearValidationMessages();
-      }
-      self.isBusy(false);
-    };
-    
-    
-    init: {
-      self.name = name;
-      self.type = type;
-      utils.extend(self.parameters, parameters);
-      utils.extend(self.callbacks, callbacks);
-      utils.extend(self, new Validatable(self.name, self.parameters, qvc.constraintResolver));
-    }
+      complete: function () {},
+      invalid: function() {}
+    }, callbacks);
   }
+    
+  Executable.prototype = utils.inheritsFrom(Validatable);
+    
+  Executable.prototype.execute = function () {
+    if (this.onBeforeExecute() === false) {
+      return;
+    }
+    this.qvc.execute(this);
+  };
+
+  Executable.prototype.onBeforeExecute = function () {
+
+    if (this.isBusy()) {
+      return false;
+    }
+
+    this.hasError(false);
+
+    this.callbacks.beforeExecute();
+
+    this.validate();
+    if (!this.isValid()) {
+      this.callbacks.invalid();
+      return false;
+    }
+
+    if (this.callbacks.canExecute() === false) {
+      return false;
+    }
+    this.isBusy(true);
+
+    return true;
+  };
+
+  Executable.prototype.onError = function () {
+    this.hasError(true);
+    if("violations" in this.result && this.result.violations != null)
+      this.applyViolations(this.result.violations);
+    this.callbacks.error(this.result);
+  };
+
+  Executable.prototype.onSuccess = function () {
+    this.hasError(false);
+    this.clearValidationMessages();
+    this.callbacks.success(this.result);
+    this.callbacks.result(this.result.result);
+  };
+
+  Executable.prototype.onComplete = function () {
+    if (!this.hasError()) {
+      this.callbacks.complete(this.result);
+      this.clearValidationMessages();
+    }
+    this.isBusy(false);
+  };
   
   Executable.Command = "command";
   Executable.Query = "query";
@@ -643,21 +671,22 @@ define('deco/qvc',[
 
   var qvc = new QVC();
   
-  function createExecutable(name, type, parameters, callbacks){
-    if(name == null || name.length == 0)
-      throw new Error(type + " is missing name\nA " + type + " must have a name!\nusage: createCommand('name', [parameters, callbacks])");
-  
+  function createExecutable(name, type, parameters, callbacks){  
     var executable = new Executable(name, type, parameters || {}, callbacks || {}, qvc);
     var execute = executable.execute.bind(executable);
-    execute.isValid = ko.computed(function(){return executable.isValid(); });
-    execute.isBusy = ko.computed(function(){return executable.isBusy();});
-    execute.hasError = ko.computed(function(){return executable.hasError();});
+    execute.isValid = ko.computed(executable.isValid, executable);
+    execute.isBusy = ko.computed(executable.isBusy, executable);
+    execute.hasError = ko.computed(executable.hasError, executable);
     execute.success = function(callback){
       executable.callbacks.success = callback;
       return execute;
     };
     execute.error = function(callback){
       executable.callbacks.error = callback;
+      return execute;
+    };
+    execute.invalid = function(callback){
+      executable.callbacks.invalid = callback;
       return execute;
     };
     execute.beforeExecute = function(callback){
@@ -681,15 +710,21 @@ define('deco/qvc',[
     };
     execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
     execute.validator = executable.validator;
+    execute.parameters = executable.parameters;
+    execute.validate = executable.validate.bind(executable);
     
     return execute;
   }
   
   return {
     createCommand: function(name, parameters, callbacks){
+      if(name == null || name.length == 0)
+        throw new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])");
       return createExecutable(name, Executable.Command, parameters, callbacks);
     },
     createQuery: function(name, parameters, callbacks){
+      if(name == null || name.length == 0)
+        throw new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])");
       return createExecutable(name, Executable.Query, parameters, callbacks);
     },
     config: function(config){

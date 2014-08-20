@@ -1,7 +1,11 @@
 # DecoJS Release Notes
 
-## 0.3.3 (2014-08-08)
-* Switched to json, instead of json2, which has a valid bower.json file
+## 0.4.0 (2014-08-20)
+* Cleaned up the QVC code
+* Made the parameters to a command/query accessible
+* Added ability to manually validate a command/query
+* Improved error message when creating a command/query without a name
+* Added callback when a command/query has invalid parameters when it is executed
 
 ## 0.3.2 (2014-05-03)
 * Upgraded to latest version of dependencies

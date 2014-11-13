@@ -1,7 +1,7 @@
 define([
   "deco/utils",
   "deco/errorHandler",
-  "knockout",
+  "knockout", 
 ], function (
   utils, 
   errorHandler,
@@ -55,12 +55,23 @@ define([
 
     domElement = domElement || document.body;
 
-    var elementList = utils.toArray(domElement.querySelectorAll("*[data-viewmodel]"));
+    var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
+      .filter(function(element){
+        while(element = element.parentNode){
+          if(element === domElement) return true;
+          if(element.hasAttribute("data-viewmodel")) return false;
+        }
+        return true;
+      })
+      .map(getAttributes)
+      .map(loadViewModel);
 
-    var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
-    
     return Promise.all(viewModelsLoaded).then(function(list){
-      list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
+      list
+        .filter(viewModelLoadedSuccessfully)
+        .forEach(function(data){
+          applyViewModel(subscribe, data);
+        });
     });
   };
 });

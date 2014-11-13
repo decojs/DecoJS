@@ -11,6 +11,18 @@ define([], function(){
 
       return elm;
     },
+    withNestedViewModel: function(first, second){
+
+      var elm = document.createElement("div");
+      var div = document.createElement("div");
+      var child = document.createElement("div");
+      div.setAttribute("data-viewmodel", first);
+      child.setAttribute("data-viewmodel", second);
+      div.appendChild(child);
+      elm.appendChild(div);
+
+      return elm;
+    },
     withChildrenAndATitle: function(titleText){
       var elm = this.withChildren();
       var title = document.createElement("meta");

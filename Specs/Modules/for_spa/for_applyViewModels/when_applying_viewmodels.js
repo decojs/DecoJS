@@ -7,7 +7,7 @@ describe("when applying viewmodels", [
 ){
 
   var dummyVM,
-    subscribe,
+    whenContext,
     model = {a: true};
   
   function DummyVM(){
@@ -16,7 +16,8 @@ describe("when applying viewmodels", [
 
   beforeEach(function(done){
 
-    subscribe = sinon.spy();
+    whenContext = sinon.spy();
+    var subscribe = sinon.stub().returns(whenContext);
 
     dummyVM = sinon.spy();
 
@@ -48,6 +49,6 @@ describe("when applying viewmodels", [
   });
 
   it("should call the viewmodule with the subscribe function as the second argument", function(){
-    expect(dummyVM.firstCall.args[1][1]).toEqual(subscribe);
+    expect(dummyVM.firstCall.args[1][1]).toEqual(whenContext);
   });
 });

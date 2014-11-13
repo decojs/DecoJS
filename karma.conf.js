@@ -17,7 +17,7 @@ module.exports = function(config){
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/jasmine-sinon/lib/jasmine-sinon.js',
-      {pattern: 'bower_components/knockout.js/knockout.js', included: false},
+      {pattern: 'bower_components/knockout/dist/knockout.js', included: false},
 
       'Specs/specs-main.js',
       'Specs/Matchers/*',

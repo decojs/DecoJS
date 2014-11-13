@@ -6,7 +6,7 @@ jazzmine.requireConfig({
   paths: {
     "Mocks": "Specs/Mocks",
     "Given": "Specs/Given",
-    "knockout": "bower_components/knockout.js/knockout"
+    "knockout": "bower_components/knockout/dist/knockout"
   },
   packages: [
       { name: 'deco', location: 'Source/deco', main: 'deco' }

@@ -13,14 +13,14 @@ define([
 
     var viewModelName = target.getAttribute("data-viewmodel");
     var model = target.getAttribute("data-model");
-    if (model && model.indexOf("{") == 0) {
+    if (model && (model.charAt(0) == '{' || model.charAt(0) == '[')) {
       model = JSON.parse(model);
     }
 
     return {
       target: target,
       viewModelName: viewModelName,
-      model: model
+      model: model == undefined ? {} : model
     };
   }
 
@@ -40,7 +40,7 @@ define([
 
   function applyViewModel(subscribe, data) {
     try{
-      var viewModel = new data.ViewModel(data.model || {}, subscribe);
+      var viewModel = new data.ViewModel(data.model, subscribe);
       ko.applyBindings(viewModel, data.target);
     }catch(e){
       errorHandler.onError(e);

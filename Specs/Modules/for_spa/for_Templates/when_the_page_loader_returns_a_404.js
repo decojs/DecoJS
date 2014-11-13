@@ -11,22 +11,14 @@ describe("when the page loader returns a 404", {
 ){
 
   var templates,
-    result,
-    loadPageSpy;
+    result;
 
   beforeEach(function(){
-
-    loadPageSpy = sinon.spy();
-
-    PageLoader.prototype.loadPage = function(path, resolver){
-      loadPageSpy(path, resolver);
-      resolver.reject({error: 404, content: "oh noes!"});
-    }
-
+    PageLoader.loadPageSpy.returns(Promise.reject({error: 404, content: "oh noes!"}));
   });
 
   afterEach(function(){
-    PageLoader.prototype.loadPage = PageLoader.loadPageSpy;
+    PageLoader.loadPageSpy.reset();
     PageLoader.abortSpy.reset();
   });
 
@@ -44,7 +36,7 @@ describe("when the page loader returns a 404", {
     });
 
     it("should call the loadPage method", function(){
-      expect(loadPageSpy.callCount).toBe(1);
+      expect(PageLoader.loadPageSpy.callCount).toBe(1);
     });
 
     it("should abort the previous loading", function(){
@@ -73,7 +65,7 @@ describe("when the page loader returns a 404", {
     });
 
     it("should call the loadPage method", function(){
-      expect(loadPageSpy.callCount).toBe(1);
+      expect(PageLoader.loadPageSpy.callCount).toBe(1);
     });
 
     it("should abort the previous loading", function(){

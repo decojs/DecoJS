@@ -6,19 +6,23 @@ describe("when subscribing to events", {
   "deco/spa",
   "Given/an_element",
   "Given/an_event",
-  "deco/spa/hashNavigation"
+  "deco/spa/hashNavigation",
+  "deco/spa/PageLoader"
 ], function(
   spa,
   an_element,
   an_event,
-  hashNavigationMock
+  hashNavigationMock,
+  pageLoaderMock
 ){
 
   var event,
     react;
 
   beforeEach(function(done){
-
+    
+    pageLoaderMock.loadPageSpy.returns(Promise.resolve());
+    
     var doc = an_element.withAViewModel("dummyVM");
 
     event = an_event.withNoParams();

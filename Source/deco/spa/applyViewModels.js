@@ -1,15 +1,11 @@
 define([
   "deco/utils",
   "deco/errorHandler",
-  "knockout", 
-  "when", 
-  "when/callbacks"
+  "knockout",
 ], function (
   utils, 
   errorHandler,
-  ko, 
-  when, 
-  callbacks
+  ko
 ) {
 
 
@@ -31,9 +27,9 @@ define([
 
   function loadViewModel(data){
 
-    return callbacks.call(require, [
-      data.viewModelName
-    ]).then(function(ViewModel){
+    return new Promise(function(resolve, reject){
+      require([data.viewModelName], resolve, reject);
+    }).then(function(ViewModel){
       data.ViewModel = ViewModel;
       return data;
     }, function(error){
@@ -62,8 +58,8 @@ define([
     var elementList = utils.toArray(domElement.querySelectorAll("*[data-viewmodel]"));
 
     var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
-
-    return when.all(viewModelsLoaded).then(function(list){
+    
+    return Promise.all(viewModelsLoaded).then(function(list){
       list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
     });
   };

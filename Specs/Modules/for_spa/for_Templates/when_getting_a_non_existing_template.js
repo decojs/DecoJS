@@ -12,6 +12,7 @@ describe("when getting a non existing template", {
     result;
 
   beforeEach(function(){
+    PageLoader.loadPageSpy.returns(Promise.resolve());
     templates = new Templates(document);
     because: {
       result = templates.getTemplate("path/to/cached/template");
@@ -38,7 +39,7 @@ describe("when getting a non existing template", {
   describe("for the second time", function(){
 
     because(function(done){
-      PageLoader.loadPageSpy.firstCall.args[1].resolve("content of page");
+      PageLoader.loadPageSpy.returns(Promise.resolve("content of page"));
       result.then(function(){
         templates.getTemplate("path/to/cached/template");
         done();

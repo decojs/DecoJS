@@ -1,5 +1,5 @@
-define(["when"], function(when){
+define(function(){
   var spy = sinon.stub();
-  spy.returns(when.resolve());
+  spy.returns(Promise.resolve());
   return spy;
 });

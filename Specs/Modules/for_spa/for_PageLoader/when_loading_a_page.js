@@ -9,7 +9,7 @@ describe("when loading a page", {
 ){
 
   var pageLoader,
-    resolver,
+    promise,
     pathToUrlSpy;
 
   beforeEach(function(){
@@ -23,13 +23,8 @@ describe("when loading a page", {
     pageLoader = new PageLoader(config);
     ajax.respondImmediately = false;
 
-    resolver = {
-      resolve: sinon.spy(),
-      reject: sinon.spy()
-    };
-
     because: {
-      pageLoader.loadPage("path/to/page", resolver);
+      promise = pageLoader.loadPage("path/to/page");
     }
   });
 
@@ -49,58 +44,73 @@ describe("when loading a page", {
 
   describe("when the server responds", function(){
 
-    because(function(){
+    var resolve = sinon.spy();
+    
+    because(function(done){
       ajax.callback({
         status: 200,
         responseText: "myTemplate"
       });
+      
+      promise.then(resolve).then(done);
     });
 
     it("the promise should resolve", function(){
-      expect(resolver.resolve.callCount).toBe(1);
+      expect(resolve.callCount).toBe(1);
     });
     it("the promise should resolve with the page content", function(){
-      expect(resolver.resolve.firstCall.args[0]).toBe("myTemplate");
+      expect(resolve.firstCall.args[0]).toBe("myTemplate");
     });
   });
 
   describe("when the server responds with a 404", function(){
-
-    because(function(){
+    
+    var reject = sinon.spy();
+    
+    because(function(done){
       ajax.callback({
         status: 404,
         responseText: "myTemplate"
       });
+      
+      promise['catch'](reject).then(done);
     });
 
     it("the promise should be rejected", function(){
-      expect(resolver.reject.callCount).toBe(1);
+      expect(reject.callCount).toBe(1);
     });
 
     it("the promise should contain the error code", function(){
-      expect(resolver.reject.firstCall.args[0].error).toBe(404);
+      expect(reject.firstCall.args[0].error).toBe(404);
     });
   });
 
   describe("when a new page is requetsed before the old one is resolved", function(){
 
-    because(function(){
+    var reject = sinon.spy();
+    
+    because(function(done){
       pageLoader.loadPage("a/second/page");
+      
+      promise['catch'](reject).then(done);
     });
 
     it("the original promise should be rejected", function(){
-      expect(resolver.reject.callCount).toBe(1);
+      expect(reject.callCount).toBe(1);
     });
   });
 
   describe("when the loading is aborted", function(){
 
-    because(function(){
+    var reject = sinon.spy();
+    
+    because(function(done){
       pageLoader.abort();
+      promise['catch'](reject).then(done);
     });
 
     it("the original promise should be rejected", function(){
-      expect(resolver.reject.callCount).toBe(1);
+      expect(reject.callCount).toBe(1);
     });
   });
 });

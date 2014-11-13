@@ -1,11 +1,9 @@
 define([
   "deco/spa/PageLoader",
-  "deco/utils",
-  "when"
+  "deco/utils"
 ], function(
   PageLoader,
-  utils,
-  when
+  utils
 ){
 
   function defaultConfig(){
@@ -44,13 +42,10 @@ define([
     var normalizedPath = path.toLowerCase();
 
     if(normalizedPath in this.templates){
-      return when.resolve(this.templates[normalizedPath]);
+      return Promise.resolve(this.templates[normalizedPath]);
     }else{
-      var deferred = when.defer();
-
-      this.pageLoader.loadPage(path, deferred.resolver);
-      
-      return deferred.promise.then(function(content){
+      return this.pageLoader.loadPage(path)
+      .then(function(content){
         if(this.cachePages)
           this.templates[normalizedPath] = content;
         

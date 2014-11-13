@@ -8,8 +8,7 @@ describe("when always caching pages", {
   ajax
 ){
 
-  var pageLoader,
-    resolver;
+  var pageLoader;
 
   beforeEach(function(){
 
@@ -20,13 +19,8 @@ describe("when always caching pages", {
     pageLoader = new PageLoader(config);
     ajax.respondImmediately = false;
 
-    resolver = {
-      resolve: sinon.spy(),
-      reject: sinon.spy()
-    };
-
     because: {
-      pageLoader.loadPage("path/to/cached/page", resolver);
+      pageLoader.loadPage("path/to/cached/page");
     }
   });
 

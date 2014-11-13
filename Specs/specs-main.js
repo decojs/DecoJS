@@ -9,10 +9,10 @@ jazzmine.requireConfig({
     "knockout": "bower_components/knockout.js/knockout"
   },
   packages: [
-      { name: 'when', location: 'bower_components/when', main: 'when' },
       { name: 'deco', location: 'Source/deco', main: 'deco' }
   ]
 });
 
+ES6Promise.polyfill();
 
 jazzmine.onReady(window.__karma__.start);

@@ -6,25 +6,23 @@ describe("when applying viewmodels", [
   an_element
 ){
 
-
-  function functionName(m){
-    return m.name || m.toString().match(/function\s+([^(]+)/)[1];
-  }
-
   var dummyVM,
-    subscribe,
+    whenContext,
     model = {a: true};
+  
+  function DummyVM(){
+    dummyVM(this, arguments);
+  }
 
   beforeEach(function(done){
 
-    subscribe = sinon.spy();
+    whenContext = sinon.spy();
+    var subscribe = sinon.stub().returns(whenContext);
 
     dummyVM = sinon.spy();
 
     define("dummyVM", [], function(){
-      return function DummyVM(){
-        dummyVM(this, arguments);
-      };
+      return DummyVM;
     });
     
     var elm = an_element.withAViewModel("dummyVM", model);
@@ -43,7 +41,7 @@ describe("when applying viewmodels", [
   });
 
   it("should call the viewmodule as a constructor", function(){
-    expect(functionName(dummyVM.firstCall.args[0].constructor)).toBe("DummyVM");
+    expect(dummyVM.firstCall.args[0]).toBeA(DummyVM);
   });
 
   it("should call the viewmodule with the model as the first argument", function(){
@@ -51,6 +49,6 @@ describe("when applying viewmodels", [
   });
 
   it("should call the viewmodule with the subscribe function as the second argument", function(){
-    expect(dummyVM.firstCall.args[1][1]).toEqual(subscribe);
+    expect(dummyVM.firstCall.args[1][1]).toEqual(whenContext);
   });
 });

@@ -10,7 +10,7 @@ define([
     this.currentXHR = null;
   }
 
-  PageLoader.prototype.loadPage = function(path, resolver){
+  PageLoader.prototype.loadPage = function(path){
 
     this.abort();
 
@@ -18,12 +18,17 @@ define([
 
     if(this.cache === false)
       url = ajax.cacheBust(url);
-
-    this.currentXHR = ajax(url, {}, "GET", function(xhr){
-      if(xhr.status === 200)
-        resolver.resolve(xhr.responseText);
-      else
-        resolver.reject({error: xhr.status, content: xhr.responseText});
+    
+    var self = this;
+    return new Promise(function(resolve, reject){
+      self.currentXHR = ajax(url, {}, "GET", function(xhr){
+        self.currentXHR = null;
+        if(xhr.status === 200){
+          resolve(xhr.responseText);
+        }else{
+          reject({error: xhr.status, content: xhr.responseText});
+        }
+      });
     });
   };
 

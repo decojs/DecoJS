@@ -14,6 +14,7 @@ describe("when getting an existing template", {
     result;
 
   beforeEach(function(){
+    PageLoader.loadPageSpy.returns(Promise.resolve());
     templates = new Templates(a_document.withPageTemplates());
     because: {
       result = templates.getTemplate("myTemplate");

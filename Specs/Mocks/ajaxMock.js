@@ -16,7 +16,8 @@ define(["__mocked__"], function(realAjax){
           status: 0,
           responseText: ""
         });
-      }
+      },
+      readyState: 2
     }
   }
 

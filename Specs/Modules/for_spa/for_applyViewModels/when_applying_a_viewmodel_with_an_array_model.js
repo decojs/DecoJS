@@ -1,4 +1,4 @@
-describe("when applying a viewmodel without a model", [
+describe("when applying a viewmodel with an array model", [
   "deco/spa/applyViewModels",
   "Given/an_element"
 ], function(
@@ -6,10 +6,13 @@ describe("when applying a viewmodel without a model", [
   an_element
 ){
 
-
   var dummyVM,
     whenContext,
-    model = null;
+    model = [1, 2, 3];
+  
+  function DummyVM(){
+    dummyVM(this, arguments);
+  }
 
   beforeEach(function(done){
 
@@ -19,9 +22,7 @@ describe("when applying a viewmodel without a model", [
     dummyVM = sinon.spy();
 
     define("dummyVM", [], function(){
-      return function DummyVM(){
-        dummyVM(this, arguments);
-      };
+      return DummyVM;
     });
     
     var elm = an_element.withAViewModel("dummyVM", model);
@@ -39,8 +40,12 @@ describe("when applying a viewmodel without a model", [
     expect(dummyVM.callCount).toBe(1);
   });
 
-  it("should call the viewmodule with an empty model as the first argument", function(){
-    expect(dummyVM.firstCall.args[1][0]).toEqual({});
+  it("should call the viewmodule as a constructor", function(){
+    expect(dummyVM.firstCall.args[0]).toBeA(DummyVM);
+  });
+
+  it("should call the viewmodule with the model as the first argument", function(){
+    expect(dummyVM.firstCall.args[1][0]).toEqual(model);
   });
 
   it("should call the viewmodule with the subscribe function as the second argument", function(){

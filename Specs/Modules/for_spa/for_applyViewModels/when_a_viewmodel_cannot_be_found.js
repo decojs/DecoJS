@@ -23,7 +23,7 @@ describe("when a viewmodel cannot be found", {
     var elm = an_element.withAViewModel("IdoNotExist", {});
 
     because: {
-      applyViewModels(elm, subscribe).then(done);
+      applyViewModels(elm, subscribe).then(done, done);
     }
   });
 

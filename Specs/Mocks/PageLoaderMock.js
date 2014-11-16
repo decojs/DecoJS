@@ -7,7 +7,7 @@ define([
 
   }
 
-  PageLoader.prototype.loadPage = PageLoader.loadPageSpy = sinon.spy();
+  PageLoader.prototype.loadPage = PageLoader.loadPageSpy = sinon.stub();
   PageLoader.prototype.abort = PageLoader.abortSpy = sinon.spy();
 
 

@@ -1,54 +1,19 @@
 define([
   "deco/utils",
   "deco/errorHandler",
-  "knockout", 
-  "when", 
-  "when/callbacks"
+  "deco/spa/viewModelFactory",
+  "knockout",
+  "deco/spa/extendKnockout"
 ], function (
   utils, 
   errorHandler,
-  ko, 
-  when, 
-  callbacks
+  viewModelFactory,
+  ko
 ) {
 
-
-  function getAttributes(target){
-
-    var viewModelName = target.getAttribute("data-viewmodel");
-    var model = target.getAttribute("data-model");
-    if (model && model.indexOf("{") == 0) {
-      model = JSON.parse(model);
-    }
-
-    return {
-      target: target,
-      viewModelName: viewModelName,
-      model: model
-    };
-  }
-
-
-  function loadViewModel(data){
-
-    return callbacks.call(require, [
-      data.viewModelName
-    ]).then(function(ViewModel){
-      data.ViewModel = ViewModel;
-      return data;
-    }, function(error){
-      errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
-      return null;
-    });
-  }
-
-  function applyViewModel(subscribe, data) {
-    try{
-      var viewModel = new data.ViewModel(data.model || {}, subscribe);
-      ko.applyBindings(viewModel, data.target);
-    }catch(e){
-      errorHandler.onError(e);
-    }
+  function applyViewModel(data) {
+    data.target['@SymbolDecoViewModel'] = data.viewModelName;
+    ko.applyBindings(data.viewModel, data.target);
   }
 
   function viewModelLoadedSuccessfully(data){
@@ -56,15 +21,28 @@ define([
   }
 
   return function (domElement, subscribe) {
-
     domElement = domElement || document.body;
 
-    var elementList = utils.toArray(domElement.querySelectorAll("*[data-viewmodel]"));
+    var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
+      .filter(function(element){
+        while(element = element.parentNode){
+          if(element === domElement) return true;
+          if(element.hasAttribute("data-viewmodel")) return false;
+        }
+        return true;
+      })
+      .map(viewModelFactory.getViewModelFromAttributes)
+      .map(viewModelFactory.loadViewModel);
 
-    var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
-
-    return when.all(viewModelsLoaded).then(function(list){
-      list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
+    return Promise.all(viewModelsLoaded).then(function(list){
+      list
+        .filter(viewModelLoadedSuccessfully)
+        .map(function(data){
+          return viewModelFactory.createViewModel(data, subscribe);
+        })
+        .forEach(applyViewModel);
+    }).catch(function(error){
+      errorHandler.onError(error);
     });
   };
 });

@@ -1,8 +1,8 @@
-define(["when"], function(when){
+define(function(){
   function Templates(){}
 
   Templates.prototype.getTemplate = Templates.getTemplate = sinon.stub();
-  Templates.getTemplate.returns(when.resolve("<p>my template</p>"));
+  Templates.getTemplate.returns(Promise.resolve("<p>my template</p>"));
 
   Templates.reset = function(){
     Templates.getTemplate.reset();

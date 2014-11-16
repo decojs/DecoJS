@@ -865,57 +865,132 @@ define('deco/spa/whenContext',[
 
   return createContext().when;
 });
+define('deco/spa/viewModelFactory',[
+  "deco/errorHandler"
+], function(
+  errorHandler
+) {
+  return {
+    getViewModelFromAttributes: function(target){
+      var viewModelName = target.getAttribute("data-viewmodel");
+      var model = target.getAttribute("data-model");
+
+      return {
+        target: target,
+        viewModelName: viewModelName,
+        model: model
+      };
+    },
+    
+    loadViewModel: function(data){
+      return new Promise(function(resolve, reject){
+        require([data.viewModelName], resolve, reject);
+      }).then(function(ViewModel){
+        return {
+          viewModelName: data.viewModelName,
+          ViewModel: ViewModel,
+          model: data.model,
+          target: data.target
+        }
+      }, function(error){
+        errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
+        return null;
+      });
+    },
+
+    createViewModel: function(data, subscribe, parentViewModel) {
+      var model = (data.model && (data.model.charAt(0) == '{' || data.model.charAt(0) == '['))
+        ? JSON.parse(data.model)
+        : {};
+      var whenContext = subscribe();
+      var viewModel = new data.ViewModel(model, whenContext, parentViewModel);
+      viewModel['@SymbolDecoWhenContext'] = whenContext;
+      return {
+        viewModelName: data.viewModelName,
+        viewModel: viewModel,
+        target: data.target
+      }
+    }
+  }
+});
+define('deco/spa/extendKnockout',[
+  "deco/spa/viewModelFactory",
+  "deco/errorHandler",
+  "knockout"
+], function(
+  viewModelFactory,
+  errorHandler,
+  ko
+){
+  
+  function hasViewModel(node){
+    return node.nodeType === 1 && node.hasAttribute("data-viewmodel") && !('@SymbolDecoViewModel' in node);
+  }
+  
+  var originalBindingProvider = ko.bindingProvider.instance;
+
+  ko.bindingProvider.instance = {
+    nodeHasBindings: function(node){
+      return hasViewModel(node) || originalBindingProvider.nodeHasBindings(node);
+    },
+    getBindingAccessors: function(node, context){
+      if(hasViewModel(node)){
+        return {
+          '@SymbolDecoApplyViewModel': function(){ return null; }
+        };
+       }else{
+         return originalBindingProvider.getBindingAccessors(node, context);
+       }
+    }
+  };
+
+
+  ko.bindingHandlers['@SymbolDecoApplyViewModel'] = {
+    init: function(element, valueAccessor, allBindingsAccessor, deprecated, parentContext){
+      var parentViewModel = parentContext.$data;
+      var whenContext = parentViewModel['@SymbolDecoWhenContext']();
+
+      Promise.resolve(viewModelFactory.getViewModelFromAttributes(element))
+      .then(function(data){
+        return viewModelFactory.loadViewModel(data)
+      }).then(function(data){
+        return viewModelFactory.createViewModel(data, whenContext, parentViewModel);
+      }).then(function(data){
+        data.target['@SymbolDecoViewModel'] = data.viewModelName;
+        
+        var childContext = parentContext.createChildContext(data.viewModel);
+        ko.cleanNode(data.target);
+        ko.applyBindings(childContext, data.target);
+        
+        ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {
+          whenContext.destroy();
+        });
+      }).catch(function(error){
+        errorHandler.onError(error);
+      });
+
+      return {
+        controlsDescendantBindings: true
+      };
+    }
+  };
+});
 define('deco/spa/applyViewModels',[
   "deco/utils",
   "deco/errorHandler",
-  "knockout", 
-  "when", 
-  "when/callbacks"
+  "deco/spa/viewModelFactory",
+  "knockout",
+  "deco/spa/extendKnockout"
 ], function (
   utils, 
   errorHandler,
-  ko, 
-  when, 
-  callbacks
+  viewModelFactory,
+  ko
 ) {
 
-
-  function getAttributes(target){
-
-    var viewModelName = target.getAttribute("data-viewmodel");
-    var model = target.getAttribute("data-model");
-    if (model && model.indexOf("{") == 0) {
-      model = JSON.parse(model);
-    }
-
-    return {
-      target: target,
-      viewModelName: viewModelName,
-      model: model
-    };
-  }
-
-
-  function loadViewModel(data){
-
-    return callbacks.call(require, [
-      data.viewModelName
-    ]).then(function(ViewModel){
-      data.ViewModel = ViewModel;
-      return data;
-    }, function(error){
-      errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
-      return null;
-    });
-  }
-
-  function applyViewModel(subscribe, data) {
-    try{
-      var viewModel = new data.ViewModel(data.model || {}, subscribe);
-      ko.applyBindings(viewModel, data.target);
-    }catch(e){
-      errorHandler.onError(e);
-    }
+  function applyViewModel(data) {
+    data.target['@SymbolDecoViewModel'] = data.viewModelName;
+    ko.applyBindings(data.viewModel, data.target);
   }
 
   function viewModelLoadedSuccessfully(data){
@@ -923,15 +998,28 @@ define('deco/spa/applyViewModels',[
   }
 
   return function (domElement, subscribe) {
-
     domElement = domElement || document.body;
 
-    var elementList = utils.toArray(domElement.querySelectorAll("*[data-viewmodel]"));
+    var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
+      .filter(function(element){
+        while(element = element.parentNode){
+          if(element === domElement) return true;
+          if(element.hasAttribute("data-viewmodel")) return false;
+        }
+        return true;
+      })
+      .map(viewModelFactory.getViewModelFromAttributes)
+      .map(viewModelFactory.loadViewModel);
 
-    var viewModelsLoaded = elementList.map(getAttributes).map(loadViewModel);
-
-    return when.all(viewModelsLoaded).then(function(list){
-      list.filter(viewModelLoadedSuccessfully).forEach(applyViewModel.bind(null, subscribe))
+    return Promise.all(viewModelsLoaded).then(function(list){
+      list
+        .filter(viewModelLoadedSuccessfully)
+        .map(function(data){
+          return viewModelFactory.createViewModel(data, subscribe);
+        })
+        .forEach(applyViewModel);
+    }).catch(function(error){
+      errorHandler.onError(error);
     });
   };
 });
@@ -1032,7 +1120,7 @@ define('deco/spa/PageLoader',[
     this.currentXHR = null;
   }
 
-  PageLoader.prototype.loadPage = function(path, resolver){
+  PageLoader.prototype.loadPage = function(path){
 
     this.abort();
 
@@ -1040,12 +1128,17 @@ define('deco/spa/PageLoader',[
 
     if(this.cache === false)
       url = ajax.cacheBust(url);
-
-    this.currentXHR = ajax(url, {}, "GET", function(xhr){
-      if(xhr.status === 200)
-        resolver.resolve(xhr.responseText);
-      else
-        resolver.reject({error: xhr.status, content: xhr.responseText});
+    
+    var self = this;
+    return new Promise(function(resolve, reject){
+      self.currentXHR = ajax(url, {}, "GET", function(xhr){
+        self.currentXHR = null;
+        if(xhr.status === 200){
+          resolve(xhr.responseText);
+        }else{
+          reject({error: xhr.status, content: xhr.responseText});
+        }
+      });
     });
   };
 
@@ -1059,12 +1152,10 @@ define('deco/spa/PageLoader',[
 });
 define('deco/spa/Templates',[
   "deco/spa/PageLoader",
-  "deco/utils",
-  "when"
+  "deco/utils"
 ], function(
   PageLoader,
-  utils,
-  when
+  utils
 ){
 
   function defaultConfig(){
@@ -1103,13 +1194,10 @@ define('deco/spa/Templates',[
     var normalizedPath = path.toLowerCase();
 
     if(normalizedPath in this.templates){
-      return when.resolve(this.templates[normalizedPath]);
+      return Promise.resolve(this.templates[normalizedPath]);
     }else{
-      var deferred = when.defer();
-
-      this.pageLoader.loadPage(path, deferred.resolver);
-      
-      return deferred.promise.then(function(content){
+      return this.pageLoader.loadPage(path)
+      .then(function(content){
         if(this.cachePages)
           this.templates[normalizedPath] = content;
         

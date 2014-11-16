@@ -17,13 +17,12 @@
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.4.0",
+  "version": "0.5.0",
   "devDependencies": {
     "karma": "0.12.9",
     "karma-jasmine": "0.1.5",
     "karma-requirejs": "0.2.1",
     "karma-phantomjs-launcher": "0.1.4",
-    "requirejs": "2.1.11",
     "jazzmine": "0.4.1",
     "sinon": "1.9.1",
     "jasmine-sinon": "0.3.1",
@@ -38,5 +37,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/decojs/DecoJS"
+  },
+  "dependencies": {
+    "es6-promise": "^2.0.0",
+    "knockout": "^3.2.0",
+    "es5-shim": "^4.0.3",
+    "requirejs": "^2.1.15",
+    "json": "^9.0.2"
   }
 }

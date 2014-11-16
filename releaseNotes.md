@@ -1,5 +1,10 @@
 # DecoJS Release Notes
 
+## 0.5.0 (2014-11-16)
+* Updated to use Knockout 3.2.0
+* Got rid of when.js in favor of native promises (ES6 Promise polyfill is available)
+* Added support for nested viewmodels
+
 ## 0.4.0 (2014-08-20)
 * Cleaned up the QVC code
 * Made the parameters to a command/query accessible

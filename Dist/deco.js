@@ -882,6 +882,14 @@ define('deco/spa/viewModelFactory',[
       };
     },
     
+    getParentViewModelElement: function(element, maxAncestor){
+      while(element = element.parentNode){
+        if(element === maxAncestor) return null;
+        if(element.hasAttribute("data-viewmodel")) return element;
+      }
+      return null;
+    },
+    
     loadViewModel: function(data){
       return new Promise(function(resolve, reject){
         require([data.viewModelName], resolve, reject);
@@ -947,7 +955,7 @@ define('deco/spa/extendKnockout',[
 
   ko.bindingHandlers['@SymbolDecoApplyViewModel'] = {
     init: function(element, valueAccessor, allBindingsAccessor, deprecated, parentContext){
-      var parentViewModel = parentContext.$data;
+      var parentViewModel = viewModelFactory.getParentViewModelElement(element)['@SymbolDecoViewModel'];
       var whenContext = parentViewModel['@SymbolDecoWhenContext']();
 
       Promise.resolve(viewModelFactory.getViewModelFromAttributes(element))
@@ -956,13 +964,14 @@ define('deco/spa/extendKnockout',[
       }).then(function(data){
         return viewModelFactory.createViewModel(data, whenContext, parentViewModel);
       }).then(function(data){
-        data.target['@SymbolDecoViewModel'] = data.viewModelName;
+        data.target['@SymbolDecoViewModel'] = data.viewModel;
         
         var childContext = parentContext.createChildContext(data.viewModel);
         ko.cleanNode(data.target);
         ko.applyBindings(childContext, data.target);
         
         ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {
+          delete data.target['@SymbolDecoViewModel'];
           whenContext.destroy();
         });
       }).catch(function(error){
@@ -989,7 +998,7 @@ define('deco/spa/applyViewModels',[
 ) {
 
   function applyViewModel(data) {
-    data.target['@SymbolDecoViewModel'] = data.viewModelName;
+    data.target['@SymbolDecoViewModel'] = data.viewModel;
     ko.applyBindings(data.viewModel, data.target);
   }
 
@@ -1001,15 +1010,11 @@ define('deco/spa/applyViewModels',[
     domElement = domElement || document.body;
 
     var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
-      .filter(function(element){
-        while(element = element.parentNode){
-          if(element === domElement) return true;
-          if(element.hasAttribute("data-viewmodel")) return false;
-        }
-        return true;
-      })
-      .map(viewModelFactory.getViewModelFromAttributes)
-      .map(viewModelFactory.loadViewModel);
+    .filter(function(element){
+      return viewModelFactory.getParentViewModelElement(element, domElement) ? false : true;
+    })
+    .map(viewModelFactory.getViewModelFromAttributes)
+    .map(viewModelFactory.loadViewModel);
 
     return Promise.all(viewModelsLoaded).then(function(list){
       list

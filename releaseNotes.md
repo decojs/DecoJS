@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.5.1 (2014-11-16)
+* Fixed nested data-viewmodel could not be used inside foreach (issue 15)
+
 ## 0.5.0 (2014-11-16)
 * Updated to use Knockout 3.2.0
 * Got rid of when.js in favor of native promises (ES6 Promise polyfill is available)

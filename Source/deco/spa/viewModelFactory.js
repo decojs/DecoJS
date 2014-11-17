@@ -15,6 +15,14 @@ define([
       };
     },
     
+    getParentViewModelElement: function(element, maxAncestor){
+      while(element = element.parentNode){
+        if(element === maxAncestor) return null;
+        if(element.hasAttribute("data-viewmodel")) return element;
+      }
+      return null;
+    },
+    
     loadViewModel: function(data){
       return new Promise(function(resolve, reject){
         require([data.viewModelName], resolve, reject);

@@ -12,7 +12,7 @@ define([
 ) {
 
   function applyViewModel(data) {
-    data.target['@SymbolDecoViewModel'] = data.viewModelName;
+    data.target['@SymbolDecoViewModel'] = data.viewModel;
     ko.applyBindings(data.viewModel, data.target);
   }
 
@@ -24,15 +24,11 @@ define([
     domElement = domElement || document.body;
 
     var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
-      .filter(function(element){
-        while(element = element.parentNode){
-          if(element === domElement) return true;
-          if(element.hasAttribute("data-viewmodel")) return false;
-        }
-        return true;
-      })
-      .map(viewModelFactory.getViewModelFromAttributes)
-      .map(viewModelFactory.loadViewModel);
+    .filter(function(element){
+      return viewModelFactory.getParentViewModelElement(element, domElement) ? false : true;
+    })
+    .map(viewModelFactory.getViewModelFromAttributes)
+    .map(viewModelFactory.loadViewModel);
 
     return Promise.all(viewModelsLoaded).then(function(list){
       list

@@ -32,7 +32,7 @@ define([
 
   ko.bindingHandlers['@SymbolDecoApplyViewModel'] = {
     init: function(element, valueAccessor, allBindingsAccessor, deprecated, parentContext){
-      var parentViewModel = parentContext.$data;
+      var parentViewModel = viewModelFactory.getParentViewModelElement(element)['@SymbolDecoViewModel'];
       var whenContext = parentViewModel['@SymbolDecoWhenContext']();
 
       Promise.resolve(viewModelFactory.getViewModelFromAttributes(element))
@@ -41,13 +41,14 @@ define([
       }).then(function(data){
         return viewModelFactory.createViewModel(data, whenContext, parentViewModel);
       }).then(function(data){
-        data.target['@SymbolDecoViewModel'] = data.viewModelName;
+        data.target['@SymbolDecoViewModel'] = data.viewModel;
         
         var childContext = parentContext.createChildContext(data.viewModel);
         ko.cleanNode(data.target);
         ko.applyBindings(childContext, data.target);
         
         ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {
+          delete data.target['@SymbolDecoViewModel'];
           whenContext.destroy();
         });
       }).catch(function(error){

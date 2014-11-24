@@ -42,7 +42,7 @@ define([
     createViewModel: function(data, subscribe, parentViewModel) {
       var model = (data.model && (data.model.charAt(0) == '{' || data.model.charAt(0) == '['))
         ? JSON.parse(data.model)
-        : {};
+        : undefined;
       var whenContext = subscribe();
       var viewModel = new data.ViewModel(model, whenContext, parentViewModel);
       viewModel['@SymbolDecoWhenContext'] = whenContext;

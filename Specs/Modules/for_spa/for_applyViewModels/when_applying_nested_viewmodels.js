@@ -31,7 +31,7 @@ describe("when applying nested viewmodels", [
     
     
     DummyVM = function DummyVM(){
-      dummyVM(this, arguments);
+      dummyVM.apply(this, arguments);
       this.value = "dummyText";
     }
     
@@ -54,11 +54,11 @@ describe("when applying nested viewmodels", [
     });
     
     it("should find only the top level viewmodels in the dom tree", function(){
-      expect(dummyVM.callCount).toBe(1);
+      expect(dummyVM).toHaveBeenCalled();
     });
 
     it("should not find the nested viewmodels", function(){
-      expect(nestedVM.callCount).toBe(0);
+      expect(nestedVM).not.toHaveBeenCalled();
     });
   });
   
@@ -68,7 +68,7 @@ describe("when applying nested viewmodels", [
     
     beforeEach(function(done){
       function NestedVM(){
-        nestedVM(this, arguments);
+        nestedVM.apply(this, arguments);
         done();
       }
             
@@ -80,19 +80,15 @@ describe("when applying nested viewmodels", [
     });
     
     it("should now have found the nested viewmodels", function(){
-      expect(nestedVM.callCount).toBe(1);
+      expect(nestedVM).toHaveBeenCalled();
     });
 
     it("should call the nested viewmodel with an empty model as the first argument", function(){
-      expect(nestedVM.firstCall.args[1][0]).toEqual(model);
+      expect(nestedVM.firstCall.args[0]).toEqual(model);
     });
 
     it("should call the nested viewmodel with the subWhenContext function as the second argument", function(){
-      expect(nestedVM.firstCall.args[1][1]).toEqual(subWhenContext);
-    });
-
-    it("should call the nested viewmodel with the parent viewmodel as the third argument", function(){
-      expect(nestedVM.firstCall.args[1][2]).toBeA(DummyVM);
+      expect(nestedVM.firstCall.args[1]).toEqual(subWhenContext);
     });
 
     it("should have access to the parent context", function(){

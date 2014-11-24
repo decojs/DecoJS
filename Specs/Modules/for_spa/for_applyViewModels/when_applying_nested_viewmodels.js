@@ -62,7 +62,7 @@ describe("when applying nested viewmodels", [
     });
   });
   
-  describe("and waiting for the viewmodel to be applied", function(){
+  describe("and the nested viewmodel has been loaded with a model", function(){
     
     var elm;
     
@@ -83,8 +83,53 @@ describe("when applying nested viewmodels", [
       expect(nestedVM).toHaveBeenCalled();
     });
 
-    it("should call the nested viewmodel with an empty model as the first argument", function(){
+    it("should call the nested viewmodel with the model as the first argument", function(){
       expect(nestedVM.firstCall.args[0]).toEqual(model);
+    });
+
+    it("should call the nested viewmodel with the subWhenContext function as the second argument", function(){
+      expect(nestedVM.firstCall.args[1]).toEqual(subWhenContext);
+    });
+
+    it("should have access to the parent context", function(){
+      expect(elm.firstChild.firstChild.textContent).toBe("dummyText");
+    });
+    
+    describe("when the nested element is destroyed", function(){
+      
+      beforeEach(function(){
+        ko.cleanNode(elm.firstChild.firstChild);
+      });
+      
+      it("should destroy the when context", function(){
+        expect(parentContext.destroy.callCount).toBe(1);
+      });
+    });
+  });
+  
+  describe("and the nested viewmodel has been loaded with params", function(){
+    
+    var elm;
+    
+    beforeEach(function(done){
+      function NestedVM(){
+        nestedVM.apply(this, arguments);
+        done();
+      }
+            
+      require.onSecondCall().callsArgWith(1, NestedVM);
+      
+      elm = an_element.withNestedViewModelAndParams("dummyVM", "nestedVM", "something: value");
+
+      applyViewModels(elm, subscribe);
+    });
+    
+    it("should now have found the nested viewmodels", function(){
+      expect(nestedVM).toHaveBeenCalled();
+    });
+
+    it("should call the nested viewmodel with the model as the first argument", function(){
+      expect(nestedVM.firstCall.args[0]).toEqual({something: "dummyText"});
     });
 
     it("should call the nested viewmodel with the subWhenContext function as the second argument", function(){

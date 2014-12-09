@@ -6,7 +6,7 @@ define([
 
 
   
-  function newPath(currentPath, link, index){
+  function findNewPath(currentPath, link, index){
     var isRelative = _.startsWith(link, '/') === false;
     var isFolder = _.endsWith(link, '/');
     
@@ -26,35 +26,36 @@ define([
     }
 
     var out = [];
+    var isPretty = true;
+    var segmentsToSkip = 0;
 
-    for(var i = path.length>>>0; i--;){
+    for(var i = path.length-1; i>=0; i--){
       if(path[i] === ""){
-        continue;
+        isPretty = false;
       }else if(path[i] === "."){
-        continue;
+        isPretty = false;
       }else if(path[i] === "..") {
-        i--;
+        isPretty = false;
+        segmentsToSkip++;
+      }else if(segmentsToSkip > 0){
+        segmentsToSkip--;
       }else{
         out.unshift(path[i]);
       }
     }
 
-    return out;
+    return {isAbsoluteAndPretty: !isFolder && !isRelative && isPretty, path: out};
   }
 
   function hashChanged(config, onPageChanged, document){
-
-    var path = _.after(document.location.href, '#');
-
-    var isRelative = _.startsWith(path, '/') == false;
-    var isFolder = _.endsWith(path, '/');
-
-    if(isRelative || isFolder){
-      var newHash = newPath(this.currentPath, path, config.index).join('/');
-      document.location.replace("#/" + newHash);
+    var link = _.after(document.location.href, '#');
+    var result = findNewPath(this.currentPath, link, config.index);
+    
+    if(result.isAbsoluteAndPretty){
+      this.currentPath = result.path;
+      onPageChanged(result.path.join('/'), result.path.map(decodeURIComponent));
     }else{
-      this.currentPath = newPath(this.currentPath, path, config.index);
-      onPageChanged(this.currentPath.join('/'), this.currentPath.map(function(p){return decodeURIComponent(p);}));
+      document.location.replace("#/" + result.path.join('/'));
     }
 
   }

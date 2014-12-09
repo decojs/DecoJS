@@ -4,8 +4,7 @@ describe("when the hashchange event listener is called", [
   hashNavigation
 ){
 
-  var result,
-    onPageChangedSpy,
+  var onPageChangedSpy,
     replaceSpy,
     doc,
     onHashChange;
@@ -32,7 +31,7 @@ describe("when the hashchange event listener is called", [
       }
     };
 
-    result = hashNavigation.start(config, onPageChangedSpy, doc, global);
+    hashNavigation.start(config, onPageChangedSpy, doc, global);
   });
 
   describe("with a path starting with /", function(){
@@ -47,6 +46,34 @@ describe("when the hashchange event listener is called", [
       expect(onPageChangedSpy.callCount).toBe(1);
       expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath");
       expect(onPageChangedSpy.firstCall.args[1]).toEqual(["newPath"]);
+    });
+  });
+
+  describe("with a path that is absolute and contains ..", function(){
+
+    because(function(){
+      replaceSpy.reset();
+      doc.location.href = "http://example.com/#/../newPath";
+      onHashChange();
+    });
+
+    it("should call document.location.replace with the new path", function(){
+      expect(replaceSpy.callCount).toBe(1);
+      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath");
+    });
+  });
+  
+  describe("with a path that is absolute and contains .", function(){
+
+    because(function(){
+      replaceSpy.reset();
+      doc.location.href = "http://example.com/#/./newPath";
+      onHashChange();
+    });
+
+    it("should call document.location.replace with the new path", function(){
+      expect(replaceSpy.callCount).toBe(1);
+      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath");
     });
   });
 
@@ -92,6 +119,20 @@ describe("when the hashchange event listener is called", [
     });
   });
 
+  describe("with a path with too many ..", function(){
+
+    because(function(){
+      replaceSpy.reset();
+      doc.location.href = "http://example.com/#../../home";
+      onHashChange();
+    });
+
+    it("should call document.location.replace with the new path, which is home", function(){
+      expect(replaceSpy.callCount).toBe(1);
+      expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+    });
+  });
+
   describe("with a path containing two consecutive slashes", function(){
 
     because(function(){
@@ -100,10 +141,9 @@ describe("when the hashchange event listener is called", [
       onHashChange();
     });
 
-    it("should call onPageChanged with the new path, ending with home", function(){
-      expect(onPageChangedSpy.callCount).toBe(1);
-      expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath/home");
-      expect(onPageChangedSpy.firstCall.args[1]).toEqual(["newPath", "home"]);
+    it("should call document.location.replace with the new pretty path, ending with home", function(){
+      expect(replaceSpy.callCount).toBe(1);
+      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath/home");
     });
   });
 
@@ -147,6 +187,77 @@ describe("when the hashchange event listener is called", [
       expect(onPageChangedSpy.callCount).toBe(1);
       expect(onPageChangedSpy.firstCall.args[0]).toBe("%3A%2F%2F/%C3%BC");
       expect(onPageChangedSpy.firstCall.args[1]).toEqual(["://", "ü"]);
+    });
+  });
+  
+  
+  describe("when the current path only has one segment", function(){    
+    beforeEach(function(){
+      doc.location.href = "http://example.com/#/index";
+      hashNavigation.start(config, onPageChangedSpy, doc, global);
+    });
+
+    describe("with a simple path", function(){
+
+      because(function(){
+        replaceSpy.reset();
+        doc.location.href = "http://example.com/#home";
+        onHashChange();
+      });
+
+      it("should call document.location.replace with the new path, which is home", function(){
+        expect(replaceSpy.callCount).toBe(1);
+        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+      });
+    });
+
+    describe("with a path with too many ..", function(){
+
+      because(function(){
+        replaceSpy.reset();
+        doc.location.href = "http://example.com/#../home";
+        onHashChange();
+      });
+
+      it("should call document.location.replace with the new path, which is home", function(){
+        expect(replaceSpy.callCount).toBe(1);
+        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+      });
+    });
+  });
+  
+  describe("when the current path has three segment", function(){    
+    beforeEach(function(){
+      doc.location.href = "http://example.com/#/path/to/page";
+      hashNavigation.start(config, onPageChangedSpy, doc, global);
+    });
+
+    describe("with a simple path", function(){
+
+      because(function(){
+        replaceSpy.reset();
+        doc.location.href = "http://example.com/#home";
+        onHashChange();
+      });
+
+      it("should call document.location.replace with the new path, which is path/to/home", function(){
+        expect(replaceSpy.callCount).toBe(1);
+        expect(replaceSpy.firstCall.args[0]).toBe("#/path/to/home");
+      });
+    });
+
+    describe("with a path with two .. in a row", function(){
+
+      because(function(){
+        replaceSpy.reset();
+        doc.location.href = "http://example.com/#../../home";
+        onHashChange();
+      });
+
+      it("should call document.location.replace with the new path, which is home", function(){
+        expect(replaceSpy.callCount).toBe(1);
+        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+      });
     });
   });
 });

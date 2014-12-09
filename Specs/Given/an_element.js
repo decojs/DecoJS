@@ -26,6 +26,21 @@ define([], function(){
 
       return elm;
     },
+    withNestedViewModelAndParams: function(first, second, params){
+
+      var elm = document.createElement("div");
+      var div = document.createElement("div");
+      var child = document.createElement("div");
+      div.setAttribute("data-viewmodel", first);
+      child.setAttribute("data-viewmodel", second);
+      if(params)
+        child.setAttribute("data-params", params);
+      child.setAttribute("data-bind", "text: $parent.value");
+      div.appendChild(child);
+      elm.appendChild(div);
+
+      return elm;
+    },
     withChildrenAndATitle: function(titleText){
       var elm = this.withChildren();
       var title = document.createElement("meta");

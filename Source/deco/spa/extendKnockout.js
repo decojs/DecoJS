@@ -45,7 +45,7 @@ define([
         data.target['@SymbolDecoViewModel'] = data.viewModel;
         
         var childContext = parentContext.createChildContext(data.viewModel);
-        ko.cleanNode(data.target);
+        ko.utils.domData.clear(data.target);
         ko.applyBindings(childContext, data.target);
         
         ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {

@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.5.2 (2014-12-09)
+* Fixed an issue where relative paths in the url fragment could cause an infinite JS loop
+
 ## 0.5.1 (2014-11-16)
 * Fixed nested data-viewmodel could not be used inside foreach (issue 15)
 

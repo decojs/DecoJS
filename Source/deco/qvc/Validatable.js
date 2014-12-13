@@ -18,7 +18,7 @@ define([
     
     
     init: {
-      recursivlyExtendParameters(self.validatableParameters, self.validatableFields, []);
+      recursivlyExtendParameters(self.validatableParameters, self.validatableFields, [], name);
       if(constraintResolver)
         constraintResolver.applyValidationConstraints(name, self);
     }
@@ -90,22 +90,16 @@ define([
   
   
   
-  function recursivlyExtendParameters(parameters, validatableFields, parents) {
+  function recursivlyExtendParameters(parameters, validatableFields, parents, executableName) {
     for (var key in parameters) {
       var property = parameters[key];
       var path = parents.concat([key]);
-      if (ko.isObservable(property)) {
-        property.extend({
-          validation: {
-            name:key,
-            path:path.join(".")
-          }
-        });
-        validatableFields.push(property);
+      if (ko.isObservable(property)) {        
+        validatableFields.push(applyValidatorTo(property, key, path, executableName));
       }
       property = ko.utils.unwrapObservable(property);
       if (typeof property === "object") {
-        recursivlyExtendParameters(property, validatableFields, path);
+        recursivlyExtendParameters(property, validatableFields, path, executableName);
       }
     }
   }
@@ -152,7 +146,23 @@ define([
     validatable.validator.message(newMessage);
   };
   
-  
+  function applyValidatorTo(property, key, path, executableName){
+    if('validator' in property && property.validator instanceof Validator){
+      throw new Error("Observable `"+path+"` is parameter `"+property.validator.path+"` in "+property.validator.executableName+" and therefore cannot be a parameter in "+executableName+"!");
+    }
+
+    property.validator = new Validator(property, {
+      name: key,
+      path: path.join("."),
+      executableName: executableName
+    });
+
+    property.subscribe(function (newValue) {
+      property.validator.validate(newValue);
+    });
+    
+    return property;
+  }
   
   return Validatable;
 });

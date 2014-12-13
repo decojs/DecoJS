@@ -11,7 +11,7 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
       parameters = {
         name: ko.observable("deco")
       };
-      validatable = new Validatable("",parameters);
+      validatable = new Validatable("SomeExecutable",parameters);
       validatableFields = validatable.validatableFields;
       
     });
@@ -32,6 +32,10 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
     it("should set the correct path on the validator", function(){
       expect(parameters.name.validator.path).toBe("name");
     });
+    
+    it("should set the correct executableName on the validator", function(){
+      expect(parameters.name.validator.executableName).toBe("SomeExecutable");
+    });
   });
   
   describe("with nested fields inside an observable", function(){
@@ -44,7 +48,7 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
         }),
         name: ko.observable("name")
       };
-      validatable = new Validatable("", parameters);
+      validatable = new Validatable("SomeExecutable", parameters);
       validatableFields = validatable.validatableFields;
       
     });
@@ -67,6 +71,10 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
     it("should set the correct path on the validator", function(){
       expect(parameters.address().street.validator.path).toBe("address.street");
     });
+    
+    it("should set the correct ExecutableName on the validator", function(){
+      expect(parameters.address().street.validator.executableName).toBe("SomeExecutable");
+    });
   });
   
   describe("with nested fields", function(){
@@ -79,7 +87,7 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
         },
         name: ko.observable("name")
       };
-      validatable = new Validatable("",parameters);
+      validatable = new Validatable("SomeExecutable",parameters);
       validatableFields = validatable.validatableFields;
       
     });
@@ -100,6 +108,10 @@ describe("when extending a Validatable", ["knockout", "deco/qvc/Validatable", "d
     
     it("should set the correct path on the validator", function(){
       expect(parameters.address.street.validator.path).toBe("address.street");
+    });
+    
+    it("should set the correct ExecutableName on the validator", function(){
+      expect(parameters.address.street.validator.executableName).toBe("SomeExecutable");
     });
   });
 });

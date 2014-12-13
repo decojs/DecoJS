@@ -14,14 +14,6 @@ define(["deco/qvc/Validator", "knockout"], function(Validator, ko){
       }
     };
     
-    ko.extenders.validation = function (target, options) {
-      target.validator = new Validator(target, options);
-      target.subscribe(function (newValue) {
-        target.validator.validate(newValue);
-      });
-      return target;
-    };
-    
     ko.bindingHandlers.command = ko.bindingHandlers.query = {
       init: function (element, valueAccessor, allBindingAccessor, viewModel) {
         ko.applyBindingsToNode(element, { click: valueAccessor() }, viewModel);

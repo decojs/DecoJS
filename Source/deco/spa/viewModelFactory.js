@@ -39,12 +39,12 @@ define([
       });
     },
 
-    createViewModel: function(data, subscribe, parentViewModel) {
+    createViewModel: function(data, subscribe, params) {
       var model = (data.model && (data.model.charAt(0) == '{' || data.model.charAt(0) == '['))
         ? JSON.parse(data.model)
-        : {};
+        : params;
       var whenContext = subscribe();
-      var viewModel = new data.ViewModel(model, whenContext, parentViewModel);
+      var viewModel = new data.ViewModel(model, whenContext);
       viewModel['@SymbolDecoWhenContext'] = whenContext;
       return {
         viewModelName: data.viewModelName,

@@ -20,7 +20,7 @@ describe("when applying a viewmodel without a model", [
 
     define("dummyVM", [], function(){
       return function DummyVM(){
-        dummyVM(this, arguments);
+        dummyVM.apply(this, arguments);
       };
     });
     
@@ -36,14 +36,14 @@ describe("when applying a viewmodel without a model", [
   });
 
   it("should find all the viewmodels in the dom tree", function(){
-    expect(dummyVM.callCount).toBe(1);
+    expect(dummyVM).toHaveBeenCalled(1);
   });
 
-  it("should call the viewmodule with an empty model as the first argument", function(){
-    expect(dummyVM.firstCall.args[1][0]).toEqual({});
+  it("should call the viewmodule with nothing as the first argument", function(){
+    expect(dummyVM).toHaveBeenCalledWith(undefined);
   });
 
   it("should call the viewmodule with the subscribe function as the second argument", function(){
-    expect(dummyVM.firstCall.args[1][1]).toEqual(whenContext);
+    expect(dummyVM).toHaveBeenCalledWith(undefined, whenContext);
   });
 });

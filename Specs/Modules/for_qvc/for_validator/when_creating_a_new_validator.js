@@ -5,7 +5,7 @@ describe("when creating a new validator", {
   var validator;
   
   beforeEach(function(){
-    validator = new Validator(ko.observable(), {name:"name", path:"some.name"});
+    validator = new Validator(ko.observable(), {name:"name", path:"some.name", executableName:"SomeExecutable"});
   });
   
   it("should be valid by default", function(){
@@ -22,6 +22,10 @@ describe("when creating a new validator", {
   
   it("should have a path", function(){
     expect(validator.path).toBe("some.name");
+  });
+  
+  it("should belong to an executable", function(){
+    expect(validator.executableName).toBe("SomeExecutable");
   });
   
   describe("when reseting the validator", function(){

@@ -27,6 +27,7 @@ define([
 
     this.name = options && options.name;
     this.path = options && options.path;
+    this.executableName = options && options.executableName;
   }
   
   Validator.prototype.setConstraints = function(constraints){

@@ -139,6 +139,11 @@ define('deco/qvc/Validator',[
 
     this.name = options && options.name;
     this.path = options && options.path;
+    this.executableName = options && options.executableName;
+    
+    if(target && ko.isObservable(target)){
+      target.isValid = function(){return self.isValid();};
+    }
   }
   
   Validator.prototype.setConstraints = function(constraints){
@@ -187,14 +192,6 @@ define('deco/qvc/koExtensions',["deco/qvc/Validator", "knockout"], function(Vali
       }
     };
     
-    ko.extenders.validation = function (target, options) {
-      target.validator = new Validator(target, options);
-      target.subscribe(function (newValue) {
-        target.validator.validate(newValue);
-      });
-      return target;
-    };
-    
     ko.bindingHandlers.command = ko.bindingHandlers.query = {
       init: function (element, valueAccessor, allBindingAccessor, viewModel) {
         ko.applyBindingsToNode(element, { click: valueAccessor() }, viewModel);
@@ -224,7 +221,7 @@ define('deco/qvc/Validatable',[
     
     
     init: {
-      recursivlyExtendParameters(self.validatableParameters, self.validatableFields, []);
+      recursivlyExtendParameters(self.validatableParameters, self.validatableFields, [], name);
       if(constraintResolver)
         constraintResolver.applyValidationConstraints(name, self);
     }
@@ -296,22 +293,16 @@ define('deco/qvc/Validatable',[
   
   
   
-  function recursivlyExtendParameters(parameters, validatableFields, parents) {
+  function recursivlyExtendParameters(parameters, validatableFields, parents, executableName) {
     for (var key in parameters) {
       var property = parameters[key];
       var path = parents.concat([key]);
-      if (ko.isObservable(property)) {
-        property.extend({
-          validation: {
-            name:key,
-            path:path.join(".")
-          }
-        });
-        validatableFields.push(property);
+      if (ko.isObservable(property)) {        
+        validatableFields.push(applyValidatorTo(property, key, path, executableName));
       }
       property = ko.utils.unwrapObservable(property);
       if (typeof property === "object") {
-        recursivlyExtendParameters(property, validatableFields, path);
+        recursivlyExtendParameters(property, validatableFields, path, executableName);
       }
     }
   }
@@ -358,7 +349,23 @@ define('deco/qvc/Validatable',[
     validatable.validator.message(newMessage);
   };
   
-  
+  function applyValidatorTo(property, key, path, executableName){
+    if('validator' in property && property.validator instanceof Validator){
+      throw new Error("Observable `"+path+"` is parameter `"+property.validator.path+"` in "+property.validator.executableName+" and therefore cannot be a parameter in "+executableName+"!");
+    }
+
+    property.validator = new Validator(property, {
+      name: key,
+      path: path.join("."),
+      executableName: executableName
+    });
+
+    property.subscribe(function (newValue) {
+      property.validator.validate(newValue);
+    });
+    
+    return property;
+  }
   
   return Validatable;
 });
@@ -906,12 +913,12 @@ define('deco/spa/viewModelFactory',[
       });
     },
 
-    createViewModel: function(data, subscribe, parentViewModel) {
+    createViewModel: function(data, subscribe, params) {
       var model = (data.model && (data.model.charAt(0) == '{' || data.model.charAt(0) == '['))
         ? JSON.parse(data.model)
-        : {};
+        : params;
       var whenContext = subscribe();
-      var viewModel = new data.ViewModel(model, whenContext, parentViewModel);
+      var viewModel = new data.ViewModel(model, whenContext);
       viewModel['@SymbolDecoWhenContext'] = whenContext;
       return {
         viewModelName: data.viewModelName,
@@ -930,11 +937,8 @@ define('deco/spa/extendKnockout',[
   errorHandler,
   ko
 ){
-  
-  function hasViewModel(node){
-    return node.nodeType === 1 && node.hasAttribute("data-viewmodel") && !('@SymbolDecoViewModel' in node);
-  }
-  
+    
+  var nativeBindingProviderInstance = new ko.bindingProvider();
   var originalBindingProvider = ko.bindingProvider.instance;
 
   ko.bindingProvider.instance = {
@@ -957,32 +961,81 @@ define('deco/spa/extendKnockout',[
     init: function(element, valueAccessor, allBindingsAccessor, deprecated, parentContext){
       var parentViewModel = viewModelFactory.getParentViewModelElement(element)['@SymbolDecoViewModel'];
       var whenContext = parentViewModel['@SymbolDecoWhenContext']();
-
+      try{
+      var params = getComponentParamsFromCustomElement(element, parentContext);
+      }catch(e){
+        console.error(e.stack);
+      }
       Promise.resolve(viewModelFactory.getViewModelFromAttributes(element))
       .then(function(data){
         return viewModelFactory.loadViewModel(data)
       }).then(function(data){
-        return viewModelFactory.createViewModel(data, whenContext, parentViewModel);
+        return viewModelFactory.createViewModel(data, whenContext, params);
       }).then(function(data){
         data.target['@SymbolDecoViewModel'] = data.viewModel;
         
         var childContext = parentContext.createChildContext(data.viewModel);
-        ko.cleanNode(data.target);
+        ko.utils.domData.clear(data.target);
         ko.applyBindings(childContext, data.target);
         
         ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {
           delete data.target['@SymbolDecoViewModel'];
-          whenContext.destroy();
+          whenContext.destroyChildContexts();
         });
-      }).catch(function(error){
-        errorHandler.onError(error);
-      });
+      })['catch'](errorHandler.onError);
 
       return {
         controlsDescendantBindings: true
       };
     }
   };
+  
+  //this is stolen from the knockout sourcecode, and I had to copy it since it's not exposed as a public api
+
+  function getComponentParamsFromCustomElement(elem, bindingContext) {
+    var paramsAttribute = elem.getAttribute('data-params');
+
+    if (!paramsAttribute) {
+      return undefined;
+    }
+    
+    var params = nativeBindingProviderInstance['parseBindingsString'](paramsAttribute, bindingContext, elem, { 'valueAccessors': true, 'bindingParams': true });
+    var rawParamComputedValues = Object.create(null);
+    for(paramName in params) {
+      var paramValue = params[paramName];
+      rawParamComputedValues[paramName] = ko.computed(paramValue, null, { disposeWhenNodeIsRemoved: elem });
+    }
+    var result = Object.create(null);
+    for(paramName in rawParamComputedValues) {
+      var paramValueComputed = rawParamComputedValues[paramName];
+      var paramValue = paramValueComputed.peek();
+      // Does the evaluation of the parameter value unwrap any observables?
+      if (!paramValueComputed.isActive()) {
+        // No it doesn't, so there's no need for any computed wrapper. Just pass through the supplied value directly.
+        // Example: "someVal: firstName, age: 123" (whether or not firstName is an observable/computed)
+        result[paramName] = paramValue;
+      } else {
+        // Yes it does. Supply a computed property that unwraps both the outer (binding expression)
+        // level of observability, and any inner (resulting model value) level of observability.
+        // This means the component doesn't have to worry about multiple unwrapping. If the value is a
+        // writable observable, the computed will also be writable and pass the value on to the observable.
+        result[paramName] = ko.computed({
+          'read': function() {
+            return ko.unwrap(paramValueComputed());
+          },
+          'write': ko.isWriteableObservable(paramValue) && function(value) {
+            paramValueComputed()(value);
+          },
+          disposeWhenNodeIsRemoved: elem
+        });
+      }
+    }
+    return result;
+  }
+  
+  function hasViewModel(node){
+    return node.nodeType === 1 && node.hasAttribute("data-viewmodel") && !('@SymbolDecoViewModel' in node);
+  }
 });
 define('deco/spa/applyViewModels',[
   "deco/utils",
@@ -1023,9 +1076,7 @@ define('deco/spa/applyViewModels',[
           return viewModelFactory.createViewModel(data, subscribe);
         })
         .forEach(applyViewModel);
-    }).catch(function(error){
-      errorHandler.onError(error);
-    });
+    })['catch'](errorHandler.onError);
   };
 });
 define('deco/spa/hashNavigation',[
@@ -1317,7 +1368,8 @@ define('deco/spa',[
   "deco/spa/hashNavigation",
   "deco/spa/Templates",
   "deco/utils",
-  "deco/events"
+  "deco/events",
+  "deco/errorHandler"
 ], function(
   Outlet,
   whenContext,
@@ -1325,7 +1377,8 @@ define('deco/spa',[
   hashNavigation,
   Templates,
   utils,
-  proclaim
+  proclaim,
+  errorHandler
 ){
 
   var _config = {
@@ -1353,7 +1406,7 @@ define('deco/spa',[
       .then(function(){
         _outlet.pageHasLoaded();
         proclaim.thePageHasChanged(path, segments, document.location)
-      });
+      })['catch'](errorHandler.onError);;
   }
 
   function start(config, document){

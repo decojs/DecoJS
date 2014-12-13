@@ -17,7 +17,7 @@
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.5.2",
+  "version": "0.5.3",
   "devDependencies": {
     "karma": "0.12.9",
     "karma-jasmine": "0.1.5",

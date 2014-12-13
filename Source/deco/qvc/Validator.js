@@ -28,6 +28,10 @@ define([
     this.name = options && options.name;
     this.path = options && options.path;
     this.executableName = options && options.executableName;
+    
+    if(target && ko.isObservable(target)){
+      target.isValid = function(){return self.isValid();};
+    }
   }
   
   Validator.prototype.setConstraints = function(constraints){

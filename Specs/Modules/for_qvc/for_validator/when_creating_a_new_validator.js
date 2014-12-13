@@ -2,10 +2,12 @@ describe("when creating a new validator", {
   "deco/qvc/Constraint": "Mocks/ConstraintMock"
 },["knockout", "deco/qvc/Validator"], function(ko, Validator){
 
-  var validator;
+  var observable,
+    validator;
   
   beforeEach(function(){
-    validator = new Validator(ko.observable(), {name:"name", path:"some.name", executableName:"SomeExecutable"});
+    observable = ko.observable();
+    validator = new Validator(observable, {name:"name", path:"some.name", executableName:"SomeExecutable"});
   });
   
   it("should be valid by default", function(){
@@ -28,10 +30,16 @@ describe("when creating a new validator", {
     expect(validator.executableName).toBe("SomeExecutable");
   });
   
+  it("should make it easy to see if the observable is valid", function(){
+    expect(observable.isValid).toBeA(Function);
+  });
+  
   describe("when reseting the validator", function(){
       
     beforeEach(function(){
-      validator = new Validator();
+      observable = ko.observable();
+      
+      validator = new Validator(observable);
       validator.isValid(false);
       validator.message("hello");
       validator.reset();
@@ -44,6 +52,10 @@ describe("when creating a new validator", {
     it("should have an empty message", function(){
       expect(validator.message()).toBe("");
     });
+    
+    it("should be easy to see that it is valid by default", function(){
+      expect(observable.isValid()).toBe(true);
+    });
   });
   
   describe("when setting constraints", function(){
@@ -51,7 +63,7 @@ describe("when creating a new validator", {
     var constraint = {name:"NotEmpty", attributes:{}};
     
     beforeEach(function(){
-      validator = new Validator();
+      validator = new Validator(ko.observable());
       validator.setConstraints([constraint]);
     });
   

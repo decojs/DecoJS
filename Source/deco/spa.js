@@ -5,7 +5,8 @@ define([
   "deco/spa/hashNavigation",
   "deco/spa/Templates",
   "deco/utils",
-  "deco/events"
+  "deco/events",
+  "deco/errorHandler"
 ], function(
   Outlet,
   whenContext,
@@ -13,7 +14,8 @@ define([
   hashNavigation,
   Templates,
   utils,
-  proclaim
+  proclaim,
+  errorHandler
 ){
 
   var _config = {
@@ -41,7 +43,7 @@ define([
       .then(function(){
         _outlet.pageHasLoaded();
         proclaim.thePageHasChanged(path, segments, document.location)
-      });
+      })['catch'](errorHandler.onError);;
   }
 
   function start(config, document){

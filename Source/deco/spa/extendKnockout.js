@@ -50,11 +50,9 @@ define([
         
         ko.utils.domNodeDisposal.addDisposeCallback(data.target, function() {
           delete data.target['@SymbolDecoViewModel'];
-          whenContext.destroy();
+          whenContext.destroyChildContexts();
         });
-      }).catch(function(error){
-        errorHandler.onError(error);
-      });
+      })['catch'](errorHandler.onError);
 
       return {
         controlsDescendantBindings: true

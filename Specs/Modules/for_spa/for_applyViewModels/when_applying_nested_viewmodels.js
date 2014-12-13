@@ -26,7 +26,7 @@ describe("when applying nested viewmodels", [
 
     subWhenContext = sinon.spy();
     parentContext = sinon.stub().returns(subWhenContext);
-    parentContext.destroy = sinon.spy();
+    parentContext.destroyChildContexts = sinon.spy();
     subscribe = sinon.stub().returns(sinon.stub().returns(parentContext));
     
     
@@ -102,7 +102,7 @@ describe("when applying nested viewmodels", [
       });
       
       it("should destroy the when context", function(){
-        expect(parentContext.destroy.callCount).toBe(1);
+        expect(parentContext.destroyChildContexts.callCount).toBe(1);
       });
     });
   });
@@ -147,7 +147,7 @@ describe("when applying nested viewmodels", [
       });
       
       it("should destroy the when context", function(){
-        expect(parentContext.destroy.callCount).toBe(1);
+        expect(parentContext.destroyChildContexts.callCount).toBe(1);
       });
     });
   });

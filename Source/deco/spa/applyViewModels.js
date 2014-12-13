@@ -37,8 +37,6 @@ define([
           return viewModelFactory.createViewModel(data, subscribe);
         })
         .forEach(applyViewModel);
-    }).catch(function(error){
-      errorHandler.onError(error);
-    });
+    })['catch'](errorHandler.onError);
   };
 });

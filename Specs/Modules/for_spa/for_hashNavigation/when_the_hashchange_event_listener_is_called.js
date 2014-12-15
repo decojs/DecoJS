@@ -20,7 +20,7 @@ describe("when the hashchange event listener is called", [
 
     doc = {
       location: {
-        href: "http://example.com/#/myPath/home",
+        href: "http://example.com/#!/myPath/home",
         replace: replaceSpy
       }
     };
@@ -43,6 +43,20 @@ describe("when the hashchange event listener is called", [
     });
 
     it("should call onPageChanged with the new path", function(){
+      expect(replaceSpy.callCount).toBe(1);
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/newPath");
+    });
+  });
+
+  describe("with a path starting with !", function(){
+
+    because(function(){
+      onPageChangedSpy.reset();
+      doc.location.href = "http://example.com/#!/newPath";
+      onHashChange();
+    });
+
+    it("should call onPageChanged with the new path", function(){
       expect(onPageChangedSpy.callCount).toBe(1);
       expect(onPageChangedSpy.firstCall.args[0]).toBe("newPath");
       expect(onPageChangedSpy.firstCall.args[1]).toEqual(["newPath"]);
@@ -59,7 +73,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/newPath");
     });
   });
   
@@ -73,7 +87,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/newPath");
     });
   });
 
@@ -87,7 +101,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/newPath");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/myPath/newPath");
     });
   });
 
@@ -101,7 +115,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path, ending with index", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/newPath/home");
     });
   });
 
@@ -115,7 +129,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path, which is home", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/home");
     });
   });
 
@@ -129,7 +143,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path, which is home", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/home");
     });
   });
 
@@ -143,7 +157,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new pretty path, ending with home", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/newPath/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/newPath/home");
     });
   });
 
@@ -157,7 +171,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path, ending with home", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/myPath/home");
     });
   });
 
@@ -171,7 +185,7 @@ describe("when the hashchange event listener is called", [
 
     it("should call document.location.replace with the new path, ending with home", function(){
       expect(replaceSpy.callCount).toBe(1);
-      expect(replaceSpy.firstCall.args[0]).toBe("#/myPath/home");
+      expect(replaceSpy.firstCall.args[0]).toBe("#!/myPath/home");
     });
   });
 
@@ -179,7 +193,7 @@ describe("when the hashchange event listener is called", [
 
     because(function(){
       onPageChangedSpy.reset();
-      doc.location.href = "http://example.com/#/%3A%2F%2F/%C3%BC";
+      doc.location.href = "http://example.com/#!/%3A%2F%2F/%C3%BC";
       onHashChange();
     });
 
@@ -207,7 +221,7 @@ describe("when the hashchange event listener is called", [
 
       it("should call document.location.replace with the new path, which is home", function(){
         expect(replaceSpy.callCount).toBe(1);
-        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+        expect(replaceSpy.firstCall.args[0]).toBe("#!/home");
       });
     });
 
@@ -221,14 +235,14 @@ describe("when the hashchange event listener is called", [
 
       it("should call document.location.replace with the new path, which is home", function(){
         expect(replaceSpy.callCount).toBe(1);
-        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+        expect(replaceSpy.firstCall.args[0]).toBe("#!/home");
       });
     });
   });
   
   describe("when the current path has three segment", function(){    
     beforeEach(function(){
-      doc.location.href = "http://example.com/#/path/to/page";
+      doc.location.href = "http://example.com/#!/path/to/page";
       hashNavigation.start(config, onPageChangedSpy, doc, global);
     });
 
@@ -242,7 +256,7 @@ describe("when the hashchange event listener is called", [
 
       it("should call document.location.replace with the new path, which is path/to/home", function(){
         expect(replaceSpy.callCount).toBe(1);
-        expect(replaceSpy.firstCall.args[0]).toBe("#/path/to/home");
+        expect(replaceSpy.firstCall.args[0]).toBe("#!/path/to/home");
       });
     });
 
@@ -256,7 +270,7 @@ describe("when the hashchange event listener is called", [
 
       it("should call document.location.replace with the new path, which is home", function(){
         expect(replaceSpy.callCount).toBe(1);
-        expect(replaceSpy.firstCall.args[0]).toBe("#/home");
+        expect(replaceSpy.firstCall.args[0]).toBe("#!/home");
       });
     });
   });

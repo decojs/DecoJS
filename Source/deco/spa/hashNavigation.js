@@ -49,13 +49,14 @@ define([
 
   function hashChanged(config, onPageChanged, document){
     var link = _.after(document.location.href, '#');
-    var result = findNewPath(this.currentPath, link, config.index);
+    var isHashBang = _.startsWith(link, '!');
+    var result = findNewPath(this.currentPath, link.substr(isHashBang ? 1 : 0), config.index);
     
-    if(result.isAbsoluteAndPretty){
+    if(result.isAbsoluteAndPretty && isHashBang){
       this.currentPath = result.path;
       onPageChanged(result.path.join('/'), result.path.map(decodeURIComponent));
     }else{
-      document.location.replace("#/" + result.path.join('/'));
+      document.location.replace("#!/" + result.path.join('/'));
     }
 
   }

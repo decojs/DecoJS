@@ -5,21 +5,21 @@ describe("when executing", {
   var executable,
     beforeExecute,
     canExecute,
-    invalid,
+    invalidSpy,
     parameters;
   
   beforeEach(function(){
     beforeExecute = sinon.spy();
     canExecute = sinon.spy();
-    invalid = sinon.spy();
+    invalidSpy = sinon.spy();
     ajaxMock.responseText = "{\"parameters\": []}";
     executable = qvc.createCommand("MyCommand", {}, {
       beforeExecute: beforeExecute,
       canExecute: canExecute,
-      invalid: invalid
+      invalid: invalidSpy
     });
     ajaxMock.spy.reset();
-    ajaxMock.responseText = "{}"
+    ajaxMock.respondImmediately = false;
   });
   
   describe("valid parameters", function(){
@@ -29,54 +29,101 @@ describe("when executing", {
     });
   
     it("should call beforeExecute", function(){
-      expect(beforeExecute.callCount).toBe(1);
+      expect(beforeExecute).toHaveBeenCalled();
     });
 
     it("should check canExecute", function(){
-      expect(canExecute.callCount).toBe(1);
+      expect(canExecute).toHaveBeenCalled();
     });
     
     it("should not call invalid listener", function(){
-      expect(invalid.callCount).toBe(0);
+      expect(invalidSpy).not.toHaveBeenCalled();
     });
 
     it("should AJAX the server", function(){
-      expect(ajaxMock.spy.callCount).toBe(1);
+      expect(ajaxMock.spy).toHaveBeenCalled();
       var args = ajaxMock.spy.firstCall.args;
       expect(args[0]).toMatch(/command\/MyCommand$/);
     });
 
     describe("after complete", function(){
 
+      var successSpy,
+          completeSpy,
+          errorSpy
+      
       beforeEach(function(){
+        
+        successSpy = sinon.spy();
+        completeSpy = sinon.spy();
+        errorSpy = sinon.spy();        
+        
         parameters = {
           name: ko.observable()
         }
+        
         ajaxMock.responseText = "{\"parameters\": []}";
+        
         executable = qvc.createCommand(
           "MyCommand",
           parameters,
           {
-            beforeExecute: beforeExecute,
-            canExecute: canExecute,
-            complete: function(){
-              parameters.name.validator.message("hello");
-            }
+            success: successSpy,
+            complete: completeSpy,
+            error: errorSpy,
+            invalid: invalidSpy
           }
         );
         ajaxMock.responseText = "{\"success\":true}"
+        ajaxMock.respondImmediately = true;
+        parameters.name.validator.message("hello");
+        
         executable();
       });
 
       it("should clear validation messages", function(){
         expect(parameters.name.validator.message()).toBe("");
       });
+      
+      it("should call success", function(){
+        expect(successSpy).toHaveBeenCalled();
+      });
+      
+      it("should call complete", function(){
+        expect(completeSpy).toHaveBeenCalled();
+      });
+      
+      it("should not call error", function(){
+        expect(errorSpy).not.toHaveBeenCalled();
+       });
+      
+      it("should not call invalid", function(){
+        expect(invalidSpy).not.toHaveBeenCalled();
+       });
     });
   });
   
   describe("invalid parameters", function(){
     
+    var successSpy,
+        completeSpy,
+        errorSpy;
+
     because(function(){
+      
+      successSpy = sinon.spy();
+      completeSpy = sinon.spy();
+      errorSpy = sinon.spy();
+      
+      executable = qvc.createCommand("MyCommand", {}, {
+        beforeExecute: beforeExecute,
+        canExecute: canExecute,
+        invalid: invalidSpy,
+        success: successSpy,
+        complete: completeSpy,
+        error: errorSpy,
+      });
+
       executable.validator.validate = function(){
         executable.validator.isValid(false);
       };
@@ -85,16 +132,86 @@ describe("when executing", {
     });
   
     it("should call beforeExecute", function(){
-      expect(beforeExecute.callCount).toBe(1);
+      expect(beforeExecute).toHaveBeenCalled();
     });
 
     it("should not call canExecute", function(){
-      expect(canExecute.callCount).toBe(0);
+      expect(canExecute).not.toHaveBeenCalled();
     });
     
     it("should call invalid listener", function(){
-      expect(invalid.callCount).toBe(1);
+      expect(invalidSpy).toHaveBeenCalled();
     });
-    
+      
+    it("should not call success", function(){
+      expect(successSpy).not.toHaveBeenCalled();
+    });
+
+    it("should not call complete", function(){
+      expect(completeSpy).not.toHaveBeenCalled();
+    });
+
+    it("should not call error", function(){
+      expect(errorSpy).not.toHaveBeenCalled();
+     });
+
+    it("should call invalid", function(){
+      expect(invalidSpy).toHaveBeenCalled();
+     });    
+  });
+
+  describe("with invalid result from the server", function(){
+
+    var successSpy,
+        completeSpy,
+        errorSpy;
+
+    beforeEach(function(){
+
+      successSpy = sinon.spy();
+      completeSpy = sinon.spy();
+      errorSpy = sinon.spy();
+
+      parameters = {
+        name: ko.observable()
+      }
+
+      ajaxMock.responseText = "{\"parameters\": []}";
+
+      executable = qvc.createCommand(
+        "MyCommand",
+        parameters,
+        {
+          success: successSpy,
+          complete: completeSpy,
+          error: errorSpy,
+          invalid: invalidSpy
+        }
+      );
+      ajaxMock.responseText = "{\"success\":false, \"violations\":[{}]}"
+      ajaxMock.respondImmediately = true;
+
+      executable();
+    });
+
+    it("should clear validation messages", function(){
+      expect(parameters.name.validator.message()).toBe("");
+    });
+
+    it("should not call success", function(){
+      expect(successSpy).not.toHaveBeenCalled();
+    });
+
+    it("should call complete", function(){
+      expect(completeSpy).toHaveBeenCalled();
+    });
+
+    it("should not call error", function(){
+      expect(errorSpy).not.toHaveBeenCalled();
+     });
+
+    it("should call invalid", function(){
+      expect(invalidSpy).toHaveBeenCalled();
+     });
   });
 });

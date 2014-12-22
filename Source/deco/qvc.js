@@ -88,34 +88,34 @@ define([
     execute.isBusy = ko.computed(executable.isBusy, executable);
     execute.hasError = ko.computed(executable.hasError, executable);
     execute.success = function(callback){
-      executable.callbacks.success = callback;
+      executable.hooks.success = callback;
       return execute;
     };
     execute.error = function(callback){
-      executable.callbacks.error = callback;
+      executable.hooks.error = callback;
       return execute;
     };
     execute.invalid = function(callback){
-      executable.callbacks.invalid = callback;
+      executable.hooks.invalid = callback;
       return execute;
     };
     execute.beforeExecute = function(callback){
-      executable.callbacks.beforeExecute = callback;
+      executable.hooks.beforeExecute = callback;
       return execute;
     };
     execute.canExecute = function(callback){
-      executable.callbacks.canExecute = callback;
+      executable.hooks.canExecute = callback;
       return execute;
     };
     execute.result = function(){
       if(arguments.length == 1){
-        executable.callbacks.result = arguments[0];
+        executable.hooks.result = arguments[0];
         return execute;
       }
       return executable.result.result;
     };
     execute.complete = function(callback){
-      executable.callbacks.complete = callback;
+      executable.hooks.complete = callback;
       return execute;
     };
     execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
@@ -127,15 +127,15 @@ define([
   }
   
   return {
-    createCommand: function(name, parameters, callbacks){
+    createCommand: function(name, parameters, hooks){
       if(name == null || name.length == 0)
-        throw new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])");
-      return createExecutable(name, Executable.Command, parameters, callbacks);
+        throw new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, hooks])");
+      return createExecutable(name, Executable.Command, parameters, hooks);
     },
-    createQuery: function(name, parameters, callbacks){
+    createQuery: function(name, parameters, hooks){
       if(name == null || name.length == 0)
-        throw new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])");
-      return createExecutable(name, Executable.Query, parameters, callbacks);
+        throw new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, hooks])");
+      return createExecutable(name, Executable.Query, parameters, hooks);
     },
     config: function(config){
       utils.extend(qvc.config, config);

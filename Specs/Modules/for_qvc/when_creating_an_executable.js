@@ -65,7 +65,7 @@ describe("when creating an executable", {
     });
     
     it("should call the error callback on error", function(){
-      expect(spy.callCount).toBe(1);
+      expect(spy).toHaveBeenCalled();
     });
     
   });

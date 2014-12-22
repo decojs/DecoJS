@@ -34,27 +34,27 @@ describe("when creating an executable", {
     expect(executable.result()).toBe(null);
   });
   
-  it("should have way to set the beforeExecute listener", function(){
+  it("should have way to set the beforeExecute hook", function(){
     expect(executable.beforeExecute).toBeDefined();
   });
   
-  it("should have way to set the canExecute listener", function(){
+  it("should have way to set the canExecute hook", function(){
     expect(executable.canExecute).toBeDefined();
   });
   
-  it("should have way to set the success listener", function(){
+  it("should have way to set the success hook", function(){
     expect(executable.success).toBeDefined();
   });
   
-  it("should have way to set the invalid listener", function(){
+  it("should have way to set the invalid hook", function(){
     expect(executable.invalid).toBeDefined();
   });
   
-  it("should have way to set the complete listener", function(){
+  it("should have way to set the complete hook", function(){
     expect(executable.complete).toBeDefined();
   });
   
-  it("should have way to set the error listener", function(){
+  it("should have way to set the error hook", function(){
     expect(executable.error).toBeDefined();
   });
   
@@ -70,12 +70,12 @@ describe("when creating an executable", {
     it("should throw an error", function(){
       expect(function(){
         qvc.createCommand();
-      }).toThrow(new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])"));
+      }).toThrow(new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, hooks])"));
     });
     it("should throw an error", function(){
       expect(function(){
         qvc.createQuery();
-      }).toThrow(new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])"));
+      }).toThrow(new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, hooks])"));
     });
   });
   

@@ -34,7 +34,7 @@ define([
     violations.forEach(function(violation){
       var message = violation.message;
       var fieldName = violation.fieldName;
-      if (fieldName.length > 0) {
+      if (fieldName && fieldName.length > 0) {
         //one of the fields violates a constraint
         applyViolationMessageToField(this.validatableParameters, fieldName, message);
       } else {

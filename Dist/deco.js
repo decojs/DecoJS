@@ -237,7 +237,7 @@ define('deco/qvc/Validatable',[
     violations.forEach(function(violation){
       var message = violation.message;
       var fieldName = violation.fieldName;
-      if (fieldName.length > 0) {
+      if (fieldName && fieldName.length > 0) {
         //one of the fields violates a constraint
         applyViolationMessageToField(this.validatableParameters, fieldName, message);
       } else {
@@ -380,7 +380,7 @@ define('deco/qvc/Executable',[
   utils, 
   ko){
 
-  function Executable(name, type, parameters, callbacks, qvc){    
+  function Executable(name, type, parameters, hooks, qvc){    
     Validatable.call(this, name, parameters, qvc.constraintResolver)
     
     this.name = name;
@@ -391,7 +391,7 @@ define('deco/qvc/Executable',[
     this.result = new ExecutableResult();
     
     this.parameters = Object.seal(parameters);
-    this.callbacks = utils.extend({
+    this.hooks = utils.extend({
       beforeExecute: function () {},
       canExecute: function(){return true;},
       error: function () {},
@@ -399,61 +399,54 @@ define('deco/qvc/Executable',[
       result: function(){},
       complete: function () {},
       invalid: function() {}
-    }, callbacks);
+    }, hooks);
   }
     
   Executable.prototype = utils.inheritsFrom(Validatable);
     
   Executable.prototype.execute = function () {
-    if (this.onBeforeExecute() === false) {
-      return;
-    }
-    this.qvc.execute(this);
-  };
-
-  Executable.prototype.onBeforeExecute = function () {
-
     if (this.isBusy()) {
       return false;
     }
 
     this.hasError(false);
 
-    this.callbacks.beforeExecute();
+    this.hooks.beforeExecute();
 
     this.validate();
     if (!this.isValid()) {
-      this.callbacks.invalid();
+      this.hooks.invalid();
       return false;
     }
 
-    if (this.callbacks.canExecute() === false) {
+    if (this.hooks.canExecute() === false) {
       return false;
     }
     this.isBusy(true);
 
+    this.qvc.execute(this);
     return true;
   };
 
   Executable.prototype.onError = function () {
-    this.hasError(true);
-    if("violations" in this.result && this.result.violations != null)
+    if("violations" in this.result && this.result.violations != null && this.result.violations.length > 0){
       this.applyViolations(this.result.violations);
-    this.callbacks.error(this.result);
+      this.hooks.invalid();
+    }else{
+      this.hasError(true);
+      this.hooks.error(this.result);
+    }
   };
 
   Executable.prototype.onSuccess = function () {
     this.hasError(false);
     this.clearValidationMessages();
-    this.callbacks.success(this.result);
-    this.callbacks.result(this.result.result);
+    this.hooks.success(this.result);
+    this.hooks.result(this.result.result);
   };
 
   Executable.prototype.onComplete = function () {
-    if (!this.hasError()) {
-      this.callbacks.complete(this.result);
-      this.clearValidationMessages();
-    }
+    this.hooks.complete();
     this.isBusy(false);
   };
   
@@ -685,34 +678,34 @@ define('deco/qvc',[
     execute.isBusy = ko.computed(executable.isBusy, executable);
     execute.hasError = ko.computed(executable.hasError, executable);
     execute.success = function(callback){
-      executable.callbacks.success = callback;
+      executable.hooks.success = callback;
       return execute;
     };
     execute.error = function(callback){
-      executable.callbacks.error = callback;
+      executable.hooks.error = callback;
       return execute;
     };
     execute.invalid = function(callback){
-      executable.callbacks.invalid = callback;
+      executable.hooks.invalid = callback;
       return execute;
     };
     execute.beforeExecute = function(callback){
-      executable.callbacks.beforeExecute = callback;
+      executable.hooks.beforeExecute = callback;
       return execute;
     };
     execute.canExecute = function(callback){
-      executable.callbacks.canExecute = callback;
+      executable.hooks.canExecute = callback;
       return execute;
     };
     execute.result = function(){
       if(arguments.length == 1){
-        executable.callbacks.result = arguments[0];
+        executable.hooks.result = arguments[0];
         return execute;
       }
       return executable.result.result;
     };
     execute.complete = function(callback){
-      executable.callbacks.complete = callback;
+      executable.hooks.complete = callback;
       return execute;
     };
     execute.clearValidationMessages = executable.clearValidationMessages.bind(executable);
@@ -724,15 +717,15 @@ define('deco/qvc',[
   }
   
   return {
-    createCommand: function(name, parameters, callbacks){
+    createCommand: function(name, parameters, hooks){
       if(name == null || name.length == 0)
-        throw new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, callbacks])");
-      return createExecutable(name, Executable.Command, parameters, callbacks);
+        throw new Error("Command is missing name\nA command must have a name!\nusage: createCommand('name', [parameters, hooks])");
+      return createExecutable(name, Executable.Command, parameters, hooks);
     },
-    createQuery: function(name, parameters, callbacks){
+    createQuery: function(name, parameters, hooks){
       if(name == null || name.length == 0)
-        throw new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, callbacks])");
-      return createExecutable(name, Executable.Query, parameters, callbacks);
+        throw new Error("Query is missing name\nA query must have a name!\nusage: createQuery('name', [parameters, hooks])");
+      return createExecutable(name, Executable.Query, parameters, hooks);
     },
     config: function(config){
       utils.extend(qvc.config, config);

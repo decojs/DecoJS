@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.5.4 (2014-12-22)
+* Improved the way QVC errors and invalid parameter responses are handled
+
 ## 0.5.3 (2014-12-13)
 * Fixed a bug where nested viewmodels weren't cleaned up correctly, which could break the application (issue 19)
 * Made it possible to pass data into nested viewmodels using data-params

@@ -34,9 +34,13 @@ define('deco/utils',[], function(){
     },
     
     trim: function(word, character){
-      while(word.charAt(0) == character) word = word.substr(1);
-      while(word.charAt(word.length - 1) == character) word = word.substr(0, word.length - 1);
-      return word;
+      for(var f=0; f<word.length; f++){
+        if(word.charAt(f) !== character) break;
+      }
+      for(var t=word.length; t>0; t--){
+        if(word.charAt(t-1) !== character) break;
+      }
+      return word.substring(f, t);
     },
     
     after: function(word, character){
@@ -1123,13 +1127,14 @@ define('deco/spa/hashNavigation',[
 
   function hashChanged(config, onPageChanged, document){
     var link = _.after(document.location.href, '#');
-    var result = findNewPath(this.currentPath, link, config.index);
+    var isHashBang = _.startsWith(link, '!');
+    var result = findNewPath(this.currentPath, link.substr(isHashBang ? 1 : 0), config.index);
     
-    if(result.isAbsoluteAndPretty){
+    if(result.isAbsoluteAndPretty && isHashBang){
       this.currentPath = result.path;
       onPageChanged(result.path.join('/'), result.path.map(decodeURIComponent));
     }else{
-      document.location.replace("#/" + result.path.join('/'));
+      document.location.replace("#!/" + result.path.join('/'));
     }
 
   }

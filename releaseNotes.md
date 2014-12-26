@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.6.0 (2014-12-26)
+* Implemented hashbang urls to improve crawlability by Goolge and other search engines. (issue 21)
+
 ## 0.5.4 (2014-12-22)
 * Improved the way QVC errors and invalid parameter responses are handled
 

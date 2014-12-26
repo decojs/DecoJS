@@ -89,6 +89,7 @@ module.exports = function(grunt) {
   grunt.registerTask('install', ['bower']);
   grunt.registerTask('build', ['requirejs', 'uglify']);
   grunt.registerTask('test', ['karma:unit']);
+  grunt.registerTask('ci-test', ['karma:continuous']);
   grunt.registerTask('default', ['bower', 'requirejs', 'uglify', 'karma:continuous']);
   grunt.registerTask('release', function (type) {
     //grunt release:major|minor|patch

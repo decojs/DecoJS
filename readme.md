@@ -1,16 +1,18 @@
-# DecoJS
+# [DecoJS](http://decojs.com) [![Build Status](https://travis-ci.org/decojs/DecoJS.svg?branch=release)](https://travis-ci.org/decojs/DecoJS)
 
-Scalable frontend architecture
+> **Scalable frontend architecture**
 
 ## Getting Started
 
-This project can be used with bower. This will install both the concatenated and minified files, along with the sourcemap for both of them. It will also install the dependencies needed to run the project
+This project can be used with bower or npm. This will install both the concatenated and minified files, along with the sourcemap for both of them. It will also install the dependencies needed to run the project
 
 ```shell
 bower install deco
+#or
+npm install decojs
 ```
 
-DecoJS is only dependent on [Require.js](http://requirejs.org), [Knockout.js](http://knockoutjs.com) and [When.js](https://github.com/cujojs/when). For more information on building websites with DecoJS, go to [DecoJS.com](http://decojs.com)!s
+DecoJS is only dependent on [Require.js](http://requirejs.org) and [Knockout.js](http://knockoutjs.com). For more information on building websites with DecoJS, go to [DecoJS.com](http://decojs.com)!
 
 
 ## Contribution
@@ -24,7 +26,7 @@ npm install -g bower
 npm install -g grunt-cli
 ```
 
-## Installation
+### Installation
 
 This project uses grunt for installation, building and testing. With grunt and bower installed, the `grunt` command can be used to perform any of the other tasks. Before grunt can be used, some node packages must be installed:
 
@@ -75,6 +77,12 @@ Grunt can be used to create a new version. This will commit the latest changes, 
 
 ```shell
 grunt release
+```
+
+When creating a new release, merge master to the release branch, update the releaseNotes.md file and then run the grunt release script. This will create a single commit with all the release info. Push the release branch to the server with tags, then publish the new version on npm, using
+
+```shell
+npm publish
 ```
 
 

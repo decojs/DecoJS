@@ -34,9 +34,13 @@ define([], function(){
     },
     
     trim: function(word, character){
-      while(word.charAt(0) == character) word = word.substr(1);
-      while(word.charAt(word.length - 1) == character) word = word.substr(0, word.length - 1);
-      return word;
+      for(var f=0; f<word.length; f++){
+        if(word.charAt(f) !== character) break;
+      }
+      for(var t=word.length; t>0; t--){
+        if(word.charAt(t-1) !== character) break;
+      }
+      return word.substring(f, t);
     },
     
     after: function(word, character){

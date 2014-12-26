@@ -1,6 +1,6 @@
-# DecoJS [![Build Status](https://travis-ci.org/decojs/DecoJS.svg?branch=release)](https://travis-ci.org/decojs/DecoJS)
+# [DecoJS](http://decojs.com) [![Build Status](https://travis-ci.org/decojs/DecoJS.svg?branch=release)](https://travis-ci.org/decojs/DecoJS)
 
-Scalable frontend architecture
+> **Scalable frontend architecture**
 
 ## Getting Started
 
@@ -12,7 +12,7 @@ bower install deco
 npm install decojs
 ```
 
-DecoJS is only dependent on [Require.js](http://requirejs.org) and [Knockout.js](http://knockoutjs.com). For more information on building websites with DecoJS, go to [DecoJS.com](http://decojs.com)!s
+DecoJS is only dependent on [Require.js](http://requirejs.org) and [Knockout.js](http://knockoutjs.com). For more information on building websites with DecoJS, go to [DecoJS.com](http://decojs.com)!
 
 
 ## Contribution
@@ -26,7 +26,7 @@ npm install -g bower
 npm install -g grunt-cli
 ```
 
-## Installation
+### Installation
 
 This project uses grunt for installation, building and testing. With grunt and bower installed, the `grunt` command can be used to perform any of the other tasks. Before grunt can be used, some node packages must be installed:
 

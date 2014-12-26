@@ -39,7 +39,7 @@
     "url": "https://github.com/decojs/DecoJS"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt ci-test"
   },
   "dependencies": {
     "es6-promise": "^2.0.0",

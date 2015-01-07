@@ -54,7 +54,7 @@ define([
     this.isBusy(true);
 
     this.qvc.execute(this);
-    return true;
+    return false;
   };
 
   Executable.prototype.onError = function () {

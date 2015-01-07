@@ -6,7 +6,8 @@ describe("when executing", {
     beforeExecute,
     canExecute,
     invalidSpy,
-    parameters;
+    parameters,
+    result;
   
   beforeEach(function(){
     beforeExecute = sinon.spy();
@@ -25,7 +26,11 @@ describe("when executing", {
   describe("valid parameters", function(){
     
     because(function(){
-      executable();
+      result = executable();
+    });
+      
+    it("should return false, so that it can be used in click and submit bindings", function(){
+      expect(result).toBe(false);
     });
   
     it("should call beforeExecute", function(){
@@ -78,7 +83,11 @@ describe("when executing", {
         ajaxMock.respondImmediately = true;
         parameters.name.validator.message("hello");
         
-        executable();
+        result = executable();
+      });
+      
+      it("should return false, so that it can be used in click and submit bindings", function(){
+        expect(result).toBe(false);
       });
 
       it("should clear validation messages", function(){
@@ -128,7 +137,11 @@ describe("when executing", {
         executable.validator.isValid(false);
       };
       
-      executable();
+      result = executable();
+    });
+      
+    it("should return false, so that it can be used in click and submit bindings", function(){
+      expect(result).toBe(false);
     });
   
     it("should call beforeExecute", function(){
@@ -191,7 +204,11 @@ describe("when executing", {
       ajaxMock.responseText = "{\"success\":false, \"violations\":[{}]}"
       ajaxMock.respondImmediately = true;
 
-      executable();
+      result = executable();
+    });
+      
+    it("should return false, so that it can be used in click and submit bindings", function(){
+      expect(result).toBe(false);
     });
 
     it("should clear validation messages", function(){

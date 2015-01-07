@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.6.1 (2015-01-07)
+* Fixed executing command/query returns true, which knockout submit/click bindings interpret as "don't preventDefault".
+
 ## 0.6.0 (2014-12-26)
 * Implemented hashbang urls to improve crawlability by Goolge and other search engines. (issue 21)
 

@@ -1273,8 +1273,8 @@ define('deco/spa/Templates',[
 define('deco/proclaimWhen',[], function () {
 
   function publish(name, subscribers, data) {
-    subscribers.forEach(function (item) {
-      item.apply(item, data);
+    subscribers.forEach(function (subscriber) {
+      subscriber.apply(subscriber, data);
     });
   }
 
@@ -1291,6 +1291,7 @@ define('deco/proclaimWhen',[], function () {
       subscribers.splice(index, 1);
     return index >= 0;
   }
+  
   function extendEvent(name, event){
     event.subscribers = [];
     event.subscribeSubscribers = [];
@@ -1298,8 +1299,10 @@ define('deco/proclaimWhen',[], function () {
 
     var extendedEvent = function(){
       if(arguments.length == 1 && typeof arguments[0] === "function"){
-        if(subscribeTo(name, event.subscribers, arguments[0]))
-          publish(name+".isSubscribedTo", event.subscribeSubscribers);
+        var subscriber = arguments[0];
+        var wasNew = subscribeTo(name, event.subscribers, subscriber);
+        if(wasNew)
+          publish(name+".isSubscribedTo", event.subscribeSubscribers, [function(){subscriber.apply(subscriber, arguments);}]);
       }else{
         publish(name, event.subscribers, arguments);
       }

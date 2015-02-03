@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.7.0 (2015-02-03)
+* When subscribing to subscriptions you now have the ability to notify the new subscriber of the current state (issue 25)
+
 ## 0.6.1 (2015-01-07)
 * Fixed executing command/query returns true, which knockout submit/click bindings interpret as "don't preventDefault".
 

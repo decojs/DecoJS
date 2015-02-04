@@ -1,4 +1,6 @@
 # DecoJS Release Notes
+## 0.7.1 (2015-02-04)
+* The bower dependency ES6-Promise does not need to be exactly version 2.0.0
 
 ## 0.7.0 (2015-02-03)
 * When subscribing to subscriptions you now have the ability to notify the new subscriber of the current state (issue 25)

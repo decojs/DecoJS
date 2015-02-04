@@ -30,7 +30,7 @@
     "knockout": "3.2.0",
     "json": "latest",
     "es5-shim": "2.1.0",
-    "es6-promise": "2.0.0"
+    "es6-promise": "~2.0.0"
   },
   "_source": "https://github.com/decojs/DecoJS"
 }

@@ -98,7 +98,7 @@ describe("when creating an executable", {
     });
 
     it("should request constraints from the server", function(){
-      expect(ajaxMock.spy.callCount).toBe(1);
+      expect(ajaxMock.spy).toHaveBeenCalledOnce();
       expect(ajaxMock.spy.firstCall.args[0]).toMatch(/constraints\/name/);
     });
   });

@@ -50,25 +50,28 @@ define([
       });
     };
     
-    this.loadConstraints = function(name, callback){
+    this.loadConstraints = function(name){
       var url = ajax.addToPath(qvc.config.baseUrl, "constraints/" + name);
-      ajax(url, null, "GET", function(xhr){
-        if (xhr.status === 200) {
-          try{
-            var response = JSON.parse(xhr.responseText || "{\"parameters\":[]}");
-            if("parameters" in response == false){
-              response.parameters = [];
+      return new Promise(function(resolve, reject){
+        ajax(url, null, "GET", function(xhr){
+          if (xhr.status === 200) {
+            try{
+              var response = JSON.parse(xhr.responseText || "{\"parameters\":[]}");
+              if("parameters" in response == false){
+                response.parameters = [];
+              }
+              if(response.exception && response.exception.message){
+                errorHandler.onError(response.exception.message);
+              }
+            }catch(e){
+              var response = {parameters: []};
             }
-            if(response.exception && response.exception.message){
-              errorHandler.onError(response.exception.message);
-            }
-          }catch(e){
-            var response = {parameters: []};
+            resolve(response.parameters);
+          }else{
+            errorHandler.onError(xhr.responseText);
+            reject(xhr.responseText);
           }
-          callback(name, response.parameters);
-        }else{
-          errorHandler.onError(xhr.responseText);
-        }
+        });
       });
     };
 

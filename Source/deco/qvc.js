@@ -29,25 +29,25 @@ define([
         csrfToken: qvc.config.csrf
       };
       var url = ajax.addToPath(qvc.config.baseUrl, executable.type + "/" + executable.name);
-      ajax(url, data, "POST", function (xhr) {
-        if (xhr.status === 200) {
-          var result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
-          if (result.success === true) {
-            executable.onSuccess(result);
-          } else {
-            if(result.exception && result.exception.message){
-              errorHandler.onError(result.exception.message);
+      return new Promise(function(resolve, reject){
+        ajax(url, data, "POST", function (xhr) {
+          if (xhr.status === 200) {
+            var result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
+            if (result.success === true) {
+              resolve(result);
+            } else {
+              if(result.exception && result.exception.message){
+                errorHandler.onError(result.exception.message);
+              }
+              reject(result);
             }
-            executable.onError(result);
+          } else {
+            var result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
+            errorHandler.onError(result.exception.message);
+            reject(result);
           }
-        } else {
-          var result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
-          errorHandler.onError(result.exception.message);
-          executable.onError(result);
-        }
-        executable.onComplete();
+        });
       });
-    
     };
     
     this.loadConstraints = function(name, callback){

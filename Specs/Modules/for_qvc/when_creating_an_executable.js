@@ -20,17 +20,18 @@ describe("when creating an executable", {
   
   describe("and setting the success callback", function(){
   
-    var spy,
+    var successSpy,
       successResult;
   
-    beforeEach(function(){
+    beforeEach(function(done){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:true});
-      spy = sinon.spy();
+      successSpy = sinon.spy();
       
       because: {
-        successResult = executable.success(spy);
+        successResult = executable.success(successSpy);
         executable();
+        setTimeout(done,1);
       }
     });
     
@@ -39,24 +40,25 @@ describe("when creating an executable", {
     });
     
     it("should call the success callback on success", function(){
-      expect(spy.callCount).toBe(1);
+      expect(successSpy).toHaveBeenCalledOnce();
     });
     
   });
   
   describe("and setting the error callback", function(){
   
-    var spy,
+    var errorSpy,
       errorResult;
   
-    beforeEach(function(){
+    beforeEach(function(done){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:false});
-      spy = sinon.spy();
+      errorSpy = sinon.spy();
       
       because: {
-        errorResult = executable.error(spy);
+        errorResult = executable.error(errorSpy);
         executable();
+        setTimeout(done,1);
       }
     });
     
@@ -65,23 +67,23 @@ describe("when creating an executable", {
     });
     
     it("should call the error callback on error", function(){
-      expect(spy).toHaveBeenCalled();
+      expect(errorSpy).toHaveBeenCalledOnce();
     });
     
   });
   
   describe("and setting the beforeExecute callback", function(){
   
-    var spy,
+    var beforeExecuteSpy,
       beforeExecuteResult;
   
     beforeEach(function(){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:false});
-      spy = sinon.spy();
+      beforeExecuteSpy = sinon.spy();
       
       because: {
-        beforeExecuteResult = executable.beforeExecute(spy);
+        beforeExecuteResult = executable.beforeExecute(beforeExecuteSpy);
         executable();
       }
     });
@@ -91,23 +93,23 @@ describe("when creating an executable", {
     });
     
     it("should call the beforeExecute callback on beforeExecute", function(){
-      expect(spy.callCount).toBe(1);
+      expect(beforeExecuteSpy).toHaveBeenCalledOnce();
     });
     
   });
   
   describe("and setting the canExecute callback", function(){
   
-    var spy,
+    var canExecuteSpy,
       canExecuteResult;
   
     beforeEach(function(){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:false});
-      spy = sinon.spy();
+      canExecuteSpy = sinon.spy();
       
       because: {
-        canExecuteResult = executable.canExecute(spy);
+        canExecuteResult = executable.canExecute(canExecuteSpy);
         executable();
       }
     });
@@ -117,24 +119,25 @@ describe("when creating an executable", {
     });
     
     it("should call the canExecute callback on canExecute", function(){
-      expect(spy.callCount).toBe(1);
+      expect(canExecuteSpy).toHaveBeenCalledOnce();
     });
     
   });
   
   describe("and setting the result callback", function(){
   
-    var spy,
+    var resultSpy,
       resultResult;
   
-    beforeEach(function(){
+    beforeEach(function(done){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:true, result:"something"});
-      spy = sinon.spy();
+      resultSpy = sinon.spy();
       
       because: {
-        resultResult = executable.result(spy);
+        resultResult = executable.result(resultSpy);
         executable();
+        setTimeout(done,1);
       }
     });
     
@@ -143,24 +146,25 @@ describe("when creating an executable", {
     });
     
     it("should call the result callback on result", function(){
-      expect(spy.callCount).toBe(1);
+      expect(resultSpy).toHaveBeenCalledOnce();
     });
     
   });
   
   describe("and setting the complete callback", function(){
   
-    var spy,
+    var completeSpy,
       completeResult;
   
-    beforeEach(function(){
+    beforeEach(function(done){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:true});
-      spy = sinon.spy();
+      completeSpy = sinon.spy();
       
       because: {
-        completeResult = executable.complete(spy);
+        completeResult = executable.complete(completeSpy);
         executable();
+        setTimeout(done,1);
       }
     });
     
@@ -169,7 +173,7 @@ describe("when creating an executable", {
     });
     
     it("should call the complete callback on complete", function(){
-      expect(spy.callCount).toBe(1);
+      expect(completeSpy).toHaveBeenCalledOnce();
     });
     
   });

@@ -54,6 +54,7 @@ describe("when the server throws an exception", {
     beforeEach(function(){
       ajaxMock.spy.reset();
       ajaxMock.responseText = JSON.stringify({success:false, exception:{message:"oh noes!"}});
+      executable = qvc.createQuery("name"+Math.random());
       
       because: {
         executable();
@@ -72,6 +73,7 @@ describe("when the server throws an exception", {
       ajaxMock.spy.reset();
       ajaxMock.responseCode = 500;
       ajaxMock.responseText = "oh noes!";
+      executable = qvc.createQuery("name"+Math.random());
       
       because: {
         executable();

@@ -53,7 +53,9 @@ define([
     }
     this.isBusy(true);
 
-    this.qvc.execute(this);
+    this.qvc.execute(this)
+      .then(this.onSuccess.bind(this), this.onError.bind(this))
+      .then(this.onComplete.bind(this));
     return false;
   };
 

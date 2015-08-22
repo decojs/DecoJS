@@ -17,7 +17,7 @@ define([
     this.qvc = qvc;
     this.isBusy = ko.observable(false);
     this.hasError = ko.observable(false);
-    this.result = new ExecutableResult();
+    this.result = null;
     
     this.parameters = Object.seal(parameters);
     this.hooks = utils.extend({
@@ -57,21 +57,22 @@ define([
     return false;
   };
 
-  Executable.prototype.onError = function () {
-    if("violations" in this.result && this.result.violations != null && this.result.violations.length > 0){
-      this.applyViolations(this.result.violations);
+  Executable.prototype.onError = function (result) {
+    if("violations" in result && result.violations != null && result.violations.length > 0){
+      this.applyViolations(result.violations);
       this.hooks.invalid();
     }else{
       this.hasError(true);
-      this.hooks.error(this.result);
+      this.hooks.error(result);
     }
   };
 
-  Executable.prototype.onSuccess = function () {
+  Executable.prototype.onSuccess = function (result) {
     this.hasError(false);
     this.clearValidationMessages();
-    this.hooks.success(this.result);
-    this.hooks.result(this.result.result);
+    this.hooks.success(result);
+    this.hooks.result(result.result);
+    this.reslt = result.result;
   };
 
   Executable.prototype.onComplete = function () {

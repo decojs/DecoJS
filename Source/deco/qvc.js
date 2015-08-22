@@ -31,19 +31,19 @@ define([
       var url = ajax.addToPath(qvc.config.baseUrl, executable.type + "/" + executable.name);
       ajax(url, data, "POST", function (xhr) {
         if (xhr.status === 200) {
-          executable.result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
-          if (executable.result.success === true) {
-            executable.onSuccess();
+          var result = new ExecutableResult(JSON.parse(xhr.responseText || "{}"));
+          if (result.success === true) {
+            executable.onSuccess(result);
           } else {
-            if(executable.result.exception && executable.result.exception.message){
-              errorHandler.onError(executable.result.exception.message);
+            if(result.exception && result.exception.message){
+              errorHandler.onError(result.exception.message);
             }
-            executable.onError();
+            executable.onError(result);
           }
         } else {
-          executable.result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
-          errorHandler.onError(executable.result.exception.message);
-          executable.onError();
+          var result = new ExecutableResult({exception: {message: xhr.responseText, cause: xhr}});
+          errorHandler.onError(result.exception.message);
+          executable.onError(result);
         }
         executable.onComplete();
       });
@@ -112,7 +112,7 @@ define([
         executable.hooks.result = arguments[0];
         return execute;
       }
-      return executable.result.result;
+      return executable.result;
     };
     execute.complete = function(callback){
       executable.hooks.complete = callback;

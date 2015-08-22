@@ -1,7 +1,9 @@
 describe("when onError is called", [
-  'deco/qvc/Executable'
+  'deco/qvc/Executable',
+  'deco/qvc/ExecutableResult'
 ], function(
-  Executable
+  Executable,
+  ExecutableResult
 ){
   
   var executable,
@@ -23,11 +25,10 @@ describe("when onError is called", [
 
   describe("with violations", function(){
 
-
     because(function(){
-      executable.result.violations = [{fieldName:'', message:'oh noes'}];
-      
-      executable.onError();
+      executable.onError(new ExecutableResult({
+        violations: [{fieldName:'', message:'oh noes'}]
+      }));
     });
 
     it("should not set hasError to true", function(){
@@ -54,11 +55,8 @@ describe("when onError is called", [
 
   describe("without violations", function(){
 
-
     because(function(){
-      executable.result.violations = null;
-
-      executable.onError();
+      executable.onError(new ExecutableResult());
     });
 
     it("should set hasError to true", function(){

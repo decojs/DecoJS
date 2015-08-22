@@ -10,14 +10,14 @@ module.exports = function(config){
       'bower_components/json/json2.js', //for old IE
       'bower_components/es6-promise/promise.js', //for non ES6 browsers
       
+      'node_modules/sinon/pkg/sinon.js',
+      'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/requirejs/require.js',
       'node_modules/karma-requirejs/lib/adapter.js',
       
       'node_modules/jazzmine/bin/jazzmine.min.js',
-      'node_modules/sinon/pkg/sinon.js',
-      'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/jasmine-sinon/lib/jasmine-sinon.js',
-      {pattern: 'bower_components/knockout/dist/knockout.js', included: false},
+      {pattern: 'bower_components/knockout/dist/knockout.debug.js', included: false},
 
       'Specs/specs-main.js',
       'Specs/Matchers/*',

@@ -38,15 +38,13 @@ describe("when extending knockout", {
     });
 
     describe("on a value which does not have a validator", function(){
-
-      expect(function(){
-        ko.bindingHandlers.validationMessageFor.init("element", function(){
-          return {};
-        });
-      }).toThrow();
-
+      it("should throw", function(){
+        expect(function(){
+          ko.bindingHandlers.validationMessageFor.init("element", function(){
+            return {};
+          });
+        }).toThrow();
+      });
     });
-
   });
-
 });

@@ -69,13 +69,12 @@ describe("when applying nested viewmodels", [
     beforeEach(function(done){
       function NestedVM(){
         nestedVM.apply(this, arguments);
-        done();
+        setTimeout(done,1);
       }
-            
+
       require.onSecondCall().callsArgWith(1, NestedVM);
       
       elm = an_element.withNestedViewModel("dummyVM", "nestedVM", model);
-
       applyViewModels(elm, subscribe);
     });
     
@@ -102,7 +101,7 @@ describe("when applying nested viewmodels", [
       });
       
       it("should destroy the when context", function(){
-        expect(parentContext.destroyChildContexts.callCount).toBe(1);
+        expect(parentContext.destroyChildContexts).toHaveBeenCalledOnce();
       });
     });
   });
@@ -114,7 +113,7 @@ describe("when applying nested viewmodels", [
     beforeEach(function(done){
       function NestedVM(){
         nestedVM.apply(this, arguments);
-        done();
+        setTimeout(done, 1);
       }
             
       require.onSecondCall().callsArgWith(1, NestedVM);
@@ -129,7 +128,7 @@ describe("when applying nested viewmodels", [
     });
 
     it("should call the nested viewmodel with the model as the first argument", function(){
-      expect(nestedVM.firstCall.args[0]).toEqual({something: "dummyText"});
+      expect(nestedVM.firstCall.args[0].something).toBe("dummyText");
     });
 
     it("should call the nested viewmodel with the subWhenContext function as the second argument", function(){
@@ -147,7 +146,7 @@ describe("when applying nested viewmodels", [
       });
       
       it("should destroy the when context", function(){
-        expect(parentContext.destroyChildContexts.callCount).toBe(1);
+        expect(parentContext.destroyChildContexts).toHaveBeenCalledOnce();
       });
     });
   });

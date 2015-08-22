@@ -22,8 +22,8 @@ describe("when the viewmodel is destroyed", {
 
     define("DestroyVM", [], function(){
       return function DestroyVM(model, when){
-        done();
         when.thisIsDestroyed(react);
+        done();
       };
     });
 

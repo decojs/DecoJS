@@ -1,15 +1,10 @@
-define(["deco/utils"], function(utils){
-  function ExecutableResult(result){
-    
-    this.success = false;
-    this.valid = false;
-    this.result = null;
-    this.exception = null;
-    this.violations = [];
-  
-    utils.extend(this, result);
-  
+define(function(){
+  return function ExecutableResult(model){
+    model = model || {};
+    this.success = model.success || false;
+    this.valid = model.valid || false;
+    this.result = model.result || null;
+    this.exception = model.exception || null;
+    this.violations = model.violations || [];  
   };
-  
-  return ExecutableResult;
 });

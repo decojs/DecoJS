@@ -54,32 +54,26 @@ define([
     this.isBusy(true);
 
     this.qvc.execute(this)
-      .then(this.onSuccess.bind(this), this.onError.bind(this))
-      .then(this.onComplete.bind(this));
+      .then(function (result) {
+        this.hasError(false);
+        this.clearValidationMessages();
+        this.hooks.success(result);
+        this.hooks.result(result.result);
+        this.reslt = result.result;
+      }.bind(this), function (result) {
+        if("violations" in result && result.violations != null && result.violations.length > 0){
+          this.applyViolations(result.violations);
+          this.hooks.invalid();
+        }else{
+          this.hasError(true);
+          this.hooks.error(result);
+        }
+      }.bind(this))
+      .then(function () {
+        this.hooks.complete();
+        this.isBusy(false);
+      }.bind(this));
     return false;
-  };
-
-  Executable.prototype.onError = function (result) {
-    if("violations" in result && result.violations != null && result.violations.length > 0){
-      this.applyViolations(result.violations);
-      this.hooks.invalid();
-    }else{
-      this.hasError(true);
-      this.hooks.error(result);
-    }
-  };
-
-  Executable.prototype.onSuccess = function (result) {
-    this.hasError(false);
-    this.clearValidationMessages();
-    this.hooks.success(result);
-    this.hooks.result(result.result);
-    this.reslt = result.result;
-  };
-
-  Executable.prototype.onComplete = function () {
-    this.hooks.complete();
-    this.isBusy(false);
   };
   
   Executable.Command = "command";

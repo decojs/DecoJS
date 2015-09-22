@@ -38,7 +38,7 @@ describe("when applying nested viewmodels", [
     dummyVM = sinon.spy();
     nestedVM = sinon.spy();
 
-    require.onFirstCall().callsArgWith(1, DummyVM);
+    require.withArgs(['dummyVM']).callsArgWith(1, DummyVM);
   });
 
   afterEach(function(){
@@ -48,6 +48,8 @@ describe("when applying nested viewmodels", [
   describe("before the nested view model has loaded", function(){
     
     because(function(done){
+      require.withArgs(['nestedVM']).callsArgWith(1, function(){});
+      
       var elm = an_element.withNestedViewModel("dummyVM", "nestedVM");
 
       applyViewModels(elm, subscribe).then(done);
@@ -59,6 +61,22 @@ describe("when applying nested viewmodels", [
 
     it("should not find the nested viewmodels", function(){
       expect(nestedVM).not.toHaveBeenCalled();
+    });
+    
+    it("should have called require twice", function(){
+      expect(require).toHaveBeenCalledThrice();
+    });
+    
+    it("should have first requested dummyVM", function(){
+      expect(require.firstCall.args[0]).toEqual(['dummyVM']);
+    });
+    
+    it("should have second requested nestedVM", function(){
+      expect(require.secondCall.args[0]).toEqual(['nestedVM']);
+    });
+    
+    it("should have third requested nestedVM again", function(){
+      expect(require.thirdCall.args[0]).toEqual(['nestedVM']);
     });
   });
   
@@ -72,7 +90,7 @@ describe("when applying nested viewmodels", [
         setTimeout(done,1);
       }
 
-      require.onSecondCall().callsArgWith(1, NestedVM);
+      require.withArgs(['nestedVM']).callsArgWith(1, NestedVM);
       
       elm = an_element.withNestedViewModel("dummyVM", "nestedVM", model);
       applyViewModels(elm, subscribe);
@@ -116,7 +134,7 @@ describe("when applying nested viewmodels", [
         setTimeout(done, 1);
       }
             
-      require.onSecondCall().callsArgWith(1, NestedVM);
+      require.withArgs(['nestedVM']).callsArgWith(1, NestedVM);
       
       elm = an_element.withNestedViewModelAndParams("dummyVM", "nestedVM", "something: value");
 

@@ -26,15 +26,23 @@ define([
     domElement = domElement || document.body;
 
     var viewModelsLoaded = utils.toArray(domElement.querySelectorAll("[data-viewmodel]"))
-    .filter(function(element){
-      return viewModelFactory.getParentViewModelElement(element, domElement) ? false : true;
-    })
     .map(viewModelFactory.getViewModelFromAttributes)
     .map(viewModelFactory.loadViewModel)
     .map(promisify(function(data){
-      return viewModelFactory.createViewModel(data, subscribe);
+      if(viewModelFactory.getParentViewModelElement(data.target, domElement) ? false : true){
+        return data;
+      }
     }))
-    .map(promisify(applyViewModel));
+    .map(promisify(function(data){
+      if(data){
+        return viewModelFactory.createViewModel(data, subscribe);
+      }
+    }))
+    .map(promisify(function(data){
+      if(data){
+        applyViewModel(data);
+      }
+    }));
     
     return Promise.all(viewModelsLoaded)['catch'](errorHandler.onError);
   };

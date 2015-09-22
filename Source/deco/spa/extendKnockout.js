@@ -32,7 +32,7 @@ define([
       var parentViewModel = viewModelFactory.getParentViewModelElement(element)['@SymbolDecoViewModel'];
       var whenContext = parentViewModel['@SymbolDecoWhenContext']();
       try{
-      var params = getComponentParamsFromCustomElement(element, parentContext);
+        var params = getComponentParamsFromCustomElement(element, parentContext);
       }catch(e){
         console.error(e.stack);
       }

@@ -17,7 +17,7 @@
     "email": "npm@mariusgundersen.net",
     "url": "http://mariusgundersen.net"
   },
-  "version": "0.7.1",
+  "version": "0.8.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-bower-task": "^0.4.0",

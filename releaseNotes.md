@@ -1,4 +1,9 @@
 # DecoJS Release Notes
+
+## 0.8.0 (2015-09-22)
+* Improvements to the page load speed by loading nested viewmodels in paralell
+* Improvements to the page load speed by applying viewmodels as soon as they have loaded instead of waiting for all of them to load
+
 ## 0.7.1 (2015-02-04)
 * The bower dependency ES6-Promise does not need to be exactly version 2.0.0
 

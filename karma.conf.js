@@ -6,7 +6,7 @@ module.exports = function(config){
     ],
 
     files: [
-      {pattern: 'bower_components/es5-shim/es5-shim.js', included: false}, //for old IE
+      {pattern: 'bower_components/es5-shim/es5-shim.js', included: true}, //for old IE
       'bower_components/json/json2.js', //for old IE
       'bower_components/es6-promise/promise.js', //for non ES6 browsers
       

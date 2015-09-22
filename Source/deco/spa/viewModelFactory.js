@@ -1,8 +1,4 @@
-define([
-  "deco/errorHandler"
-], function(
-  errorHandler
-) {
+define([], function() {
   return {
     getViewModelFromAttributes: function(target){
       var viewModelName = target.getAttribute("data-viewmodel");
@@ -34,8 +30,7 @@ define([
           target: data.target
         }
       }, function(error){
-        errorHandler.onError(new Error("Could not load the following modules:\n"+error.requireModules.join("\n")));
-        return null;
+        throw new Error("Could not load the following modules:\n"+error.requireModules.join("\n"));
       });
     },
 

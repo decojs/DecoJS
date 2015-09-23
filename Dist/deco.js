@@ -586,9 +586,7 @@ define('deco/qvc/ConstraintResolver',[], function(){
 define('deco/errorHandler',[], function(){
   return {
     onError: function(error){
-      setTimeout(function(){
-        throw error;
-      },1);
+     console.error(error && error.stack || error);
     }
   };
 });

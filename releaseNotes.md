@@ -1,5 +1,8 @@
 # DecoJS Release Notes
 
+## 0.8.1 (2015-09-23)
+* Improved errorHandler output to include stacktrace of exception (if present)
+
 ## 0.8.0 (2015-09-22)
 * Improvements to the page load speed by loading nested viewmodels in paralell
 * Improvements to the page load speed by applying viewmodels as soon as they have loaded instead of waiting for all of them to load

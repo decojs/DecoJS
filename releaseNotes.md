@@ -1,5 +1,9 @@
 # DecoJS Release Notes
 
+## 0.9.0 (2016-01-10)
+* Added a cachebusting key to the constraints GET requests. It can be configured in the qvc config object using `cacheKey`, but defaults to the current time
+* Set the default qvc baseUrl to `/qvc` rather than `/`
+
 ## 0.8.1 (2015-09-23)
 * Improved errorHandler output to include stacktrace of exception (if present)
 

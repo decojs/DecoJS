@@ -644,7 +644,7 @@ define('deco/qvc',[
     
     this.loadConstraints = function(name, callback){
       var url = ajax.addToPath(qvc.config.baseUrl, "constraints/" + name);
-      ajax(url, null, "GET", function(xhr){
+      ajax(ajax.addParamToUrl(url, 'cacheKey', qvc.config.cacheKey), null, "GET", function(xhr){
         if (xhr.status === 200) {
           try{
             var response = JSON.parse(xhr.responseText || "{\"parameters\":[]}");
@@ -666,8 +666,9 @@ define('deco/qvc',[
 
     
     this.config = {
-      baseUrl: "/",
-      csrf: ""
+      baseUrl: "/qvc",
+      csrf: "",
+      cachekey: Date.now()
     }
   };
 

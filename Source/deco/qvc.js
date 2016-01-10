@@ -74,7 +74,7 @@ define([
 
     
     this.config = {
-      baseUrl: "/",
+      baseUrl: "/qvc",
       csrf: "",
       cachekey: Date.now()
     }
